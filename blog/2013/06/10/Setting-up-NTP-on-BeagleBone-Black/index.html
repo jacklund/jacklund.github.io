@@ -96,41 +96,79 @@
 <ol>
 <li><p>Install NTP</p>
 
-<pre><code> # opkg update &amp;&amp; opkg install ntp
+<pre><code> $ opkg update &amp;&amp; opkg install ntp
 </code></pre></li>
-<li><p>Edit <code>/etc/ntp.conf</code>, adding <code>pool.ntp.org</code> as the server:</p>
+<li><p>Edit <code>/etc/ntp.conf</code>, adding <code>pool.ntp.org</code> as the server:</p></li>
+</ol>
 
-<pre><code> # This is the most basic ntp configuration file
- # The driftfile must remain in a place specific to this
- # machine - it records the machine specific clock error
- driftfile /etc/ntp.drift
- # This obtains a random server which will be close
- # (in IP terms) to the machine.  Add other servers
- # as required, or change this.
- server pool.ntp.org
- # Using local hardware clock as fallback
- # Disable this when using ntpd -q -g -x as ntpdate or it will sync to itself
- server 127.127.1.0
- fudge 127.127.1.0 stratum 14
- # Defining a default security setting
- restrict default
-</code></pre></li>
-<li><p>Set your local time:</p>
 
-<pre><code> # cd /etc
- # rm -f localtime
- # ln -s ../usr/share/zoneinfo/America/Chicago localtime
-</code></pre></li>
-<li><p>Edit <code>/etc/default/ntpdate</code>:</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='apache'><span class='line'>    <span class="c"># This is the most basic ntp configuration file</span>
+</span><span class='line'>    <span class="c"># The driftfile must remain in a place specific to this</span>
+</span><span class='line'>    <span class="c"># machine - it records the machine specific clock error</span>
+</span><span class='line'>    <span class="nb">driftfile</span> <span class="sx">/etc/ntp.drift</span>
+</span><span class='line'>    <span class="c"># This obtains a random server which will be close</span>
+</span><span class='line'>    <span class="c"># (in IP terms) to the machine.  Add other servers</span>
+</span><span class='line'>    <span class="c"># as required, or change this.</span>
+</span><span class='line'>    <span class="nb">server</span> pool.ntp.org
+</span><span class='line'>    <span class="c"># Using local hardware clock as fallback</span>
+</span><span class='line'>    <span class="c"># Disable this when using ntpd -q -g -x as ntpdate or it will sync to itself</span>
+</span><span class='line'>    <span class="nb">server</span> <span class="m">127.127.1.0</span>
+</span><span class='line'>    <span class="nb">fudge</span> <span class="m">127.127.1.0</span> stratum <span class="m">14</span>
+</span><span class='line'>    <span class="c"># Defining a default security setting</span>
+</span><span class='line'>    <span class="nb">restrict</span> default
+</span></code></pre></td></tr></table></div></figure>
 
-<pre><code> # Configuration script used by ntpdate-sync script
 
- NTPSERVERS="pool.ntp.org"
+<ol>
+<li>Set your local time:</li>
+</ol>
 
- # Set to "yes" to write time to hardware clock on success
- UPDATE_HWCLOCK="yes"
-</code></pre></li>
-<li><p>Now, reboot and see if the clock gets set correctly</p></li>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>    <span class="nv">$ </span><span class="nb">cd</span> /etc
+</span><span class='line'>    <span class="nv">$ </span>rm -f localtime
+</span><span class='line'>    <span class="nv">$ </span>ln -s ../usr/share/zoneinfo/America/Chicago localtime
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Edit <code>/etc/default/ntpdate</code>:</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='apache'><span class='line'>    <span class="c"># Configuration script used by ntpdate-sync script</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="err">NTPSERVERS=&quot;pool</span>.<span class="err">ntp</span>.<span class="err">org&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c"># Set to &quot;yes&quot; to write time to hardware clock on success</span>
+</span><span class='line'>    <span class="err">UPDATE_HWCLOCK=&quot;yes&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Now, reboot and see if the clock gets set correctly</li>
 </ol>
 
 </div>

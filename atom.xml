@@ -4,7 +4,7 @@
   <title><![CDATA[Everything Is Code]]></title>
   <link href="http://jacklund.github.io/atom.xml" rel="self"/>
   <link href="http://jacklund.github.io/"/>
-  <updated>2013-06-18T10:09:59-05:00</updated>
+  <updated>2013-06-18T10:47:22-05:00</updated>
   <id>http://jacklund.github.io/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
@@ -88,41 +88,79 @@ allow this access for now by executing:
 <ol>
 <li><p>Install NTP</p>
 
-<pre><code> # opkg update &amp;&amp; opkg install ntp
+<pre><code> $ opkg update &amp;&amp; opkg install ntp
 </code></pre></li>
-<li><p>Edit <code>/etc/ntp.conf</code>, adding <code>pool.ntp.org</code> as the server:</p>
+<li><p>Edit <code>/etc/ntp.conf</code>, adding <code>pool.ntp.org</code> as the server:</p></li>
+</ol>
 
-<pre><code> # This is the most basic ntp configuration file
- # The driftfile must remain in a place specific to this
- # machine - it records the machine specific clock error
- driftfile /etc/ntp.drift
- # This obtains a random server which will be close
- # (in IP terms) to the machine.  Add other servers
- # as required, or change this.
- server pool.ntp.org
- # Using local hardware clock as fallback
- # Disable this when using ntpd -q -g -x as ntpdate or it will sync to itself
- server 127.127.1.0
- fudge 127.127.1.0 stratum 14
- # Defining a default security setting
- restrict default
-</code></pre></li>
-<li><p>Set your local time:</p>
 
-<pre><code> # cd /etc
- # rm -f localtime
- # ln -s ../usr/share/zoneinfo/America/Chicago localtime
-</code></pre></li>
-<li><p>Edit <code>/etc/default/ntpdate</code>:</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='apache'><span class='line'>    <span class="c"># This is the most basic ntp configuration file</span>
+</span><span class='line'>    <span class="c"># The driftfile must remain in a place specific to this</span>
+</span><span class='line'>    <span class="c"># machine - it records the machine specific clock error</span>
+</span><span class='line'>    <span class="nb">driftfile</span> <span class="sx">/etc/ntp.drift</span>
+</span><span class='line'>    <span class="c"># This obtains a random server which will be close</span>
+</span><span class='line'>    <span class="c"># (in IP terms) to the machine.  Add other servers</span>
+</span><span class='line'>    <span class="c"># as required, or change this.</span>
+</span><span class='line'>    <span class="nb">server</span> pool.ntp.org
+</span><span class='line'>    <span class="c"># Using local hardware clock as fallback</span>
+</span><span class='line'>    <span class="c"># Disable this when using ntpd -q -g -x as ntpdate or it will sync to itself</span>
+</span><span class='line'>    <span class="nb">server</span> <span class="m">127.127.1.0</span>
+</span><span class='line'>    <span class="nb">fudge</span> <span class="m">127.127.1.0</span> stratum <span class="m">14</span>
+</span><span class='line'>    <span class="c"># Defining a default security setting</span>
+</span><span class='line'>    <span class="nb">restrict</span> default
+</span></code></pre></td></tr></table></div></figure>
 
-<pre><code> # Configuration script used by ntpdate-sync script
 
- NTPSERVERS="pool.ntp.org"
+<ol>
+<li>Set your local time:</li>
+</ol>
 
- # Set to "yes" to write time to hardware clock on success
- UPDATE_HWCLOCK="yes"
-</code></pre></li>
-<li><p>Now, reboot and see if the clock gets set correctly</p></li>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>    <span class="nv">$ </span><span class="nb">cd</span> /etc
+</span><span class='line'>    <span class="nv">$ </span>rm -f localtime
+</span><span class='line'>    <span class="nv">$ </span>ln -s ../usr/share/zoneinfo/America/Chicago localtime
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Edit <code>/etc/default/ntpdate</code>:</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='apache'><span class='line'>    <span class="c"># Configuration script used by ntpdate-sync script</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="err">NTPSERVERS=&quot;pool</span>.<span class="err">ntp</span>.<span class="err">org&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c"># Set to &quot;yes&quot; to write time to hardware clock on success</span>
+</span><span class='line'>    <span class="err">UPDATE_HWCLOCK=&quot;yes&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Now, reboot and see if the clock gets set correctly</li>
 </ol>
 
 ]]></content>
@@ -160,22 +198,38 @@ You should consider updating Angstrom!
 
 <p>It&rsquo;s frickin&#8217; 2013, people. We should not have to deal with languages that look like this:</p>
 
-<pre><code>\renewcommand{\href}[2]{#2\footnote{\url{#1}}}
-$endif$
-$if(strikeout)$
-\usepackage[normalem]{ulem}
-% avoid problems with \sout in headers with hyperref:
-\pdfstringdefDisableCommands{\renewcommand{\sout}{}}
-$endif$
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{6pt plus 2pt minus 1pt}
-\setlength{\emergencystretch}{3em}  % prevent overfull lines
-$if(numbersections)$
-\setcounter{secnumdepth}{5}
-$else$
-\setcounter{secnumdepth}{0}
-$endif$
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='latex'><span class='line'><span class="k">\renewcommand</span><span class="nb">{</span><span class="k">\href</span><span class="nb">}</span>[2]<span class="nb">{</span>#2<span class="k">\footnote</span><span class="nb">{</span><span class="k">\url</span><span class="nb">{</span>#1<span class="nb">}}}</span>
+</span><span class='line'><span class="s">$</span><span class="nb">endif</span><span class="s">$</span>
+</span><span class='line'><span class="s">$</span><span class="nb">if</span><span class="o">(</span><span class="nb">strikeout</span><span class="o">)</span><span class="s">$</span>
+</span><span class='line'><span class="k">\usepackage</span><span class="na">[normalem]</span><span class="nb">{</span>ulem<span class="nb">}</span>
+</span><span class='line'><span class="c">% avoid problems with \sout in headers with hyperref:</span>
+</span><span class='line'><span class="k">\pdfstringdefDisableCommands</span><span class="nb">{</span><span class="k">\renewcommand</span><span class="nb">{</span><span class="k">\sout</span><span class="nb">}{}}</span>
+</span><span class='line'><span class="s">$</span><span class="nb">endif</span><span class="s">$</span>
+</span><span class='line'><span class="k">\setlength</span><span class="nb">{</span><span class="k">\parindent</span><span class="nb">}{</span>0pt<span class="nb">}</span>
+</span><span class='line'><span class="k">\setlength</span><span class="nb">{</span><span class="k">\parskip</span><span class="nb">}{</span>6pt plus 2pt minus 1pt<span class="nb">}</span>
+</span><span class='line'><span class="k">\setlength</span><span class="nb">{</span><span class="k">\emergencystretch</span><span class="nb">}{</span>3em<span class="nb">}</span>  <span class="c">% prevent overfull lines</span>
+</span><span class='line'><span class="s">$</span><span class="nb">if</span><span class="o">(</span><span class="nb">numbersections</span><span class="o">)</span><span class="s">$</span>
+</span><span class='line'><span class="k">\setcounter</span><span class="nb">{</span>secnumdepth<span class="nb">}{</span>5<span class="nb">}</span>
+</span><span class='line'><span class="s">$</span><span class="nb">else</span><span class="s">$</span>
+</span><span class='line'><span class="k">\setcounter</span><span class="nb">{</span>secnumdepth<span class="nb">}{</span>0<span class="nb">}</span>
+</span><span class='line'><span class="s">$</span><span class="nb">endif</span><span class="s">$</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>and parsers that give errors like this:</p>
 
@@ -236,13 +290,20 @@ $endif$
 
 <p>So, to be explicit, here&rsquo;s the series of commands:</p>
 
-<pre><code>$ git clone repo-url
-$ cd repo
-$ git filter-branch --prune-empty --subdirectory-filter subdir-name master
-$ git remote rm origin
-$ git remote add new-repo-url
-$ git push -u origin --all --tags
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clone repo-url
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>repo
+</span><span class='line'><span class="nv">$ </span>git filter-branch --prune-empty --subdirectory-filter subdir-name master
+</span><span class='line'><span class="nv">$ </span>git remote rm origin
+</span><span class='line'><span class="nv">$ </span>git remote add new-repo-url
+</span><span class='line'><span class="nv">$ </span>git push -u origin --all --tags
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p><strong>Updated 05/12/2013</strong>
 Okay, after messing around with this for some time, I&rsquo;ve discovered that the above doesn&rsquo;t work quite right, because the pathnames in the commits are wrong &ndash; instead of being <em>subdir-name</em><code>/src/foo/Bar.java</code>, it ends up being <code>src/foo/Bar.java</code>, which doesn&rsquo;t work. So, instead of trying to pull each subdirectory into their own repository, I&rsquo;m taking the existing repository, with a bunch of subdirs, including the ones I&rsquo;m interested in, and simply using <code>git filter-branch</code> to get rid of the ones I&rsquo;m not interested in, as well as update the tags. So, here&rsquo;s what I&rsquo;ve got now, which seems to work well:</p>
@@ -395,14 +456,22 @@ Okay, after messing around with this for some time, I&rsquo;ve discovered that t
 
 <p>Code blocks seem to be handled relatively well:</p>
 
-<pre><code>public class Foo {
-  private int bar;
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Foo</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="kt">int</span> <span class="n">bar</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getBar</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">bar</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-  public int getBar() {
-    return bar;
-  }
-}
-</code></pre>
 
 <p>So, I&rsquo;ll stick with this, for now.</p>
 ]]></content>
@@ -415,53 +484,97 @@ Okay, after messing around with this for some time, I&rsquo;ve discovered that t
     <id>http://jacklund.github.io/blog/2012/04/04/Fixed-the-deployment-issues!!!</id>
     <content type="html"><![CDATA[<p>I finally figured out how to get Ant + Ivy to copy artifacts from one Artifactory repository to another, modifying the appropriate metadata (AKA &ldquo;promotion&rdquo;). First, you need a separate ivy.xml file (I call mine &ldquo;ivy-publish.xml&rdquo;) that looks like this:</p>
 
-<pre><code>&lt;ivy-module version="2.0"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation=
-         "http://ant.apache.org/ivy/schemas/ivy.xsd"&gt;
-    &lt;info organisation="foo" module="FooDeploy" status="integration" /&gt;
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;ivy-module</span> <span class="na">version=</span><span class="s">&quot;2.0&quot;</span>
+</span><span class='line'>       <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+</span><span class='line'>       <span class="na">xsi:noNamespaceSchemaLocation=</span>
+</span><span class='line'>         <span class="s">&quot;http://ant.apache.org/ivy/schemas/ivy.xsd&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;info</span> <span class="na">organisation=</span><span class="s">&quot;foo&quot;</span> <span class="na">module=</span><span class="s">&quot;FooDeploy&quot;</span> <span class="na">status=</span><span class="s">&quot;integration&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nt">&lt;configurations&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;conf</span> <span class="na">name=</span><span class="s">&quot;integration&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;conf</span> <span class="na">name=</span><span class="s">&quot;milestone&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;conf</span> <span class="na">name=</span><span class="s">&quot;release&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/configurations&gt;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nt">&lt;publications&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;artifact</span> <span class="na">name=</span><span class="s">&quot;Foo&quot;</span> <span class="na">ext=</span><span class="s">&quot;war&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;artifact</span> <span class="na">name=</span><span class="s">&quot;Foo-src&quot;</span> <span class="na">ext=</span><span class="s">&quot;jar&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/publications&gt;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nt">&lt;dependencies&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;dependency</span> <span class="na">org=</span><span class="s">&quot;foo&quot;</span> <span class="na">name=</span><span class="s">&quot;Foo&quot;</span> <span class="na">rev=</span><span class="s">&quot;latest.integration&quot;</span>
+</span><span class='line'>          <span class="na">conf=</span><span class="s">&quot;integration-&gt;deploy&quot;</span> <span class="na">transitive=</span><span class="s">&quot;false&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;dependency</span> <span class="na">org=</span><span class="s">&quot;foo&quot;</span> <span class="na">name=</span><span class="s">&quot;Foo&quot;</span> <span class="na">rev=</span><span class="s">&quot;latest.milestone&quot;</span>
+</span><span class='line'>          <span class="na">conf=</span><span class="s">&quot;milestone-&gt;deploy&quot;</span> <span class="na">transitive=</span><span class="s">&quot;false&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;dependency</span> <span class="na">org=</span><span class="s">&quot;foo&quot;</span> <span class="na">name=</span><span class="s">&quot;Foo&quot;</span> <span class="na">rev=</span><span class="s">&quot;latest.release&quot;</span>
+</span><span class='line'>          <span class="na">conf=</span><span class="s">&quot;release-&gt;deploy&quot;</span> <span class="na">transitive=</span><span class="s">&quot;false&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/dependencies&gt;</span>
+</span><span class='line'><span class="nt">&lt;/ivy-module&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
 
-    &lt;configurations&gt;
-        &lt;conf name="integration"/&gt;
-        &lt;conf name="milestone"/&gt;
-        &lt;conf name="release"/&gt;
-    &lt;/configurations&gt;
-
-    &lt;publications&gt;
-        &lt;artifact name="Foo" ext="war" /&gt;
-        &lt;artifact name="Foo-src" ext="jar" /&gt;
-    &lt;/publications&gt;
-
-    &lt;dependencies&gt;
-        &lt;dependency org="foo" name="Foo" rev="latest.integration"
-          conf="integration-&gt;deploy" transitive="false" /&gt;
-        &lt;dependency org="foo" name="Foo" rev="latest.milestone"
-          conf="milestone-&gt;deploy" transitive="false" /&gt;
-        &lt;dependency org="foo" name="Foo" rev="latest.release"
-          conf="release-&gt;deploy" transitive="false" /&gt;
-    &lt;/dependencies&gt;
-&lt;/ivy-module&gt;
-</code></pre>
 
 <p>And then, you need an ant target that looks like this:</p>
 
-<pre><code>&lt;target name="publish-stage"&gt;
-    &lt;ivy:configure file="${common.build.dir}/ivysettings.xml"
-        host="myserver" realm="Artifactory Realm" username="user"
-        passwd="password!" override="true" /&gt;
-    &lt;ivy:retrieve file="ivy-publish.xml" conf="integration"
-        pattern="${ivy.lib.dir}/[conf]/[artifact].[ext]"
-            ivypattern="${ivy.lib.dir}/[conf]/ivy.xml"/&gt;
-    &lt;ivy:buildnumber organisation="${ivy.organisation}"
-        module="${ivy.module}" revision="1.0" defaultBuildNumber="1"
-        resolver="stage" /&gt;
-    &lt;ivy:publish resolver="stage"
-        pubrevision="1.0.${ivy.new.build.number}"
-        status="milestone" overwrite="true" update="true"&gt;
-        &lt;artifacts pattern="${lib}/integration/[artifact].[ext]" /&gt;
-    &lt;/ivy:publish&gt;
-&lt;/target&gt;
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;target</span> <span class="na">name=</span><span class="s">&quot;publish-stage&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;ivy:configure</span> <span class="na">file=</span><span class="s">&quot;${common.build.dir}/ivysettings.xml&quot;</span>
+</span><span class='line'>          <span class="na">host=</span><span class="s">&quot;myserver&quot;</span> <span class="na">realm=</span><span class="s">&quot;Artifactory Realm&quot;</span> <span class="na">username=</span><span class="s">&quot;user&quot;</span>
+</span><span class='line'>          <span class="na">passwd=</span><span class="s">&quot;password!&quot;</span> <span class="na">override=</span><span class="s">&quot;true&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;ivy:retrieve</span> <span class="na">file=</span><span class="s">&quot;ivy-publish.xml&quot;</span> <span class="na">conf=</span><span class="s">&quot;integration&quot;</span>
+</span><span class='line'>          <span class="na">pattern=</span><span class="s">&quot;${ivy.lib.dir}/[conf]/[artifact].[ext]&quot;</span>
+</span><span class='line'>          <span class="na">ivypattern=</span><span class="s">&quot;${ivy.lib.dir}/[conf]/ivy.xml&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;ivy:buildnumber</span> <span class="na">organisation=</span><span class="s">&quot;${ivy.organisation}&quot;</span>
+</span><span class='line'>          <span class="na">module=</span><span class="s">&quot;${ivy.module}&quot;</span> <span class="na">revision=</span><span class="s">&quot;1.0&quot;</span> <span class="na">defaultBuildNumber=</span><span class="s">&quot;1&quot;</span>
+</span><span class='line'>          <span class="na">resolver=</span><span class="s">&quot;stage&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;ivy:publish</span> <span class="na">resolver=</span><span class="s">&quot;stage&quot;</span>
+</span><span class='line'>          <span class="na">pubrevision=</span><span class="s">&quot;1.0.${ivy.new.build.number}&quot;</span>
+</span><span class='line'>          <span class="na">status=</span><span class="s">&quot;milestone&quot;</span> <span class="na">overwrite=</span><span class="s">&quot;true&quot;</span> <span class="na">update=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;artifacts</span> <span class="na">pattern=</span><span class="s">&quot;${lib}/integration/[artifact].[ext]&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/ivy:publish&gt;</span>
+</span><span class='line'><span class="nt">&lt;/target&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>What this does is first retrieve the &ldquo;dependencies&rdquo; (the artifacts we&rsquo;re interested in) specified in the ivy-publish.xml file to lib/integration. Then, it turns around and publishes them, changing the status from &ldquo;integration&rdquo; to &ldquo;milestone&rdquo;.</p>
 

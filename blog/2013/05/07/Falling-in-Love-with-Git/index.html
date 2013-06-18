@@ -99,13 +99,20 @@
 
 <p>So, to be explicit, here&rsquo;s the series of commands:</p>
 
-<pre><code>$ git clone repo-url
-$ cd repo
-$ git filter-branch --prune-empty --subdirectory-filter subdir-name master
-$ git remote rm origin
-$ git remote add new-repo-url
-$ git push -u origin --all --tags
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clone repo-url
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>repo
+</span><span class='line'><span class="nv">$ </span>git filter-branch --prune-empty --subdirectory-filter subdir-name master
+</span><span class='line'><span class="nv">$ </span>git remote rm origin
+</span><span class='line'><span class="nv">$ </span>git remote add new-repo-url
+</span><span class='line'><span class="nv">$ </span>git push -u origin --all --tags
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p><strong>Updated 05/12/2013</strong>
 Okay, after messing around with this for some time, I&rsquo;ve discovered that the above doesn&rsquo;t work quite right, because the pathnames in the commits are wrong &ndash; instead of being <em>subdir-name</em><code>/src/foo/Bar.java</code>, it ends up being <code>src/foo/Bar.java</code>, which doesn&rsquo;t work. So, instead of trying to pull each subdirectory into their own repository, I&rsquo;m taking the existing repository, with a bunch of subdirs, including the ones I&rsquo;m interested in, and simply using <code>git filter-branch</code> to get rid of the ones I&rsquo;m not interested in, as well as update the tags. So, here&rsquo;s what I&rsquo;ve got now, which seems to work well:</p>
