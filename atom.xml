@@ -4,7 +4,7 @@
   <title><![CDATA[Everything Is Code]]></title>
   <link href="http://jacklund.github.io/atom.xml" rel="self"/>
   <link href="http://jacklund.github.io/"/>
-  <updated>2013-06-18T10:03:08-05:00</updated>
+  <updated>2013-06-18T10:09:59-05:00</updated>
   <id>http://jacklund.github.io/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
@@ -14,9 +14,9 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Selinux And Ssh]]></title>
+    <title type="html"><![CDATA[SELinux and SSH]]></title>
     <link href="http://jacklund.github.io/blog/2013/06/13/SELinux-and-SSH/"/>
-    <updated>2013-06-13T00:00:00-05:00</updated>
+    <updated>2013-06-13T13:30:00-05:00</updated>
     <id>http://jacklund.github.io/blog/2013/06/13/SELinux-and-SSH</id>
     <content type="html"><![CDATA[<p>I needed to set up Jenkins so that it could run an agent on another Linux box. To do this the default way, you need to allow Jenkins to access the remote box via SSH. So, I set up the Jenkins user and the SSH keys on the remote machine, but trying to do an ssh from the Jenkins user on one machine to the other still didn&rsquo;t work. After doing <code>sudo journalctl -f</code> on the remote machine, I saw the following:</p>
 
@@ -64,7 +64,7 @@ allow this access for now by executing:
   <entry>
     <title type="html"><![CDATA[Node.js]]></title>
     <link href="http://jacklund.github.io/blog/2013/06/12/Node.js/"/>
-    <updated>2013-06-12T00:00:00-05:00</updated>
+    <updated>2013-06-12T16:10:00-05:00</updated>
     <id>http://jacklund.github.io/blog/2013/06/12/Node.js</id>
     <content type="html"><![CDATA[<p>Having my new <a href="http://jacklund.github.io/jacklund/post/beaglebone-black">BeagleBone Black</a> has made me look at the default programming environment for it, <a href="http://nodejs.org">Node.js</a>. Companies like <a href="http://www.linkedin.com">LinkedIn</a> are <a href="http://engineering.linkedin.com/nodejs/blazing-fast-nodejs-10-performance-tips-linkedin-mobile">using it</a> on the server side, which sort of surprises me. I can definitely see its uses in devices like the BeagleBone, since it has such a small footprint and minimal use of resources, but I was surprised at how many people are using it on the server side.</p>
 
@@ -79,9 +79,9 @@ allow this access for now by executing:
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Setting Up Ntp On Beaglebone Black]]></title>
+    <title type="html"><![CDATA[Setting up NTP on BeagleBone Black]]></title>
     <link href="http://jacklund.github.io/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black/"/>
-    <updated>2013-06-10T00:00:00-05:00</updated>
+    <updated>2013-06-10T11:50:00-05:00</updated>
     <id>http://jacklund.github.io/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black</id>
     <content type="html"><![CDATA[<p>For some reason, they didn&rsquo;t seem to see the need to set up the time service on the BeagleBone Blacks by default. I tried using the instructions from <a href="http://derekmolloy.ie/automatically-setting-the-beaglebone-black-time-using-ntp/">this gentleman</a>, but I had to make some modifications.</p>
 
@@ -129,9 +129,9 @@ allow this access for now by executing:
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Beaglebone Black]]></title>
+    <title type="html"><![CDATA[BeagleBone Black]]></title>
     <link href="http://jacklund.github.io/blog/2013/06/09/BeagleBone-Black/"/>
-    <updated>2013-06-09T00:00:00-05:00</updated>
+    <updated>2013-06-09T20:00:00-05:00</updated>
     <id>http://jacklund.github.io/blog/2013/06/09/BeagleBone-Black</id>
     <content type="html"><![CDATA[<p>Got my two <a href="http://beagleboard.org/Products/BeagleBone%20Black">BeagleBone Blacks</a> from <a href="http://adafruit.com/">AdaFruit</a> on Friday. Really nice. I bought them without enclosures because, well, the enclosures were $20, and the BeagleBones themselves were only $45. The nice thing is, though, that they fit exactly into an Altoids tin, so I turned two into my enclosures. I used tin snips to cut holes for power and Ethernet, and lined them with electrical tape to insulate the board from the box. Here&rsquo;s what they ended up looking like:</p>
 
@@ -152,9 +152,9 @@ You should consider updating Angstrom!
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[I Hate Latex]]></title>
+    <title type="html"><![CDATA[I Hate LaTeX]]></title>
     <link href="http://jacklund.github.io/blog/2013/05/30/I-Hate-LaTeX/"/>
-    <updated>2013-05-30T00:00:00-05:00</updated>
+    <updated>2013-05-30T11:30:00-05:00</updated>
     <id>http://jacklund.github.io/blog/2013/05/30/I-Hate-LaTeX</id>
     <content type="html"><![CDATA[<p>No, I really do. It&rsquo;s not hyperbole. I hate it.</p>
 
@@ -195,7 +195,7 @@ $endif$
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Creating Resteasy Project With Eclipse And Maven]]></title>
+    <title type="html"><![CDATA[Creating RESTEasy Project with Eclipse and Maven]]></title>
     <link href="http://jacklund.github.io/blog/2013/05/20/Creating-RESTEasy-Project-with-Eclipse-and-Maven/"/>
     <updated>2013-05-20T00:00:00-05:00</updated>
     <id>http://jacklund.github.io/blog/2013/05/20/Creating-RESTEasy-Project-with-Eclipse-and-Maven</id>
@@ -215,18 +215,18 @@ $endif$
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Ti Sensortag]]></title>
+    <title type="html"><![CDATA[TI SensorTag]]></title>
     <link href="http://jacklund.github.io/blog/2013/05/12/TI-SensorTag/"/>
-    <updated>2013-05-12T00:00:00-05:00</updated>
+    <updated>2013-05-12T19:20:00-05:00</updated>
     <id>http://jacklund.github.io/blog/2013/05/12/TI-SensorTag</id>
     <content type="html"><![CDATA[<p>I got my <a href="http://processors.wiki.ti.com/index.php/Bluetooth_SensorTag">TI Bluetooth SensorTag</a> Friday, and played with it some over the weekend. It&rsquo;s pretty nice. It&rsquo;s basically a small device with a bunch of embedded sensors on it &ndash; accelerometer, gyroscope, ambient temp, IR temp (see below), humidity, barometric pressure, and a couple of buttons on it. It&rsquo;s very small, and communicates over <a href="http://en.wikipedia.org/wiki/Bluetooth_low_energy">Bluetooth 4 LE</a>. You can download an iOS app for viewing the data, so my daughters and I played with it some. Pretty cool. There&rsquo;s a <a href="http://blog.makezine.com/2013/04/18/teardown-of-the-ti-sensortag">teardown of it</a> at MAKE magazine, and even a <a href="http://mike.saunby.net/2013/04/raspberry-pi-and-ti-cc2541-sensortag.html">Raspberry Pi</a> project to interface with it. W00t!!!</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Falling In Love With Git]]></title>
+    <title type="html"><![CDATA[Falling in Love with Git]]></title>
     <link href="http://jacklund.github.io/blog/2013/05/07/Falling-in-Love-with-Git/"/>
-    <updated>2013-05-07T00:00:00-05:00</updated>
+    <updated>2013-05-07T17:00:00-05:00</updated>
     <id>http://jacklund.github.io/blog/2013/05/07/Falling-in-Love-with-Git</id>
     <content type="html"><![CDATA[<p>As I mentioned earlier, we&rsquo;re transitioning from subversion to git, and one of the things we need to do is convert from many-projects-per-repository, which is what we had in subversion, to one-project-per-repository for git. This is partly to make things nicer, and partly because it will make <a href="http://jenkins-ci.org/">Jenkins</a> work better. So, thinking in subversion-terms, I thought I&rsquo;d have to do it myself, and even tried by renaming all the files in one of the projects into the upper-level directory, removing all the other projects, committing locally, and then pushing to a new repo. Royal pain.</p>
 
@@ -253,9 +253,22 @@ Okay, after messing around with this for some time, I&rsquo;ve discovered that t
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Verifyerror With Jdk 7]]></title>
+    <title type="html"><![CDATA[Airport Extreme]]></title>
+    <link href="http://jacklund.github.io/blog/2013/05/06/Airport-Extreme/"/>
+    <updated>2013-05-06T22:05:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/05/06/Airport-Extreme</id>
+    <content type="html"><![CDATA[<p>Had to replace my old, crappy Netgear router over the weekend &ndash; it was getting flaky, and causing my Skype calls to freak out at inopportune moments. I was thinking about going the <a href="http://en.wikipedia.org/wiki/DD-WRT">DD-WRT</a> route (if you&rsquo;ll excuse the pun), but it looked like it required more of a time commitment than I am able to manage at the moment. Since almost everything we have in this house is some form of Apple product, I decided to try out the Airport Extreme.</p>
+
+<p>Man, was that thing easy to set up, especially compared to the Living Hell that is most router setups. I just went into Airport Utility on my laptop, it automagically found the router, I configured it right there, and it just frickin&#8217; worked! Unbelievable! Admittedly, it&rsquo;s a pricey router, but I think it&rsquo;s worth it with the time it saved me.</p>
+
+<p>It also seems to be a <strong>lot</strong> more powerful than those underpowered Netgear POSes, which is an added benefit.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[VerifyError with JDK 7]]></title>
     <link href="http://jacklund.github.io/blog/2013/05/06/VerifyError-with-JDK-7/"/>
-    <updated>2013-05-06T00:00:00-05:00</updated>
+    <updated>2013-05-06T21:43:00-05:00</updated>
     <id>http://jacklund.github.io/blog/2013/05/06/VerifyError-with-JDK-7</id>
     <content type="html"><![CDATA[<p>We had been using nothing higher than JDK 6 with our project up until now, but when I built a new build machine using Fedora 18, JDK 7 was our only real option (okay, that and JDK 5). However, once I got things building using ant, I got the following cryptic error in the unit tests:</p>
 
@@ -269,9 +282,9 @@ Okay, after messing around with this for some time, I&rsquo;ve discovered that t
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Getting Jenkins On Windows Working With Git]]></title>
+    <title type="html"><![CDATA[Getting Jenkins on Windows Working with Git]]></title>
     <link href="http://jacklund.github.io/blog/2013/05/06/Getting-Jenkins-on-Windows-Working-with-Git/"/>
-    <updated>2013-05-06T00:00:00-05:00</updated>
+    <updated>2013-05-06T20:46:00-05:00</updated>
     <id>http://jacklund.github.io/blog/2013/05/06/Getting-Jenkins-on-Windows-Working-with-Git</id>
     <content type="html"><![CDATA[<p>We&rsquo;re transitioning, as a company, from Subversion to Git, which is a Good Thing, but has its complications. One of them was getting <a href="http://jenkins-ci.org/">Jenkins</a>, which we use for <a href="http://en.wikipedia.org/wiki/Continuous_integration">continuous integration</a>, to work with our Git repositories.</p>
 
@@ -298,22 +311,9 @@ Okay, after messing around with this for some time, I&rsquo;ve discovered that t
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Airport Extreme]]></title>
-    <link href="http://jacklund.github.io/blog/2013/05/06/Airport-Extreme/"/>
-    <updated>2013-05-06T00:00:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/05/06/Airport-Extreme</id>
-    <content type="html"><![CDATA[<p>Had to replace my old, crappy Netgear router over the weekend &ndash; it was getting flaky, and causing my Skype calls to freak out at inopportune moments. I was thinking about going the <a href="http://en.wikipedia.org/wiki/DD-WRT">DD-WRT</a> route (if you&rsquo;ll excuse the pun), but it looked like it required more of a time commitment than I am able to manage at the moment. Since almost everything we have in this house is some form of Apple product, I decided to try out the Airport Extreme.</p>
-
-<p>Man, was that thing easy to set up, especially compared to the Living Hell that is most router setups. I just went into Airport Utility on my laptop, it automagically found the router, I configured it right there, and it just frickin&#8217; worked! Unbelievable! Admittedly, it&rsquo;s a pricey router, but I think it&rsquo;s worth it with the time it saved me.</p>
-
-<p>It also seems to be a <strong>lot</strong> more powerful than those underpowered Netgear POSes, which is an added benefit.</p>
-]]></content>
-  </entry>
-  
-  <entry>
     <title type="html"><![CDATA[Rethinking Architecture]]></title>
     <link href="http://jacklund.github.io/blog/2013/04/11/Rethinking-Architecture/"/>
-    <updated>2013-04-11T00:00:00-05:00</updated>
+    <updated>2013-04-11T22:30:00-05:00</updated>
     <id>http://jacklund.github.io/blog/2013/04/11/Rethinking-Architecture</id>
     <content type="html"><![CDATA[<p>So, I&rsquo;ve been rethinking the architecture we used with a customer, and which we are planning on using, in slightly modified form, for some in-house projects.</p>
 
@@ -385,7 +385,7 @@ Okay, after messing around with this for some time, I&rsquo;ve discovered that t
   <entry>
     <title type="html"><![CDATA[Bad Blogger! Bad!]]></title>
     <link href="http://jacklund.github.io/blog/2013/04/11/Bad-Blogger%21-Bad%21/"/>
-    <updated>2013-04-11T00:00:00-05:00</updated>
+    <updated>2013-04-11T09:00:00-05:00</updated>
     <id>http://jacklund.github.io/blog/2013/04/11/Bad-Blogger!-Bad!</id>
     <content type="html"><![CDATA[<p>It&rsquo;s been over a year since I last used <a href="http://scriptogr.am">scriptogr.am</a>. Mostly I haven&rsquo;t had much time to actually post &ndash; work has been rather intense, but in a good way. :&ndash;)</p>
 
@@ -409,7 +409,7 @@ Okay, after messing around with this for some time, I&rsquo;ve discovered that t
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Fixed The Deployment Issues!!!]]></title>
+    <title type="html"><![CDATA[Fixed the deployment issues!!!]]></title>
     <link href="http://jacklund.github.io/blog/2012/04/04/Fixed-the-deployment-issues%21%21%21/"/>
     <updated>2012-04-04T00:00:00-05:00</updated>
     <id>http://jacklund.github.io/blog/2012/04/04/Fixed-the-deployment-issues!!!</id>
@@ -511,7 +511,7 @@ Okay, after messing around with this for some time, I&rsquo;ve discovered that t
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[First Day Of Work In The New Office]]></title>
+    <title type="html"><![CDATA[First Day of Work in the New Office]]></title>
     <link href="http://jacklund.github.io/blog/2012/01/16/First-Day-of-Work-in-the-New-Office/"/>
     <updated>2012-01-16T00:00:00-06:00</updated>
     <id>http://jacklund.github.io/blog/2012/01/16/First-Day-of-Work-in-the-New-Office</id>
@@ -541,7 +541,7 @@ Okay, after messing around with this for some time, I&rsquo;ve discovered that t
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Eskrima Class, Snow, And A New Server For Work]]></title>
+    <title type="html"><![CDATA[Eskrima class, Snow, and a New Server for Work]]></title>
     <link href="http://jacklund.github.io/blog/2012/01/14/Eskrima-class%2C-Snow%2C-and-a-New-Server-for-Work/"/>
     <updated>2012-01-14T00:00:00-06:00</updated>
     <id>http://jacklund.github.io/blog/2012/01/14/Eskrima-class,-Snow,-and-a-New-Server-for-Work</id>

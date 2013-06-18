@@ -1,4 +1,97 @@
-<p>Having my new <a href="/jacklund/post/beaglebone-black">BeagleBone Black</a> has made me look at the default programming environment for it, <a href="http://nodejs.org">Node.js</a>. Companies like <a href="http://www.linkedin.com">LinkedIn</a> are <a href="http://engineering.linkedin.com/nodejs/blazing-fast-nodejs-10-performance-tips-linkedin-mobile">using it</a> on the server side, which sort of surprises me. I can definitely see its uses in devices like the BeagleBone, since it has such a small footprint and minimal use of resources, but I was surprised at how many people are using it on the server side.</p>
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Node.js - Everything Is Code</title>
+  <meta name="author" content="Jack Lund">
+
+  
+  <meta name="description" content="Having my new BeagleBone Black has made me look at the default programming environment for it, Node.js. Companies like LinkedIn are using it on the &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jacklund.github.io/blog/2013/06/12/Node.js">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Everything Is Code" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Everything Is Code</a></h1>
+  
+    <h2>Coding for Fun and Profit. But mostly Fun.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jacklund.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Node.js</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-12T16:10:00-05:00" pubdate data-updated="true">Jun 12<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Having my new <a href="/jacklund/post/beaglebone-black">BeagleBone Black</a> has made me look at the default programming environment for it, <a href="http://nodejs.org">Node.js</a>. Companies like <a href="http://www.linkedin.com">LinkedIn</a> are <a href="http://engineering.linkedin.com/nodejs/blazing-fast-nodejs-10-performance-tips-linkedin-mobile">using it</a> on the server side, which sort of surprises me. I can definitely see its uses in devices like the BeagleBone, since it has such a small footprint and minimal use of resources, but I was surprised at how many people are using it on the server side.</p>
 
 <p>It makes sense, though &ndash; as <a href="http://wiki.nginx.org/Main">Nginx</a> demonstrated, an event-driven model can eat a thread-based server&rsquo;s lunch, performance-wise, under certain circumstances. What are those circumstances, though?</p>
 
@@ -7,3 +100,151 @@
 <p>However, if you were doing a lot of processing of the data, your event handler would be running longer than you would really like, and the other requests might get starved. You could get around this by offloading the processing to another service, so you would send off the request, and go about your business until the response came back, and you could respond to your client.</p>
 
 <p>This is all very interesting, and it would be even more interesting to do some performance comparisons of a &ldquo;traditional&rdquo; app written in something like Java vs. a Node.js app.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jack Lund</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-12T16:10:00-05:00" pubdate data-updated="true">Jun 12<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jacklund.github.io/blog/2013/06/12/Node.js/" data-via="" data-counturl="http://jacklund.github.io/blog/2013/06/12/Node.js/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black/" title="Previous Post: Setting up NTP on BeagleBone Black">&laquo; Setting up NTP on BeagleBone Black</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/06/13/SELinux-and-SSH/" title="Next Post: SELinux and SSH">SELinux and SSH &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/06/13/SELinux-and-SSH/">SELinux and SSH</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/12/Node.js/">Node.js</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black/">Setting Up NTP on BeagleBone Black</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/09/BeagleBone-Black/">BeagleBone Black</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/05/30/I-Hate-LaTeX/">I Hate LaTeX</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/jacklund">@jacklund</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jacklund',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Jack Lund -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -9,7 +9,7 @@
   <meta name="author" content="Jack Lund">
 
   
-  <meta name="description" content="Had to replace my old, crappy Netgear router over the weekend &ndash; it was getting flaky, and causing my Skype calls to freak out at inopportune &hellip;">
+  <meta name="description" content="We&rsquo;re transitioning, as a company, from Subversion to Git, which is a Good Thing, but has its complications. One of them was getting Jenkins, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -71,7 +71,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/05/06/Airport-Extreme/">Airport Extreme</a></h1>
+      <h1 class="entry-title"><a href="/blog/2013/05/06/Getting-Jenkins-on-Windows-Working-with-Git/">Getting Jenkins on Windows Working With Git</a></h1>
     
     
       <p class="meta">
@@ -87,18 +87,34 @@
   
 
 
-<time datetime="2013-05-06T00:00:00-05:00" pubdate data-updated="true">May 6<span>th</span>, 2013</time>
+<time datetime="2013-05-06T20:46:00-05:00" pubdate data-updated="true">May 6<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>Had to replace my old, crappy Netgear router over the weekend &ndash; it was getting flaky, and causing my Skype calls to freak out at inopportune moments. I was thinking about going the <a href="http://en.wikipedia.org/wiki/DD-WRT">DD-WRT</a> route (if you&rsquo;ll excuse the pun), but it looked like it required more of a time commitment than I am able to manage at the moment. Since almost everything we have in this house is some form of Apple product, I decided to try out the Airport Extreme.</p>
+  <div class="entry-content"><p>We&rsquo;re transitioning, as a company, from Subversion to Git, which is a Good Thing, but has its complications. One of them was getting <a href="http://jenkins-ci.org/">Jenkins</a>, which we use for <a href="http://en.wikipedia.org/wiki/Continuous_integration">continuous integration</a>, to work with our Git repositories.</p>
 
-<p>Man, was that thing easy to set up, especially compared to the Living Hell that is most router setups. I just went into Airport Utility on my laptop, it automagically found the router, I configured it right there, and it just frickin&#8217; worked! Unbelievable! Admittedly, it&rsquo;s a pricey router, but I think it&rsquo;s worth it with the time it saved me.</p>
+<p>I had started out by thinking that I would have to create a user in our repository provider (we&rsquo;re using <a href="http://bitbucket.org">BitBucket</a>) which would have read permisisons to our repositories, a &ldquo;jenkins&rdquo; user. Turns out its not the case. All you need to do for read-only access is to generate SSH keys that you register with the repository, and which Jenkins uses to clone the repository.</p>
 
-<p>It also seems to be a <strong>lot</strong> more powerful than those underpowered Netgear POSes, which is an added benefit.</p>
+<p>On Linux, this would be trivial. On Windows, of course, very little is trivial.</p>
+
+<p>So, following <a href="http://computercamp.cdwilson.us/jenkins-git-clone-via-ssh-on-windows-7-x64">this guide</a>(with some modifications) I managed it this way:</p>
+
+<ol>
+<li>Install <a href="http://git-scm.com/downloads">Git</a></li>
+<li>Generate the new SSH keys on my local machine using <code>ssh-keygen</code>. Make sure to specify a file <strong>other</strong> than the default (unless you like the idea of overwriting any existing keys you might have).</li>
+<li>Install the public key in the repository. In BitBucket, you do this under the account settings for the user or group who owns the repositories. Do it at the user/group level, not at the repository level (unless you want separate keys for each repository). Just cut and paste the contents of the public key to the web page, and click &ldquo;Add&rdquo;</li>
+<li>Install <a href="http://technet.microsoft.com/en-us/sysinternals/bb896649.aspx">PsTools</a> (<em>Note</em>: the link given in the guide mentioned above didn&rsquo;t work for me). Extract the zip file wherever you want (I put mine in the root dir)</li>
+<li>Run the following in a command shell <em>running as administrator</em>: <code>\PsTools\PsExec.exe -i -s cmd.exe</code> (<em>Note:</em> the guide says use a normal shell, but that will fail the first time, because it tries to instal something that needs Admin privileges). To do this, find the command shell icon in the menu, right-click, and select <em>Run as Administrator&hellip;</em>.</li>
+<li>Do <code>echo %USERPROFILE%</code> in the shell to find out where the system user (and, hence, Jenkins) runs from as its home directory. Mine turned out to be <code>C:\Windows\system32\config\systemprofile</code>. YMMV.</li>
+<li>Make a folder named <code>.ssh</code> in that home directory</li>
+<li>Copy the keys (private and public) to the Windows machine in the <code>.ssh</code> folder</li>
+<li>Run <code>"C:\Program Files(x86)\Git\bin\ssh.exe" -T git@bitbucket.org</code> (<em>Note:</em> the location of git on your install may be different than mine). When you get the usual &ldquo;unknown host&rdquo; warning, type &ldquo;yes&rdquo; to get the server key in your known_hosts file</li>
+<li>Finally, test git by doing a <code>git ls-remote git@bitbucket.org:repo.git HEAD</code></li>
+</ol>
+
 </div>
   
   
@@ -127,7 +143,7 @@
   
 
 
-<time datetime="2013-04-11T00:00:00-05:00" pubdate data-updated="true">Apr 11<span>th</span>, 2013</time>
+<time datetime="2013-04-11T22:30:00-05:00" pubdate data-updated="true">Apr 11<span>th</span>, 2013</time>
         
       </p>
     
@@ -226,7 +242,7 @@
   
 
 
-<time datetime="2013-04-11T00:00:00-05:00" pubdate data-updated="true">Apr 11<span>th</span>, 2013</time>
+<time datetime="2013-04-11T09:00:00-05:00" pubdate data-updated="true">Apr 11<span>th</span>, 2013</time>
         
       </p>
     
@@ -611,7 +627,7 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2013/06/13/SELinux-and-SSH/">Selinux and Ssh</a>
+        <a href="/blog/2013/06/13/SELinux-and-SSH/">SELinux and SSH</a>
       </li>
     
       <li class="post">
@@ -619,15 +635,15 @@
       </li>
     
       <li class="post">
-        <a href="/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black/">Setting Up Ntp on Beaglebone Black</a>
+        <a href="/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black/">Setting Up NTP on BeagleBone Black</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2013/06/09/BeagleBone-Black/">Beaglebone Black</a>
+        <a href="/blog/2013/06/09/BeagleBone-Black/">BeagleBone Black</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2013/05/30/I-Hate-LaTeX/">I Hate Latex</a>
+        <a href="/blog/2013/05/30/I-Hate-LaTeX/">I Hate LaTeX</a>
       </li>
     
   </ul>
