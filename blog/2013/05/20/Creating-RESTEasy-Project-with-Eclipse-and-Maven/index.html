@@ -1,0 +1,12 @@
+<p>Handy safety tip: to create a RESTEasy-friendly Maven project in Eclipse, do the following:</p>
+
+<ol>
+<li>Create the project as a simple Maven project</li>
+<li>In the project Properties &ndash;> Project Facets, make the project faceted, and select &ldquo;Dynamic Web Module&rdquo; (you may get a NullPointerException, but it doesn&rsquo;t seem to matter). Under &ldquo;Further Configuration&hellip;&rdquo;, point the WebApp directory to be <code>src/main/webapp</code>, and have it create the <code>web.xml</code> file.</li>
+<li>Under &ldquo;Web Content Settings&rdquo;, set the Context root</li>
+<li>Under &ldquo;Deployment Assembly&rdquo;, select &ldquo;Add&hellip;&rdquo;, select &ldquo;Java Build Path Entries&rdquo;, and select &ldquo;Maven Dependencies&rdquo;. It should put them in <code>WEB-INF/lib</code>.</li>
+<li>Add the code and the dependencies to the <code>pom.xml</code>. Make sure to add the RESTEasy stuff to the <code>web.xml</code> file.</li>
+</ol>
+
+
+<p>You should be able to deploy it from Eclipse into Tomcat without any issues</p>

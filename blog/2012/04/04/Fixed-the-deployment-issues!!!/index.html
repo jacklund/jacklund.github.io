@@ -1,0 +1,53 @@
+<p>I finally figured out how to get Ant + Ivy to copy artifacts from one Artifactory repository to another, modifying the appropriate metadata (AKA &ldquo;promotion&rdquo;). First, you need a separate ivy.xml file (I call mine &ldquo;ivy-publish.xml&rdquo;) that looks like this:</p>
+
+<pre><code>&lt;ivy-module version="2.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation=
+         "http://ant.apache.org/ivy/schemas/ivy.xsd"&gt;
+    &lt;info organisation="foo" module="FooDeploy" status="integration" /&gt;
+
+    &lt;configurations&gt;
+        &lt;conf name="integration"/&gt;
+        &lt;conf name="milestone"/&gt;
+        &lt;conf name="release"/&gt;
+    &lt;/configurations&gt;
+
+    &lt;publications&gt;
+        &lt;artifact name="Foo" ext="war" /&gt;
+        &lt;artifact name="Foo-src" ext="jar" /&gt;
+    &lt;/publications&gt;
+
+    &lt;dependencies&gt;
+        &lt;dependency org="foo" name="Foo" rev="latest.integration"
+          conf="integration-&gt;deploy" transitive="false" /&gt;
+        &lt;dependency org="foo" name="Foo" rev="latest.milestone"
+          conf="milestone-&gt;deploy" transitive="false" /&gt;
+        &lt;dependency org="foo" name="Foo" rev="latest.release"
+          conf="release-&gt;deploy" transitive="false" /&gt;
+    &lt;/dependencies&gt;
+&lt;/ivy-module&gt;
+</code></pre>
+
+<p>And then, you need an ant target that looks like this:</p>
+
+<pre><code>&lt;target name="publish-stage"&gt;
+    &lt;ivy:configure file="${common.build.dir}/ivysettings.xml"
+        host="myserver" realm="Artifactory Realm" username="user"
+        passwd="password!" override="true" /&gt;
+    &lt;ivy:retrieve file="ivy-publish.xml" conf="integration"
+        pattern="${ivy.lib.dir}/[conf]/[artifact].[ext]"
+            ivypattern="${ivy.lib.dir}/[conf]/ivy.xml"/&gt;
+    &lt;ivy:buildnumber organisation="${ivy.organisation}"
+        module="${ivy.module}" revision="1.0" defaultBuildNumber="1"
+        resolver="stage" /&gt;
+    &lt;ivy:publish resolver="stage"
+        pubrevision="1.0.${ivy.new.build.number}"
+        status="milestone" overwrite="true" update="true"&gt;
+        &lt;artifacts pattern="${lib}/integration/[artifact].[ext]" /&gt;
+    &lt;/ivy:publish&gt;
+&lt;/target&gt;
+</code></pre>
+
+<p>What this does is first retrieve the &ldquo;dependencies&rdquo; (the artifacts we&rsquo;re interested in) specified in the ivy-publish.xml file to lib/integration. Then, it turns around and publishes them, changing the status from &ldquo;integration&rdquo; to &ldquo;milestone&rdquo;.</p>
+
+<p>Works like a charm.</p>

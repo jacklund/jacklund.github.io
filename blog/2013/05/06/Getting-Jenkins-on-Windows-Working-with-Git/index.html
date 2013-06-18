@@ -1,0 +1,21 @@
+<p>We&rsquo;re transitioning, as a company, from Subversion to Git, which is a Good Thing, but has its complications. One of them was getting <a href="http://jenkins-ci.org/">Jenkins</a>, which we use for <a href="http://en.wikipedia.org/wiki/Continuous_integration">continuous integration</a>, to work with our Git repositories.</p>
+
+<p>I had started out by thinking that I would have to create a user in our repository provider (we&rsquo;re using <a href="http://bitbucket.org">BitBucket</a>) which would have read permisisons to our repositories, a &ldquo;jenkins&rdquo; user. Turns out its not the case. All you need to do for read-only access is to generate SSH keys that you register with the repository, and which Jenkins uses to clone the repository.</p>
+
+<p>On Linux, this would be trivial. On Windows, of course, very little is trivial.</p>
+
+<p>So, following <a href="http://computercamp.cdwilson.us/jenkins-git-clone-via-ssh-on-windows-7-x64">this guide</a>(with some modifications) I managed it this way:</p>
+
+<ol>
+<li>Install <a href="http://git-scm.com/downloads">Git</a></li>
+<li>Generate the new SSH keys on my local machine using <code>ssh-keygen</code>. Make sure to specify a file <strong>other</strong> than the default (unless you like the idea of overwriting any existing keys you might have).</li>
+<li>Install the public key in the repository. In BitBucket, you do this under the account settings for the user or group who owns the repositories. Do it at the user/group level, not at the repository level (unless you want separate keys for each repository). Just cut and paste the contents of the public key to the web page, and click &ldquo;Add&rdquo;</li>
+<li>Install <a href="http://technet.microsoft.com/en-us/sysinternals/bb896649.aspx">PsTools</a> (<em>Note</em>: the link given in the guide mentioned above didn&rsquo;t work for me). Extract the zip file wherever you want (I put mine in the root dir)</li>
+<li>Run the following in a command shell <em>running as administrator</em>: <code>\PsTools\PsExec.exe -i -s cmd.exe</code> (<em>Note:</em> the guide says use a normal shell, but that will fail the first time, because it tries to instal something that needs Admin privileges). To do this, find the command shell icon in the menu, right-click, and select <em>Run as Administrator&hellip;</em>.</li>
+<li>Do <code>echo %USERPROFILE%</code> in the shell to find out where the system user (and, hence, Jenkins) runs from as its home directory. Mine turned out to be <code>C:\Windows\system32\config\systemprofile</code>. YMMV.</li>
+<li>Make a folder named <code>.ssh</code> in that home directory</li>
+<li>Copy the keys (private and public) to the Windows machine in the <code>.ssh</code> folder</li>
+<li>Run <code>"C:\Program Files(x86)\Git\bin\ssh.exe" -T git@bitbucket.org</code> (<em>Note:</em> the location of git on your install may be different than mine). When you get the usual &ldquo;unknown host&rdquo; warning, type &ldquo;yes&rdquo; to get the server key in your known_hosts file</li>
+<li>Finally, test git by doing a <code>git ls-remote git@bitbucket.org:repo.git HEAD</code></li>
+</ol>
+

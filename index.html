@@ -1,1 +1,698 @@
-My Octopress Page is coming soon &hellip;
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="I needed to set up Jenkins so that it could run an agent on another Linux box. To do this the default way, you need to allow Jenkins to access the &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jacklund.github.io">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jacklund.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/13/SELinux-and-SSH/">Selinux and Ssh</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-13T00:00:00-05:00" pubdate data-updated="true">Jun 13<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I needed to set up Jenkins so that it could run an agent on another Linux box. To do this the default way, you need to allow Jenkins to access the remote box via SSH. So, I set up the Jenkins user and the SSH keys on the remote machine, but trying to do an ssh from the Jenkins user on one machine to the other still didn&rsquo;t work. After doing <code>sudo journalctl -f</code> on the remote machine, I saw the following:</p>
+
+<pre><code>Jun 13 12:41:50 m2m-linux setroubleshoot[701]: SELinux is preventing /usr/sbin/sshd from read access on the file authorized_keys. For complete SELinux messages. run sealert -l ca7b7aea-64cf-46e5-8bfa-6650ad23f55b
+</code></pre>
+
+<p>Running the suggested <code>sealert -l ca7b7aea-64cf-46e5-8bfa-6650ad23f55b</code> gave me the following (edited for brevity):</p>
+
+<pre><code>SELinux is preventing /usr/sbin/sshd from read access on the file authorized_keys.
+
+*****  Plugin catchall_labels (83.8 confidence) suggests  ****
+
+If you want to allow sshd to have read access on the authorized_keys file
+Then you need to change the label on authorized_keys
+Do
+# semanage fcontext -a -t FILE_TYPE 'authorized_keys'
+where FILE_TYPE is one of the following: NetworkManager_etc_rw_t, NetworkManager_etc_t,...
+Then execute:
+restorecon -v 'authorized_keys'
+
+
+*****  Plugin catchall (17.1 confidence) suggests  *************
+
+If you believe that sshd should be allowed read access on the authorized_keys file by default.
+Then you should report this as a bug.
+You can generate a local policy module to allow this access.
+Do
+allow this access for now by executing:
+# grep sshd /var/log/audit/audit.log | audit2allow -M mypol
+# semodule -i mypol.pp
+</code></pre>
+
+<p>Not really helpful, so I dug around the web and found <a href="http://serverfault.com/questions/50573/selinux-preventing-passwordless-ssh-login">this post on ServerFault</a>. It turns out that the problem is that I created the Jenkins user&rsquo;s home directory by hand (I had to, it was <code>/var/jenkins</code>, which <code>adduser</code> wouldn&rsquo;t create), so SELinux didn&rsquo;t know it was a home directory.</p>
+
+<p>To fix this, I added the following lines to the end of <code>/etc/selinux/targeted/contexts/files/file_contexts.homedirs</code>:</p>
+
+<pre><code>/var/jenkins/.+ unconfined_u:object_r:user_home_t:s0
+/var/jenkins/\.ssh(/.*)?      system_u:object_r:ssh_home_t:s0
+</code></pre>
+
+<p>and then did <code>sudo restorecon -R -v /var/jenkins</code>, and that fixed the problem.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/12/Node.js/">Node.js</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-12T00:00:00-05:00" pubdate data-updated="true">Jun 12<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Having my new <a href="/jacklund/post/beaglebone-black">BeagleBone Black</a> has made me look at the default programming environment for it, <a href="http://nodejs.org">Node.js</a>. Companies like <a href="http://www.linkedin.com">LinkedIn</a> are <a href="http://engineering.linkedin.com/nodejs/blazing-fast-nodejs-10-performance-tips-linkedin-mobile">using it</a> on the server side, which sort of surprises me. I can definitely see its uses in devices like the BeagleBone, since it has such a small footprint and minimal use of resources, but I was surprised at how many people are using it on the server side.</p>
+
+<p>It makes sense, though &ndash; as <a href="http://wiki.nginx.org/Main">Nginx</a> demonstrated, an event-driven model can eat a thread-based server&rsquo;s lunch, performance-wise, under certain circumstances. What are those circumstances, though?</p>
+
+<p>To begin with, your application would have to be overwhelmingly I/O-bound; anything that does a lot of CPU operations would gain no real benefit from the event-driven model. So, for example, an application which receives requests and stores data in the database without a lot of processing would work really well here. Why? Because in a thread-based model, you would spawn a thread to handle the request, and that thread would be waiting, doing, basically, nothing while waiting for the database request to return. In the Node.js model, you would handle the incoming request, send off an asynchronous call for the database insert, registering a callback, and then handle the next event.</p>
+
+<p>However, if you were doing a lot of processing of the data, your event handler would be running longer than you would really like, and the other requests might get starved. You could get around this by offloading the processing to another service, so you would send off the request, and go about your business until the response came back, and you could respond to your client.</p>
+
+<p>This is all very interesting, and it would be even more interesting to do some performance comparisons of a &ldquo;traditional&rdquo; app written in something like Java vs. a Node.js app.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black/">Setting Up Ntp on Beaglebone Black</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-10T00:00:00-05:00" pubdate data-updated="true">Jun 10<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>For some reason, they didn&rsquo;t seem to see the need to set up the time service on the BeagleBone Blacks by default. I tried using the instructions from <a href="http://derekmolloy.ie/automatically-setting-the-beaglebone-black-time-using-ntp/">this gentleman</a>, but I had to make some modifications.</p>
+
+<ol>
+<li><p>Install NTP</p>
+
+<pre><code> # opkg update &amp;&amp; opkg install ntp
+</code></pre></li>
+<li><p>Edit <code>/etc/ntp.conf</code>, adding <code>pool.ntp.org</code> as the server:</p>
+
+<pre><code> # This is the most basic ntp configuration file
+ # The driftfile must remain in a place specific to this
+ # machine - it records the machine specific clock error
+ driftfile /etc/ntp.drift
+ # This obtains a random server which will be close
+ # (in IP terms) to the machine.  Add other servers
+ # as required, or change this.
+ server pool.ntp.org
+ # Using local hardware clock as fallback
+ # Disable this when using ntpd -q -g -x as ntpdate or it will sync to itself
+ server 127.127.1.0
+ fudge 127.127.1.0 stratum 14
+ # Defining a default security setting
+ restrict default
+</code></pre></li>
+<li><p>Set your local time:</p>
+
+<pre><code> # cd /etc
+ # rm -f localtime
+ # ln -s ../usr/share/zoneinfo/America/Chicago localtime
+</code></pre></li>
+<li><p>Edit <code>/etc/default/ntpdate</code>:</p>
+
+<pre><code> # Configuration script used by ntpdate-sync script
+
+ NTPSERVERS="pool.ntp.org"
+
+ # Set to "yes" to write time to hardware clock on success
+ UPDATE_HWCLOCK="yes"
+</code></pre></li>
+<li><p>Now, reboot and see if the clock gets set correctly</p></li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/09/BeagleBone-Black/">Beaglebone Black</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-09T00:00:00-05:00" pubdate data-updated="true">Jun 9<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Got my two <a href="http://beagleboard.org/Products/BeagleBone%20Black">BeagleBone Blacks</a> from <a href="http://adafruit.com/">AdaFruit</a> on Friday. Really nice. I bought them without enclosures because, well, the enclosures were $20, and the BeagleBones themselves were only $45. The nice thing is, though, that they fit exactly into an Altoids tin, so I turned two into my enclosures. I used tin snips to cut holes for power and Ethernet, and lined them with electrical tape to insulate the board from the box. Here&rsquo;s what they ended up looking like:</p>
+
+<p><img src="https://dl.dropbox.com/s/bpgc7lc5azhazw5/altoids_closed.jpg" title="Closed" alt="" /></p>
+
+<p><img src="https://dl.dropbox.com/s/d87y38ydxqtcv2q/altoids_open.jpg" title="Open" alt="" /></p>
+
+<p><img src="https://dl.dropbox.com/s/7nocbp8nnb65pwn/altoids_working.jpg" title="Running" alt="" /></p>
+
+<p>By default, they run <a href="http://www.angstrom-distribution.org/">Ångström Linux</a>. The default programming environment for them is a variant of Javascript they call <a href="http://beagleboard.org/Support/BoneScript">&ldquo;Bonescript&rdquo;</a>, which runs via <a href="http://nodejs.org/">Node.js</a>. However, a kind soul had put together a Python library called <a href="https://github.com/alexanderhiam/PyBBIO">PyBBIO</a>, which I downloaded and tried to install. I kept getting the following warning, however:</p>
+
+<pre><code>Warning: you seem to have a BeagleBone image which only has drivers for the PWM1 module, PWM2A and PWM2B will not be available in PyBBIO.
+You should consider updating Angstrom!
+</code></pre>
+
+<p>I tried updating the OS using <a href="http://learn.adafruit.com/beaglebone-black-installing-operating-systems/overview">these instructions</a>, however it didn&rsquo;t make the problem go away. That&rsquo;s when I discovered that PyBBIO <a href="https://github.com/alexanderhiam/PyBBIO/issues/18">doesn&rsquo;t support the 3.8 kernel that comes with BB Blacks</a>, so it looks like I&rsquo;m stuck with Javascript for the moment.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/30/I-Hate-LaTeX/">I Hate Latex</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-30T00:00:00-05:00" pubdate data-updated="true">May 30<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>No, I really do. It&rsquo;s not hyperbole. I hate it.</p>
+
+<p>It&rsquo;s frickin&#8217; 2013, people. We should not have to deal with languages that look like this:</p>
+
+<pre><code>\renewcommand{\href}[2]{#2\footnote{\url{#1}}}
+$endif$
+$if(strikeout)$
+\usepackage[normalem]{ulem}
+% avoid problems with \sout in headers with hyperref:
+\pdfstringdefDisableCommands{\renewcommand{\sout}{}}
+$endif$
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+$if(numbersections)$
+\setcounter{secnumdepth}{5}
+$else$
+\setcounter{secnumdepth}{0}
+$endif$
+</code></pre>
+
+<p>and parsers that give errors like this:</p>
+
+<pre><code>paragraph ended before Gin@iii was completed.
+</code></pre>
+
+<p>The reason I&rsquo;m even messing with this is that I want a way to convert <a href="http://daringfireball.net/projects/markdown/">markdown</a> to PDF. Should be easy, right?</p>
+
+<p>Guess again. Just about everything either converts from markdown to HTML, then to PDF, which renders pretty badly, or from markdown to LaTeX to PDF, which renders rather nicely. Except, in order to tweak it (like adding a logo to the title) you have to hack LaTeX. Ugh.</p>
+
+<p>One of the most flexible converters, <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>, which, don&rsquo;t get me wrong, is a very nice package, requires you to tweak a <code>default.latex</code> file to modify the default format, hence my problem: I just spent around an hour and a half just trying to get a frickin&#8217; logo on the cover page where I want it (there&rsquo;s a LaTeX package called &ldquo;titlepic&rdquo; which puts it where <em>it</em> wants, but if you want it elsewhere, you&rsquo;re SOL).</p>
+
+<p>Again, it&rsquo;s 2013 and document creation shouldn&rsquo;t be frickin&#8217; rocket science! The whole point of writing in markdown is that we don&rsquo;t want to have to mess with complex document formats. I should be able to take a markdown document, pass it into a converter, give it some options in a syntax that doesn&rsquo;t look like 80&rsquo;s-era gobbledygook, and get a decent-looking document out the other end.</p>
+
+<p><em>facepalm</em></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/20/Creating-RESTEasy-Project-with-Eclipse-and-Maven/">Creating Resteasy Project With Eclipse and Maven</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-20T00:00:00-05:00" pubdate data-updated="true">May 20<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Handy safety tip: to create a RESTEasy-friendly Maven project in Eclipse, do the following:</p>
+
+<ol>
+<li>Create the project as a simple Maven project</li>
+<li>In the project Properties &ndash;> Project Facets, make the project faceted, and select &ldquo;Dynamic Web Module&rdquo; (you may get a NullPointerException, but it doesn&rsquo;t seem to matter). Under &ldquo;Further Configuration&hellip;&rdquo;, point the WebApp directory to be <code>src/main/webapp</code>, and have it create the <code>web.xml</code> file.</li>
+<li>Under &ldquo;Web Content Settings&rdquo;, set the Context root</li>
+<li>Under &ldquo;Deployment Assembly&rdquo;, select &ldquo;Add&hellip;&rdquo;, select &ldquo;Java Build Path Entries&rdquo;, and select &ldquo;Maven Dependencies&rdquo;. It should put them in <code>WEB-INF/lib</code>.</li>
+<li>Add the code and the dependencies to the <code>pom.xml</code>. Make sure to add the RESTEasy stuff to the <code>web.xml</code> file.</li>
+</ol>
+
+
+<p>You should be able to deploy it from Eclipse into Tomcat without any issues</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/12/TI-SensorTag/">Ti Sensortag</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-12T00:00:00-05:00" pubdate data-updated="true">May 12<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I got my <a href="http://processors.wiki.ti.com/index.php/Bluetooth_SensorTag">TI Bluetooth SensorTag</a> Friday, and played with it some over the weekend. It&rsquo;s pretty nice. It&rsquo;s basically a small device with a bunch of embedded sensors on it &ndash; accelerometer, gyroscope, ambient temp, IR temp (see below), humidity, barometric pressure, and a couple of buttons on it. It&rsquo;s very small, and communicates over <a href="http://en.wikipedia.org/wiki/Bluetooth_low_energy">Bluetooth 4 LE</a>. You can download an iOS app for viewing the data, so my daughters and I played with it some. Pretty cool. There&rsquo;s a <a href="http://blog.makezine.com/2013/04/18/teardown-of-the-ti-sensortag">teardown of it</a> at MAKE magazine, and even a <a href="http://mike.saunby.net/2013/04/raspberry-pi-and-ti-cc2541-sensortag.html">Raspberry Pi</a> project to interface with it. W00t!!!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/07/Falling-in-Love-with-Git/">Falling in Love With Git</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-07T00:00:00-05:00" pubdate data-updated="true">May 7<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>As I mentioned earlier, we&rsquo;re transitioning from subversion to git, and one of the things we need to do is convert from many-projects-per-repository, which is what we had in subversion, to one-project-per-repository for git. This is partly to make things nicer, and partly because it will make <a href="http://jenkins-ci.org/">Jenkins</a> work better. So, thinking in subversion-terms, I thought I&rsquo;d have to do it myself, and even tried by renaming all the files in one of the projects into the upper-level directory, removing all the other projects, committing locally, and then pushing to a new repo. Royal pain.</p>
+
+<p>And then, I came across <a href="https://help.github.com/articles/splitting-a-subpath-out-into-a-new-repository">this</a>. Oh. My. God. Git actually does the work for you. It&rsquo;s so easy, you just do the <code>git filter-branch</code> command, and suddenly your project is its own repository! Then, you just change the remote repository (<code>git remote rm origin</code> followed by <code>git remote add</code> <em>new-url</em>), and Bob&rsquo;s your uncle, you have a new, smaller repository.</p>
+
+<p>I mean, seriously? That is AWESOME!</p>
+
+<p>So, to be explicit, here&rsquo;s the series of commands:</p>
+
+<pre><code>$ git clone repo-url
+$ cd repo
+$ git filter-branch --prune-empty --subdirectory-filter subdir-name master
+$ git remote rm origin
+$ git remote add new-repo-url
+$ git push -u origin --all --tags
+</code></pre>
+
+<p><strong>Updated 05/12/2013</strong>
+Okay, after messing around with this for some time, I&rsquo;ve discovered that the above doesn&rsquo;t work quite right, because the pathnames in the commits are wrong &ndash; instead of being <em>subdir-name</em><code>/src/foo/Bar.java</code>, it ends up being <code>src/foo/Bar.java</code>, which doesn&rsquo;t work. So, instead of trying to pull each subdirectory into their own repository, I&rsquo;m taking the existing repository, with a bunch of subdirs, including the ones I&rsquo;m interested in, and simply using <code>git filter-branch</code> to get rid of the ones I&rsquo;m not interested in, as well as update the tags. So, here&rsquo;s what I&rsquo;ve got now, which seems to work well:</p>
+
+<script src="https://gist.github.com/jacklund/5565462.js"></script>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/06/VerifyError-with-JDK-7/">Verifyerror With Jdk 7</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-06T00:00:00-05:00" pubdate data-updated="true">May 6<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>We had been using nothing higher than JDK 6 with our project up until now, but when I built a new build machine using Fedora 18, JDK 7 was our only real option (okay, that and JDK 5). However, once I got things building using ant, I got the following cryptic error in the unit tests:</p>
+
+<pre><code>java.lang.VerifyError: Expecting a stackmap frame at branch target 41 in method com.m2mci.correlation.CorrelationId.equals(Ljava/lang/Object;)Z at offset 24
+</code></pre>
+
+<p>After some <a href="http://www.javacraft.org/2012/07/cobertura-with-jdk7.html">digging</a>, I found out that the kind folks at Oracle/Sun had changed the bytecode in JDK 7 such that there was a verifier frame now included where there wasn&rsquo;t before. This is fine as long as everything knows about this, but we&rsquo;ve been using <a href="http://cobertura.sourceforge.net/">Cobertura</a> for code coverage, which instruments the bytecode, and which apparently doesn&rsquo;t know about the fancy new verifier stack frame. What&rsquo;s worse, they don&rsquo;t seem (from what I can tell from their website) to have any interest in adding it any time soon.</p>
+
+<p>So, what to do? Our two alternatives are a) drop Cobertura, or b) include the JVM argument <code>-XX:-UseSplitVerifier</code> every time we run our code. To me, the former seems the better way to go, especially since we&rsquo;re not really <em>using</em> code coverage right now (we probably should, but for now, we&rsquo;re not).</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/06/Getting-Jenkins-on-Windows-Working-with-Git/">Getting Jenkins on Windows Working With Git</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-06T00:00:00-05:00" pubdate data-updated="true">May 6<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>We&rsquo;re transitioning, as a company, from Subversion to Git, which is a Good Thing, but has its complications. One of them was getting <a href="http://jenkins-ci.org/">Jenkins</a>, which we use for <a href="http://en.wikipedia.org/wiki/Continuous_integration">continuous integration</a>, to work with our Git repositories.</p>
+
+<p>I had started out by thinking that I would have to create a user in our repository provider (we&rsquo;re using <a href="http://bitbucket.org">BitBucket</a>) which would have read permisisons to our repositories, a &ldquo;jenkins&rdquo; user. Turns out its not the case. All you need to do for read-only access is to generate SSH keys that you register with the repository, and which Jenkins uses to clone the repository.</p>
+
+<p>On Linux, this would be trivial. On Windows, of course, very little is trivial.</p>
+
+<p>So, following <a href="http://computercamp.cdwilson.us/jenkins-git-clone-via-ssh-on-windows-7-x64">this guide</a>(with some modifications) I managed it this way:</p>
+
+<ol>
+<li>Install <a href="http://git-scm.com/downloads">Git</a></li>
+<li>Generate the new SSH keys on my local machine using <code>ssh-keygen</code>. Make sure to specify a file <strong>other</strong> than the default (unless you like the idea of overwriting any existing keys you might have).</li>
+<li>Install the public key in the repository. In BitBucket, you do this under the account settings for the user or group who owns the repositories. Do it at the user/group level, not at the repository level (unless you want separate keys for each repository). Just cut and paste the contents of the public key to the web page, and click &ldquo;Add&rdquo;</li>
+<li>Install <a href="http://technet.microsoft.com/en-us/sysinternals/bb896649.aspx">PsTools</a> (<em>Note</em>: the link given in the guide mentioned above didn&rsquo;t work for me). Extract the zip file wherever you want (I put mine in the root dir)</li>
+<li>Run the following in a command shell <em>running as administrator</em>: <code>\PsTools\PsExec.exe -i -s cmd.exe</code> (<em>Note:</em> the guide says use a normal shell, but that will fail the first time, because it tries to instal something that needs Admin privileges). To do this, find the command shell icon in the menu, right-click, and select <em>Run as Administrator&hellip;</em>.</li>
+<li>Do <code>echo %USERPROFILE%</code> in the shell to find out where the system user (and, hence, Jenkins) runs from as its home directory. Mine turned out to be <code>C:\Windows\system32\config\systemprofile</code>. YMMV.</li>
+<li>Make a folder named <code>.ssh</code> in that home directory</li>
+<li>Copy the keys (private and public) to the Windows machine in the <code>.ssh</code> folder</li>
+<li>Run <code>"C:\Program Files(x86)\Git\bin\ssh.exe" -T git@bitbucket.org</code> (<em>Note:</em> the location of git on your install may be different than mine). When you get the usual &ldquo;unknown host&rdquo; warning, type &ldquo;yes&rdquo; to get the server key in your known_hosts file</li>
+<li>Finally, test git by doing a <code>git ls-remote git@bitbucket.org:repo.git HEAD</code></li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/2/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/06/13/SELinux-and-SSH/">Selinux and Ssh</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/12/Node.js/">Node.js</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black/">Setting Up Ntp on Beaglebone Black</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/09/BeagleBone-Black/">Beaglebone Black</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/05/30/I-Hate-LaTeX/">I Hate Latex</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
