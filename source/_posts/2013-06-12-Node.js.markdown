@@ -1,0 +1,16 @@
+---
+date: 2013-06-12 16:10  
+title: Node.js 
+tags: node.js
+layout: post
+comments: true
+---
+Having my new [BeagleBone Black](/jacklund/post/beaglebone-black) has made me look at the default programming environment for it, [Node.js](http://nodejs.org). Companies like [LinkedIn](http://www.linkedin.com) are [using it](http://engineering.linkedin.com/nodejs/blazing-fast-nodejs-10-performance-tips-linkedin-mobile) on the server side, which sort of surprises me. I can definitely see its uses in devices like the BeagleBone, since it has such a small footprint and minimal use of resources, but I was surprised at how many people are using it on the server side.
+
+It makes sense, though - as [Nginx](http://wiki.nginx.org/Main) demonstrated, an event-driven model can eat a thread-based server's lunch, performance-wise, under certain circumstances. What are those circumstances, though?
+
+To begin with, your application would have to be overwhelmingly I/O-bound; anything that does a lot of CPU operations would gain no real benefit from the event-driven model. So, for example, an application which receives requests and stores data in the database without a lot of processing would work really well here. Why? Because in a thread-based model, you would spawn a thread to handle the request, and that thread would be waiting, doing, basically, nothing while waiting for the database request to return. In the Node.js model, you would handle the incoming request, send off an asynchronous call for the database insert, registering a callback, and then handle the next event.
+
+However, if you were doing a lot of processing of the data, your event handler would be running longer than you would really like, and the other requests might get starved. You could get around this by offloading the processing to another service, so you would send off the request, and go about your business until the response came back, and you could respond to your client.
+
+This is all very interesting, and it would be even more interesting to do some performance comparisons of a "traditional" app written in something like Java vs. a Node.js app.

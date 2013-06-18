@@ -1,0 +1,14 @@
+---
+date: 2012-01-14
+title: Eskrima class, Snow, and a New Server for Work
+tags: eskrima, martial arts
+layout: post
+comments: true
+---
+Had a killer eskrima class this morning. In the kids class, Guro worked us hard - one minute of strikes against the bag as fast as we can, alternating with planks and footwork. After that, during the adult class, lots of sparring. I ended up sparring continuously for, like, ten minutes, with only a few seconds break between rounds. It felt a lot better than last week's - I had a hard time getting back into the groove right after the holidays.
+
+After class, dropped the girls off to their first practice for their Willy Wonka musical, came back and had to do some sysadmin work for my lovely wife, then went back and picked up the girls, and we went sledding down the hill next to the Gurnee Park District building, where their musical practice was. Lots of fun, but after the class in the morning (and me being off my workout schedule and recovering from a sinus infection) it pretty much wiped me out.
+
+Then, I came home and put Ubuntu on the work Linux machine I built over the last couple of days. I got it installed, and set up on the network. Now, I just need to set up accounts, start up the services, install all the stuff we need, and we should be golden.
+
+Busy, busy day.
