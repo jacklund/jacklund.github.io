@@ -1,0 +1,2 @@
+# My Blog Source
+This is the source for my GitHub blog. I'm currently using [Octopress](http://octopress.org/) to render the layout, basically because I'm too lazy to do it myself. This may change in the future.
