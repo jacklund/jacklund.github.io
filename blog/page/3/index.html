@@ -9,7 +9,7 @@
   <meta name="author" content="Jack Lund">
 
   
-  <meta name="description" content="Had a killer eskrima class this morning. In the kids class, Guro worked us hard &ndash; one minute of strikes against the bag as fast as we can, &hellip;">
+  <meta name="description" content="So, one of the other guys in my new company ordered the parts for a Linux server to be sent to me (because we still live in a time when it&rsquo;s &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,50 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/15/New-Server-Hell/">New Server Hell</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-15T00:00:00-06:00" pubdate data-updated="true">Jan 15<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So, one of the other guys in my new company ordered the parts for a Linux server to be sent to me (because we still live in a time when it&rsquo;s cheaper to build your own Linux server than to buy one pre-made), which I built the other day. This was somewhat interesting in that I haven&rsquo;t put together a new machine in quite a while, but, fortunately, it seems like these things get easier rather than harder as the technology progresses.</p>
+
+<p>The machine was built, and I had to add services to it. The first thing we needed was our Redmine installation, which up until now was running on my home Linux box. Both machines are running Ubuntu (for no other reason than it&rsquo;s easily accessible and has a very large user base), so it was just a matter of installing MySQL and Redmine from the Ubuntu repos, dumping the MySQL database from the other machine and moving it to this machine. This worked…mostly. For some strange reason the user passwords didn&rsquo;t work, so I had to start by resetting the admin password (using the instructions from <a href="http://www.redmine.org/boards/2/topics/3364">this post</a>), and then resetting all the user passwords. The only other hitch was that the main page reset to the default main page rather than the wiki page for my company, which I had set up a while ago. Easy enough to fix with <a href="http://www.supermind.org/blog/830/change-redmine-homepage-to-project-page">these instructions</a>. So far so good.</p>
+
+<p>Next, I had to move our subversion repository over from a machine running Windows to this new server. Again, easy enough, you just have to dump the repository and load it again, as per <a href="http://dotnot.org/blog/archives/2005/01/13/move-a-subversion-repository-from-one-machine-to-another/">these instructions</a>. Then, I just had to make sure svn+ssh worked (I had already setup SSH on the machine and set up accounts for our guys), and then I had to setup SVN through WebDAV, which was really just a matter of enabling some of the Apache mods.</p>
+
+<p>The big kicker, though, was that I&rsquo;m temporarily hosting our server at my house, so it&rsquo;s part of my network. Since I already have a web server (on my Linux box) running exposed to the world, for Redmine, I had to enable mod_proxy on my home Linux box to reverse-proxy the requests to the new box. WebDAV I simply made HTTPS, so I could set up a separate port forward for it directly to the new box.</p>
+
+<p>All in all, one big sysadmin day for a guy who doesn&rsquo;t especially like sysadmin work.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -241,6 +285,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/18/eclipse-with-subversion-1-dot-8-on-os-x/">Eclipse With Subversion 1.8 on OS X</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/18/moved-to-github-slash-octopress/">Moved to GitHub/Octopress</a>
       </li>
     
@@ -254,10 +302,6 @@
     
       <li class="post">
         <a href="/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black/">Setting Up NTP on BeagleBone Black</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/09/BeagleBone-Black/">BeagleBone Black</a>
       </li>
     
   </ul>
