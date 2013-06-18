@@ -4,7 +4,7 @@
   <title><![CDATA[Everything Is Code]]></title>
   <link href="http://jacklund.github.io/atom.xml" rel="self"/>
   <link href="http://jacklund.github.io/"/>
-  <updated>2013-06-18T10:49:57-05:00</updated>
+  <updated>2013-06-18T10:55:55-05:00</updated>
   <id>http://jacklund.github.io/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
@@ -12,6 +12,17 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Moved to GitHub/Octopress]]></title>
+    <link href="http://jacklund.github.io/blog/2013/06/18/moved-to-github-slash-octopress/"/>
+    <updated>2013-06-18T10:51:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/06/18/moved-to-github-slash-octopress</id>
+    <content type="html"><![CDATA[<p>I finally gave up on <a href="http://www.scriptogr.am">scriptogr.am</a>. I was struggling with their syntax highlighting, even sent a message to their support. The only answer I got back was from another user (who was very helpful, but it didn&rsquo;t really fix my problem). So, I&rsquo;m done.</p>
+
+<p>I&rsquo;m now using <a href="http://pages.github.com/">GitHub Pages</a>, which generates their pages using <a href="https://github.com/mojombo/jekyll">Jekyll</a>. I&rsquo;m also using (Octopress)[<a href="http://octopress.org/">http://octopress.org/</a>] for the layout, which makes it all pretty easy (well, that is, once you go through the somewhat painful ruby setup).</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[SELinux and SSH]]></title>
@@ -650,21 +661,6 @@ Okay, after messing around with this for some time, I&rsquo;ve discovered that t
 <p>The big kicker, though, was that I&rsquo;m temporarily hosting our server at my house, so it&rsquo;s part of my network. Since I already have a web server (on my Linux box) running exposed to the world, for Redmine, I had to enable mod_proxy on my home Linux box to reverse-proxy the requests to the new box. WebDAV I simply made HTTPS, so I could set up a separate port forward for it directly to the new box.</p>
 
 <p>All in all, one big sysadmin day for a guy who doesn&rsquo;t especially like sysadmin work.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Eskrima class, Snow, and a New Server for Work]]></title>
-    <link href="http://jacklund.github.io/blog/2012/01/14/Eskrima-class%2C-Snow%2C-and-a-New-Server-for-Work/"/>
-    <updated>2012-01-14T00:00:00-06:00</updated>
-    <id>http://jacklund.github.io/blog/2012/01/14/Eskrima-class,-Snow,-and-a-New-Server-for-Work</id>
-    <content type="html"><![CDATA[<p>Had a killer eskrima class this morning. In the kids class, Guro worked us hard &ndash; one minute of strikes against the bag as fast as we can, alternating with planks and footwork. After that, during the adult class, lots of sparring. I ended up sparring continuously for, like, ten minutes, with only a few seconds break between rounds. It felt a lot better than last week&rsquo;s &ndash; I had a hard time getting back into the groove right after the holidays.</p>
-
-<p>After class, dropped the girls off to their first practice for their Willy Wonka musical, came back and had to do some sysadmin work for my lovely wife, then went back and picked up the girls, and we went sledding down the hill next to the Gurnee Park District building, where their musical practice was. Lots of fun, but after the class in the morning (and me being off my workout schedule and recovering from a sinus infection) it pretty much wiped me out.</p>
-
-<p>Then, I came home and put Ubuntu on the work Linux machine I built over the last couple of days. I got it installed, and set up on the network. Now, I just need to set up accounts, start up the services, install all the stuff we need, and we should be golden.</p>
-
-<p>Busy, busy day.</p>
 ]]></content>
   </entry>
   

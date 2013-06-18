@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Node.js - Everything Is Code</title>
+  <title>Category: scriptogr.am - Everything Is Code</title>
   <meta name="author" content="Jack Lund">
 
   
-  <meta name="description" content="Having my new BeagleBone Black has made me look at the default programming environment for it, Node.js. Companies like LinkedIn are using it on the &hellip;">
+  <meta name="description" content="Category: scriptogr.am">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jacklund.github.io/blog/2013/06/12/Node.js">
+  <link rel="canonical" href="http://jacklund.github.ioblog/categories/scriptogr-dot-am">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Everything Is Code" type="application/atom+xml">
@@ -64,88 +64,35 @@
   <div id="main">
     <div id="content">
       <div>
-<article class="hentry" role="article">
+<article role="article">
   
   <header>
-    
-      <h1 class="entry-title">Node.js</h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-12T16:10:00-05:00" pubdate data-updated="true">Jun 12<span>th</span>, 2013</time>
-        
-      </p>
+    <h1 class="entry-title">Category: scriptogr.am</h1>
     
   </header>
+  
+  <div id="blog-archives" class="category">
 
 
-<div class="entry-content"><p>Having my new <a href="/jacklund/post/beaglebone-black">BeagleBone Black</a> has made me look at the default programming environment for it, <a href="http://nodejs.org">Node.js</a>. Companies like <a href="http://www.linkedin.com">LinkedIn</a> are <a href="http://engineering.linkedin.com/nodejs/blazing-fast-nodejs-10-performance-tips-linkedin-mobile">using it</a> on the server side, which sort of surprises me. I can definitely see its uses in devices like the BeagleBone, since it has such a small footprint and minimal use of resources, but I was surprised at how many people are using it on the server side.</p>
 
-<p>It makes sense, though &ndash; as <a href="http://wiki.nginx.org/Main">Nginx</a> demonstrated, an event-driven model can eat a thread-based server&rsquo;s lunch, performance-wise, under certain circumstances. What are those circumstances, though?</p>
+  
+  <h2>2013</h2>
 
-<p>To begin with, your application would have to be overwhelmingly I/O-bound; anything that does a lot of CPU operations would gain no real benefit from the event-driven model. So, for example, an application which receives requests and stores data in the database without a lot of processing would work really well here. Why? Because in a thread-based model, you would spawn a thread to handle the request, and that thread would be waiting, doing, basically, nothing while waiting for the database request to return. In the Node.js model, you would handle the incoming request, send off an asynchronous call for the database insert, registering a callback, and then handle the next event.</p>
+<article>
+  
+<h1><a href="/blog/2013/06/18/moved-to-github-slash-octopress/">Moved to GitHub/Octopress</a></h1>
+<time datetime="2013-06-18T10:51:00-05:00" pubdate><span class='month'>Jun</span> <span class='day'>18</span> <span class='year'>2013</span></time>
 
-<p>However, if you were doing a lot of processing of the data, your event handler would be running longer than you would really like, and the other requests might get starved. You could get around this by offloading the processing to another service, so you would send off the request, and go about your business until the response came back, and you could respond to your client.</p>
+<footer>
+  <span class="categories">posted in <a class='category' href='/blog/categories/github/'>github</a>, <a class='category' href='/blog/categories/jekyll/'>jekyll</a>, <a class='category' href='/blog/categories/scriptogr-dot-am/'>scriptogr.am</a></span>
+</footer>
 
-<p>This is all very interesting, and it would be even more interesting to do some performance comparisons of a &ldquo;traditional&rdquo; app written in something like Java vs. a Node.js app.</p>
+
+</article>
+
 </div>
 
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">Jack Lund</span></span>
-
-      
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-12T16:10:00-05:00" pubdate data-updated="true">Jun 12<span>th</span>, 2013</time>
-      
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jacklund.github.io/blog/2013/06/12/Node.js/" data-via="" data-counturl="http://jacklund.github.io/blog/2013/06/12/Node.js/" >Tweet</a>
-  
-  
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black/" title="Previous Post: Setting up NTP on BeagleBone Black">&laquo; Setting up NTP on BeagleBone Black</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2013/06/13/SELinux-and-SSH/" title="Next Post: SELinux and SSH">SELinux and SSH &raquo;</a>
-      
-    </p>
-  </footer>
 </article>
 
 </div>

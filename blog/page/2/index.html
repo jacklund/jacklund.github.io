@@ -9,7 +9,7 @@
   <meta name="author" content="Jack Lund">
 
   
-  <meta name="description" content="We&rsquo;re transitioning, as a company, from Subversion to Git, which is a Good Thing, but has its complications. One of them was getting Jenkins, &hellip;">
+  <meta name="description" content="We had been using nothing higher than JDK 6 with our project up until now, but when I built a new build machine using Fedora 18, JDK 7 was our only &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,49 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/06/VerifyError-with-JDK-7/">VerifyError With JDK 7</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-06T21:43:00-05:00" pubdate data-updated="true">May 6<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>We had been using nothing higher than JDK 6 with our project up until now, but when I built a new build machine using Fedora 18, JDK 7 was our only real option (okay, that and JDK 5). However, once I got things building using ant, I got the following cryptic error in the unit tests:</p>
+
+<pre><code>java.lang.VerifyError: Expecting a stackmap frame at branch target 41 in method com.m2mci.correlation.CorrelationId.equals(Ljava/lang/Object;)Z at offset 24
+</code></pre>
+
+<p>After some <a href="http://www.javacraft.org/2012/07/cobertura-with-jdk7.html">digging</a>, I found out that the kind folks at Oracle/Sun had changed the bytecode in JDK 7 such that there was a verifier frame now included where there wasn&rsquo;t before. This is fine as long as everything knows about this, but we&rsquo;ve been using <a href="http://cobertura.sourceforge.net/">Cobertura</a> for code coverage, which instruments the bytecode, and which apparently doesn&rsquo;t know about the fancy new verifier stack frame. What&rsquo;s worse, they don&rsquo;t seem (from what I can tell from their website) to have any interest in adding it any time soon.</p>
+
+<p>So, what to do? Our two alternatives are a) drop Cobertura, or b) include the JVM argument <code>-XX:-UseSplitVerifier</code> every time we run our code. To me, the former seems the better way to go, especially since we&rsquo;re not really <em>using</em> code coverage right now (we probably should, but for now, we&rsquo;re not).</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -620,48 +663,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/01/14/Eskrima-class%2C-Snow%2C-and-a-New-Server-for-Work/">Eskrima Class, Snow, and a New Server for Work</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-01-14T00:00:00-06:00" pubdate data-updated="true">Jan 14<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Had a killer eskrima class this morning. In the kids class, Guro worked us hard &ndash; one minute of strikes against the bag as fast as we can, alternating with planks and footwork. After that, during the adult class, lots of sparring. I ended up sparring continuously for, like, ten minutes, with only a few seconds break between rounds. It felt a lot better than last week&rsquo;s &ndash; I had a hard time getting back into the groove right after the holidays.</p>
-
-<p>After class, dropped the girls off to their first practice for their Willy Wonka musical, came back and had to do some sysadmin work for my lovely wife, then went back and picked up the girls, and we went sledding down the hill next to the Gurnee Park District building, where their musical practice was. Lots of fun, but after the class in the morning (and me being off my workout schedule and recovering from a sinus infection) it pretty much wiped me out.</p>
-
-<p>Then, I came home and put Ubuntu on the work Linux machine I built over the last couple of days. I got it installed, and set up on the network. Now, I just need to set up accounts, start up the services, install all the stuff we need, and we should be golden.</p>
-
-<p>Busy, busy day.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -679,6 +680,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/18/moved-to-github-slash-octopress/">Moved to GitHub/Octopress</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/13/SELinux-and-SSH/">SELinux and SSH</a>
       </li>
     
@@ -692,10 +697,6 @@
     
       <li class="post">
         <a href="/blog/2013/06/09/BeagleBone-Black/">BeagleBone Black</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/05/30/I-Hate-LaTeX/">I Hate LaTeX</a>
       </li>
     
   </ul>
