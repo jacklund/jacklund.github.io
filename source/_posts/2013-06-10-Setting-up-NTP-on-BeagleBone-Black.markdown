@@ -9,10 +9,11 @@ For some reason, they didn't seem to see the need to set up the time service on 
 
 1. Install NTP
  
-        # opkg update && opkg install ntp
+        $ opkg update && opkg install ntp
 
 2. Edit ``/etc/ntp.conf``, adding ``pool.ntp.org`` as the server:
 
+```apache
         # This is the most basic ntp configuration file
         # The driftfile must remain in a place specific to this
         # machine - it records the machine specific clock error
@@ -27,20 +28,25 @@ For some reason, they didn't seem to see the need to set up the time service on 
         fudge 127.127.1.0 stratum 14
         # Defining a default security setting
         restrict default
+```
 
 3. Set your local time:
 
-        # cd /etc
-        # rm -f localtime
-        # ln -s ../usr/share/zoneinfo/America/Chicago localtime
+```bash
+        $ cd /etc
+        $ rm -f localtime
+        $ ln -s ../usr/share/zoneinfo/America/Chicago localtime
+```
 
 4. Edit ``/etc/default/ntpdate``:
 
+```apache
         # Configuration script used by ntpdate-sync script
 
         NTPSERVERS="pool.ntp.org"
 
         # Set to "yes" to write time to hardware clock on success
         UPDATE_HWCLOCK="yes"
+```
 
 5. Now, reboot and see if the clock gets set correctly

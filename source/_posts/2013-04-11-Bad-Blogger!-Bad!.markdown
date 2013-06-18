@@ -12,6 +12,7 @@ This seems to be the most painless solution, so I'm going with it.
 
 Code blocks seem to be handled relatively well:
 
+```java
     public class Foo {
       private int bar;
       
@@ -19,5 +20,6 @@ Code blocks seem to be handled relatively well:
         return bar;
       }
     }
+```
 
 So, I'll stick with this, for now.

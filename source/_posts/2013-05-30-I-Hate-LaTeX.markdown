@@ -9,6 +9,7 @@ No, I really do. It's not hyperbole. I hate it.
 
 It's frickin' 2013, people. We should not have to deal with languages that look like this:
 
+```latex
     \renewcommand{\href}[2]{#2\footnote{\url{#1}}}
     $endif$
     $if(strikeout)$
@@ -24,6 +25,7 @@ It's frickin' 2013, people. We should not have to deal with languages that look 
     $else$
     \setcounter{secnumdepth}{0}
     $endif$
+```
 
 and parsers that give errors like this:
 

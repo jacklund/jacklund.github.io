@@ -13,12 +13,14 @@ I mean, seriously? That is AWESOME!
 
 So, to be explicit, here's the series of commands:
 
+```bash
     $ git clone repo-url
     $ cd repo
     $ git filter-branch --prune-empty --subdirectory-filter subdir-name master
     $ git remote rm origin
     $ git remote add new-repo-url
     $ git push -u origin --all --tags
+```
 
 **Updated 05/12/2013**
 Okay, after messing around with this for some time, I've discovered that the above doesn't work quite right, because the pathnames in the commits are wrong - instead of being _subdir-name_``/src/foo/Bar.java``, it ends up being ``src/foo/Bar.java``, which doesn't work. So, instead of trying to pull each subdirectory into their own repository, I'm taking the existing repository, with a bunch of subdirs, including the ones I'm interested in, and simply using ``git filter-branch`` to get rid of the ones I'm not interested in, as well as update the tags. So, here's what I've got now, which seems to work well:

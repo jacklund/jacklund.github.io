@@ -6,6 +6,7 @@ comments: true
 ---
 I finally figured out how to get Ant + Ivy to copy artifacts from one Artifactory repository to another, modifying the appropriate metadata (AKA "promotion"). First, you need a separate ivy.xml file (I call mine "ivy-publish.xml") that looks like this:
 
+```xml
     <ivy-module version="2.0"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:noNamespaceSchemaLocation=
@@ -32,9 +33,11 @@ I finally figured out how to get Ant + Ivy to copy artifacts from one Artifactor
               conf="release->deploy" transitive="false" />
     	</dependencies>
     </ivy-module>
+```
 
 And then, you need an ant target that looks like this:
 
+```xml
 	<target name="publish-stage">
 		<ivy:configure file="${common.build.dir}/ivysettings.xml"
       		host="myserver" realm="Artifactory Realm" username="user"
@@ -51,6 +54,7 @@ And then, you need an ant target that looks like this:
 			<artifacts pattern="${lib}/integration/[artifact].[ext]" />
 		</ivy:publish>
 	</target>
+```
 
 What this does is first retrieve the "dependencies" (the artifacts we're interested in) specified in the ivy-publish.xml file to lib/integration. Then, it turns around and publishes them, changing the status from "integration" to "milestone".
 
