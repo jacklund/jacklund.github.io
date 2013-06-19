@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: arts | Everything Is Code]]></title>
-  <link href="http://jacklund.github.io/blog/categories/arts/atom.xml" rel="self"/>
+  <title><![CDATA[Category: martial_arts | Everything Is Code]]></title>
+  <link href="http://jacklund.github.io/blog/categories/martial-arts/atom.xml" rel="self"/>
   <link href="http://jacklund.github.io/"/>
-  <updated>2013-06-18T21:54:14-05:00</updated>
+  <updated>2013-06-18T22:03:33-05:00</updated>
   <id>http://jacklund.github.io/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
