@@ -1,7 +1,7 @@
 ---
 date: 2013-06-10 11:50  
 title: Setting up NTP on BeagleBone Black 
-tags: beaglebone, linux
+categories: beaglebone linux
 layout: post
 comments: true
 ---

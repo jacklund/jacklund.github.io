@@ -1,7 +1,7 @@
 ---
 date: 2013-05-06 20:46  
 title: Getting Jenkins on Windows Working with Git  
-tags: jenkins, windows, git  
+categories: jenkins windows git  
 layout: post
 comments: true
 ---

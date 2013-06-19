@@ -1,7 +1,7 @@
 ---
 date: 2013-06-13 13:30  
 title: SELinux and SSH
-tags: ssh, selinux
+categories: ssh selinux
 layout: post
 comments: true
 ---

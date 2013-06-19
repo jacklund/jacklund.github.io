@@ -1,7 +1,7 @@
 ---
 date: 2012-01-14
 title: Eskrima class, Snow, and a New Server for Work
-tags: eskrima, martial arts
+categories: eskrima martial arts
 layout: post
 comments: true
 ---

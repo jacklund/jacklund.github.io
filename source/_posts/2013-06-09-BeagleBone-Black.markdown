@@ -1,7 +1,7 @@
 ---
 date: 2013-06-09 20:00  
 title: BeagleBone Black  
-tags: beaglebone, linux
+categories: beaglebone linux
 layout: post
 comments: true
 ---

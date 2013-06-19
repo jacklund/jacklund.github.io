@@ -1,7 +1,7 @@
 ---
 date: 2013-05-12 19:20
 title: TI SensorTag
-tags: sensortag
+categories: sensortag
 layout: post
 comments: true
 ---

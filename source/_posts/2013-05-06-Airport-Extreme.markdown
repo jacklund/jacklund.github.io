@@ -1,7 +1,7 @@
 ---
 date: 2013-05-06 22:05 
 title: Airport Extreme  
-tags: apple, wifi
+categories: apple wifi
 layout: post
 comments: true
 ---

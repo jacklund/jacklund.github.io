@@ -1,7 +1,7 @@
 ---
 date: 2013-05-30 11:30
 title: I Hate LaTeX
-tags: latex, documents, pandoc, markdown
+categories: latex documents pandoc markdown
 layout: post
 comments: true
 ---

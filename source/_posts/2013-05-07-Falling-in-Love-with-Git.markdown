@@ -1,7 +1,7 @@
 ---
 date: 2013-05-07 17:00
 title: Falling in Love with Git
-tags: git
+categories: git
 layout: post
 comments: true
 ---

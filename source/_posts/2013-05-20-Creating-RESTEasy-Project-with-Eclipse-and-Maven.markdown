@@ -1,7 +1,7 @@
 ---
 date: 2013-05-20  
 title: Creating RESTEasy Project with Eclipse and Maven
-tags: resteasy, eclipse, maven, java
+categories: resteasy eclipse maven java
 layout: post
 comments: true
 ---

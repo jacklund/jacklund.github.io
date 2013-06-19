@@ -1,7 +1,7 @@
 ---
 date: 2013-04-11 22:30
 title: Rethinking Architecture  
-tags: architecture, jboss, rest, scalability, kafka, zookeeper, spring, jetty, tomcat, hornetq
+categories: architecture jboss rest scalability kafka zookeeper spring jetty tomcat hornetq
 layout: post
 comments: true
 ---

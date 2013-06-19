@@ -1,7 +1,7 @@
 ---
 date: 2013-06-12 16:10  
 title: Node.js 
-tags: node.js
+categories: node.js
 layout: post
 comments: true
 ---

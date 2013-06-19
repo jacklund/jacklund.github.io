@@ -1,7 +1,7 @@
 ---
 date: 2013-05-06 21:43  
 title: VerifyError with JDK 7  
-tags: java, jdk7, cobertura  
+categories: java jdk7 cobertura  
 layout: post
 comments: true
 ---
