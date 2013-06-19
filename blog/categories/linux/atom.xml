@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | Everything Is Code]]></title>
   <link href="http://jacklund.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://jacklund.github.io/"/>
-  <updated>2013-06-18T22:03:33-05:00</updated>
+  <updated>2013-06-18T22:22:34-05:00</updated>
   <id>http://jacklund.github.io/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
@@ -21,11 +21,19 @@
     <content type="html"><![CDATA[<p>For some reason, they didn&rsquo;t seem to see the need to set up the time service on the BeagleBone Blacks by default. I tried using the instructions from <a href="http://derekmolloy.ie/automatically-setting-the-beaglebone-black-time-using-ntp/">this gentleman</a>, but I had to make some modifications.</p>
 
 <ol>
-<li><p>Install NTP</p>
+<li>Install NTP</li>
+</ol>
 
-<pre><code> $ opkg update &amp;&amp; opkg install ntp
-</code></pre></li>
-<li><p>Edit <code>/etc/ntp.conf</code>, adding <code>pool.ntp.org</code> as the server:</p></li>
+
+<p>```bash</p>
+
+<pre><code>    $ opkg update &amp;&amp; opkg install ntp
+</code></pre>
+
+<p>```</p>
+
+<ol>
+<li>Edit <code>/etc/ntp.conf</code>, adding <code>pool.ntp.org</code> as the server:</li>
 </ol>
 
 
