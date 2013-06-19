@@ -9,7 +9,9 @@ For some reason, they didn't seem to see the need to set up the time service on 
 
 1. Install NTP
  
+```bash
         $ opkg update && opkg install ntp
+```
 
 2. Edit ``/etc/ntp.conf``, adding ``pool.ntp.org`` as the server:
 
