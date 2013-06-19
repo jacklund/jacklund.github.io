@@ -24,4 +24,23 @@ So, to be explicit, here's the series of commands:
 
 **Updated 05/12/2013**
 Okay, after messing around with this for some time, I've discovered that the above doesn't work quite right, because the pathnames in the commits are wrong - instead of being _subdir-name_``/src/foo/Bar.java``, it ends up being ``src/foo/Bar.java``, which doesn't work. So, instead of trying to pull each subdirectory into their own repository, I'm taking the existing repository, with a bunch of subdirs, including the ones I'm interested in, and simply using ``git filter-branch`` to get rid of the ones I'm not interested in, as well as update the tags. So, here's what I've got now, which seems to work well:
-<script src="https://gist.github.com/jacklund/5565462.js"></script>
+
+```bash
+    # Get a list of the directories I'm not interested in
+    $ excludes=`echo $* | tr " " "|"`
+    $ files=`ls | egrep -v $excludes | tr "\\n" " "`
+    # Disconnect from remote for safety
+    $ git remote rm origin
+    # Get rid of all tags that don't fit my pattern
+    $ git tag -l | grep -v $pattern | xargs git tag -d
+    # Prune the directories I'm not interested in
+    $ git filter-branch --tag-name-filter cat --prune-empty \
+        --tree-filter "rm -rf ${files}" -- --all
+    # Reset the indexes
+    $ git reset --hard
+    # Get rid of obsolete references in the logs
+    $ git for-each-ref --format="%(refname)" refs/original/ | \
+        xargs -n 1 git update-ref -d
+    $ git reflog expire --expire=now --all
+    $ git gc --aggressive --prune=now
+```
