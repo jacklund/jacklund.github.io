@@ -6,6 +6,10 @@ comments: true
 sharing: true
 footer: true
 ---
-My name is Jack Lund. I'm a software architect and programmer working in the 'burbs North of Chicago. I'm one of the co-founders of a company called [M2M Connections, Inc](http://www.m2mconnectionsinc.com). We do all sorts of things relating small devices to cloud systems.
+My name is Jack Lund, and I'm a software developer/architect/all-around geek, currently living in the northern suburbs of Chicago with my lovely (and very patient) wife, and twin daughters. I'm currently a cofounder and partner at [M2M Connections Inc.](http://www.m2mconnectionsinc.com), a consulting company which specializes in machine-to-machine and cloud-based software.
 
-When I'm not working (which isn't all that often), I'm either spending time with my wife and twin daughters, or practicing [Eskrima](https://en.wikipedia.org/wiki/Eskrima) with my teacher, [Guro Edie Mesina](http://www.lionsmartialarts.com/instructors/guro-edie-mesina.html). 
+I've been a [programmer](/about/programming.html) professionally for around 30 years now, and non-professionally a few years before that. I've developed code in C, C++, Java, Perl, Python, and Ruby, and a number of other languages which have fallen by the wayside over the years. I've worked as a software architect in varying capacities for close to 20 years.
+
+I have a very wide variety of non-work interests, including physics (my undergraduate degree) and math, politics, philosophy, music and books. I also am an avid [martial artist](/about/martial-arts.html).
+
+If you wish to contact me, I can be reached at jack.lund [at] geekheads.net.
