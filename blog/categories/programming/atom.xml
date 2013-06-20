@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: programming | Everything Is Code]]></title>
+  <link href="http://jacklund.github.io/blog/categories/programming/atom.xml" rel="self"/>
+  <link href="http://jacklund.github.io/"/>
+  <updated>2013-06-19T22:14:09-05:00</updated>
+  <id>http://jacklund.github.io/</id>
+  <author>
+    <name><![CDATA[Jack Lund]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Beautiful Code]]></title>
+    <link href="http://jacklund.github.io/blog/2012/10/01/beautiful-code/"/>
+    <updated>2012-10-01T21:11:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2012/10/01/beautiful-code</id>
+    <content type="html"><![CDATA[<p>Programmers often talk about code being “beautiful”, but often writing “pretty” code is disparaged as being a luxury that can&rsquo;t be afforded under tight schedules. The result is really ugly code that ends up being difficult to maintain, but most people don&rsquo;t seem to see the correlation between “beauty” and “maintainability”.</p>
+
+<p>Experience has shown me that beautiful code and maintainable code, if not identical, are closely related. The reason, I believe, is very simple: coding is expression. What I mean by this is that, for any given problem that is trying to be solved by code, there are usually many, many different ways to go about solving it within the context of a given language and environment &ndash; there are usually many different solutions which “work”. Because of this, the choice of how to solve the problem is, all else being equal, an aesthetic choice. In other words, given a number of different ways of going about solving the given problem, one way of choosing among all the different possible solutions is to choose the one that seems the “prettiest”, that appeals to the programmers aesthetic style.</p>
+
+<p>This assumes, of course, that the programmer has access to all, or many, of the possible solutions. A less-experienced or less-talented programmer may only see one possible way of solving the problem, or may be too lazy or unmotivated to find or utilize more than one possible solution &ndash; this is one source of much bad, “ugly”, and unmaintainable code. However, when the programmer is talented and/or experienced enough, and properly motivated, the multiple possibilities open up, and the choice becomes available. This, incidentally, is one difference between a good, talented programmer and a hack &ndash; the talented programmer will always be aware of the various possible solutions available, and will have a good grasp of the consequences of each decision.</p>
+
+<p>So, how does this make the choice an aesthetic one, and why would the “prettiest” choice turn out to be the best? Because, as I said earlier, code is expression. Who or what do we write code for? Is it just to be turned into machine code and run? No, because if that were the case, we&rsquo;d all be writing in assembler. No, we write code for humans &ndash; other people who will be looking at the code, and maintaining it. Good code is written to express the solution to a particular problem in the clearest possible manner to the people who will be reading the code later. A good programmer writes the code in such a way as to express their view of the most straightforward and conceptually clear way of solving the given problem, so that the person reading the code will easily understand what is being done, why it&rsquo;s being done, and why it&rsquo;s being done in that particular way. That&rsquo;s not to say that the way it&rsquo;s being done is, somehow, the best way of doing it, but simply that it expresses the problem and the solution in a way that the reader can grasp easily.</p>
+
+<p>However, well-written code does more than that: it also expresses the aesthetic choices of the programmer in such a way that the person reading the code can use those aesthetic choices to better understand the intent of the code, and to see how all the pieces of code fit together. If the code is written with no, or multiple, aesthetic styles, then the code becomes more difficult to understand as the reader tries to follow one set of aesthetic choices in one part of the code, and then a completely different set of choices in another part.</p>
+
+<p>This is no different than what a writer does with a novel &ndash; a given problem exists (for example, there are two characters which need to interact in such a way as to move the plot in the desired direction), there are multiple solutions available (the characters can interact in many different ways, choose not to interact, etc), and the novelist must choose the solution that not only solves the problem, but that does it in a way that is clear to the reader and which expresses the aesthetic style of the writer. If the writer changes styles, where on one page things seem to go one way, but on another page the aesthetic style changes abruptly, then the novel becomes both unpleasant to read and difficult to follow. The same is true of code &ndash; the reader needs to be able to get a feeling for the aesthetic style of the code, and use that to understand how the different pieces work and flow together.</p>
+]]></content>
+  </entry>
+  
+</feed>

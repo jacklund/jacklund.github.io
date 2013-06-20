@@ -389,6 +389,54 @@
   <header>
     
       <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2012/10/01/beautiful-code/">Beautiful Code</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-01T21:11:00-05:00" pubdate data-updated="true">Oct 1<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Programmers often talk about code being “beautiful”, but often writing “pretty” code is disparaged as being a luxury that can&rsquo;t be afforded under tight schedules. The result is really ugly code that ends up being difficult to maintain, but most people don&rsquo;t seem to see the correlation between “beauty” and “maintainability”.</p>
+
+<p>Experience has shown me that beautiful code and maintainable code, if not identical, are closely related. The reason, I believe, is very simple: coding is expression. What I mean by this is that, for any given problem that is trying to be solved by code, there are usually many, many different ways to go about solving it within the context of a given language and environment &ndash; there are usually many different solutions which “work”. Because of this, the choice of how to solve the problem is, all else being equal, an aesthetic choice. In other words, given a number of different ways of going about solving the given problem, one way of choosing among all the different possible solutions is to choose the one that seems the “prettiest”, that appeals to the programmers aesthetic style.</p>
+
+<p>This assumes, of course, that the programmer has access to all, or many, of the possible solutions. A less-experienced or less-talented programmer may only see one possible way of solving the problem, or may be too lazy or unmotivated to find or utilize more than one possible solution &ndash; this is one source of much bad, “ugly”, and unmaintainable code. However, when the programmer is talented and/or experienced enough, and properly motivated, the multiple possibilities open up, and the choice becomes available. This, incidentally, is one difference between a good, talented programmer and a hack &ndash; the talented programmer will always be aware of the various possible solutions available, and will have a good grasp of the consequences of each decision.</p>
+
+<p>So, how does this make the choice an aesthetic one, and why would the “prettiest” choice turn out to be the best? Because, as I said earlier, code is expression. Who or what do we write code for? Is it just to be turned into machine code and run? No, because if that were the case, we&rsquo;d all be writing in assembler. No, we write code for humans &ndash; other people who will be looking at the code, and maintaining it. Good code is written to express the solution to a particular problem in the clearest possible manner to the people who will be reading the code later. A good programmer writes the code in such a way as to express their view of the most straightforward and conceptually clear way of solving the given problem, so that the person reading the code will easily understand what is being done, why it&rsquo;s being done, and why it&rsquo;s being done in that particular way. That&rsquo;s not to say that the way it&rsquo;s being done is, somehow, the best way of doing it, but simply that it expresses the problem and the solution in a way that the reader can grasp easily.</p>
+
+<p>However, well-written code does more than that: it also expresses the aesthetic choices of the programmer in such a way that the person reading the code can use those aesthetic choices to better understand the intent of the code, and to see how all the pieces of code fit together. If the code is written with no, or multiple, aesthetic styles, then the code becomes more difficult to understand as the reader tries to follow one set of aesthetic choices in one part of the code, and then a completely different set of choices in another part.</p>
+
+<p>This is no different than what a writer does with a novel &ndash; a given problem exists (for example, there are two characters which need to interact in such a way as to move the plot in the desired direction), there are multiple solutions available (the characters can interact in many different ways, choose not to interact, etc), and the novelist must choose the solution that not only solves the problem, but that does it in a way that is clear to the reader and which expresses the aesthetic style of the writer. If the writer changes styles, where on one page things seem to go one way, but on another page the aesthetic style changes abruptly, then the novel becomes both unpleasant to read and difficult to follow. The same is true of code &ndash; the reader needs to be able to get a feeling for the aesthetic style of the code, and use that to understand how the different pieces work and flow together.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
         <h1 class="entry-title"><a href="/blog/2012/04/04/Fixed-the-deployment-issues%21%21%21/">Fixed the Deployment Issues!!!</a></h1>
       
     
@@ -645,48 +693,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2012/01/16/First-Day-of-Work-in-the-New-Office/">First Day of Work in the New Office</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-01-16T00:00:00-06:00" pubdate data-updated="true">Jan 16<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>My first day of work in the new office in my basement. Worked out pretty well, although I <em>do</em> need to figure out a way to take more frequent breaks, and maybe do something at lunchtime other than sitting.</p>
-
-<p>I&rsquo;ve discovered more really cool stuff with <a href="http://www.jboss.org/resteasy">RESTEasy</a>: not only does it automagically convert JSON to java.util.Map&lt;String, Object>, but it also can convert XML input into an org.w3c.dom.Document. Also, they were thoughtful enough to allow you to have different interface methods for different content types for the same URI, which means that I can have data coming in as JSON call one method (the one with a Map&lt;String, Object> in the signature), and XML call another. Really cool.</p>
-
-<p>Also, got my Groovy integration tests working. Since our architecture is basically a RESTful web service putting data onto a queue, and a MDB taking it off and calling multiple handlers to handle it, I just created another handler to dump the data onto a queue which the integration test reads from (remotely), allowing me to make sure the data got all the way through intact. Very nice.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -759,8 +765,20 @@
 
 
 <section>
+  <h1>Being Social</h1>
+  <ul>
+    <li><a href="https://www.facebook.com/jack.lund">Facebook</a></li>
+    <li><a href="http://www.linkedin.com/in/jacklund">LinkedIn</a></li>
+    <li><a href="https://plus.google.com/105150092995925691816/about">Google+</a></li>
+    <li><a href="http://jacklund.tumblr.com/">Tumblr</a></li>
+    <li><a href="http://pinterest.com/jacklund/">Pinterest</a></li>
+    <li><a href="http://www.scribd.com/jack_lund">Scribd</a></li>
+    <li><a href="http://www.shelfari.com/jacklund">Shelfari</a></li>
+    <li><a href="http://www.librarything.com/home/jacklund">LibraryThing</a></li>
+  </ul>
+</section><section>
   <h1>Categories</h1>
-    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 130.0%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 130.0%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 160.0%'>beaglebone</a>   <a href='/blog/categories/cobertura' style='font-size: 130.0%'>cobertura</a>   <a href='/blog/categories/documents' style='font-size: 130.0%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 160.0%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 130.0%'>eskrima</a>   <a href='/blog/categories/git' style='font-size: 160.0%'>git</a>   <a href='/blog/categories/github' style='font-size: 130.0%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 130.0%'>hornetq</a>   <a href='/blog/categories/java' style='font-size: 160.0%'>java</a>   <a href='/blog/categories/jboss' style='font-size: 130.0%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 130.0%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 130.0%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 130.0%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 130.0%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 130.0%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 130.0%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 160.0%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 130.0%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 130.0%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 130.0%'>maven</a>   <a href='/blog/categories/node-js' style='font-size: 130.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 130.0%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 130.0%'>pandoc</a>   <a href='/blog/categories/rest' style='font-size: 130.0%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 130.0%'>resteasy</a>   <a href='/blog/categories/scalability' style='font-size: 130.0%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 130.0%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 130.0%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 130.0%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 130.0%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 130.0%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 130.0%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 130.0%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 130.0%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 130.0%'>windows</a>   <a href='/blog/categories/zookeeper' style='font-size: 130.0%'>zookeeper</a>   </ul>
+    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 130.0%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 130.0%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 160.0%'>beaglebone</a>   <a href='/blog/categories/cobertura' style='font-size: 130.0%'>cobertura</a>   <a href='/blog/categories/documents' style='font-size: 130.0%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 160.0%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 130.0%'>eskrima</a>   <a href='/blog/categories/git' style='font-size: 160.0%'>git</a>   <a href='/blog/categories/github' style='font-size: 130.0%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 130.0%'>hornetq</a>   <a href='/blog/categories/java' style='font-size: 160.0%'>java</a>   <a href='/blog/categories/jboss' style='font-size: 130.0%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 130.0%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 130.0%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 130.0%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 130.0%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 130.0%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 130.0%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 160.0%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 130.0%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 130.0%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 130.0%'>maven</a>   <a href='/blog/categories/node-js' style='font-size: 130.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 130.0%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 130.0%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 130.0%'>programming</a>   <a href='/blog/categories/rest' style='font-size: 130.0%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 130.0%'>resteasy</a>   <a href='/blog/categories/scalability' style='font-size: 130.0%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 130.0%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 130.0%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 130.0%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 130.0%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 130.0%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 130.0%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 130.0%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 130.0%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 130.0%'>windows</a>   <a href='/blog/categories/zookeeper' style='font-size: 130.0%'>zookeeper</a>   </ul>
 </section>
 
   
