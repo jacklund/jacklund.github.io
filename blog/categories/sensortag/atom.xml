@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: sensortag | Everything Is Code]]></title>
-  <link href="http://jacklund.github.io/blog/categories/sensortag/atom.xml" rel="self"/>
-  <link href="http://jacklund.github.io/"/>
-  <updated>2013-06-20T10:18:05-05:00</updated>
-  <id>http://jacklund.github.io/</id>
+  <title><![CDATA[Category: sensortag | Geekheads]]></title>
+  <link href="http://www.geekheads.net/blog/categories/sensortag/atom.xml" rel="self"/>
+  <link href="http://www.geekheads.net/"/>
+  <updated>2013-06-20T10:35:01-05:00</updated>
+  <id>http://www.geekheads.net/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[TI SensorTag]]></title>
-    <link href="http://jacklund.github.io/blog/2013/05/12/TI-SensorTag/"/>
+    <link href="http://www.geekheads.net/blog/2013/05/12/TI-SensorTag/"/>
     <updated>2013-05-12T19:20:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/05/12/TI-SensorTag</id>
+    <id>http://www.geekheads.net/blog/2013/05/12/TI-SensorTag</id>
     <content type="html"><![CDATA[<p>I got my <a href="http://processors.wiki.ti.com/index.php/Bluetooth_SensorTag">TI Bluetooth SensorTag</a> Friday, and played with it some over the weekend. It&rsquo;s pretty nice. It&rsquo;s basically a small device with a bunch of embedded sensors on it &ndash; accelerometer, gyroscope, ambient temp, IR temp (see below), humidity, barometric pressure, and a couple of buttons on it. It&rsquo;s very small, and communicates over <a href="http://en.wikipedia.org/wiki/Bluetooth_low_energy">Bluetooth 4 LE</a>. You can download an iOS app for viewing the data, so my daughters and I played with it some. Pretty cool. There&rsquo;s a <a href="http://blog.makezine.com/2013/04/18/teardown-of-the-ti-sensortag">teardown of it</a> at MAKE magazine, and even a <a href="http://mike.saunby.net/2013/04/raspberry-pi-and-ti-cc2541-sensortag.html">Raspberry Pi</a> project to interface with it. W00t!!!</p>
 ]]></content>
   </entry>

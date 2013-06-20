@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: eclipse | Everything Is Code]]></title>
-  <link href="http://jacklund.github.io/blog/categories/eclipse/atom.xml" rel="self"/>
-  <link href="http://jacklund.github.io/"/>
-  <updated>2013-06-20T10:18:05-05:00</updated>
-  <id>http://jacklund.github.io/</id>
+  <title><![CDATA[Category: eclipse | Geekheads]]></title>
+  <link href="http://www.geekheads.net/blog/categories/eclipse/atom.xml" rel="self"/>
+  <link href="http://www.geekheads.net/"/>
+  <updated>2013-06-20T10:35:01-05:00</updated>
+  <id>http://www.geekheads.net/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Eclipse with Subversion 1.8 on OS X]]></title>
-    <link href="http://jacklund.github.io/blog/2013/06/18/eclipse-with-subversion-1-dot-8-on-os-x/"/>
+    <link href="http://www.geekheads.net/blog/2013/06/18/eclipse-with-subversion-1-dot-8-on-os-x/"/>
     <updated>2013-06-18T14:14:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/06/18/eclipse-with-subversion-1-dot-8-on-os-x</id>
+    <id>http://www.geekheads.net/blog/2013/06/18/eclipse-with-subversion-1-dot-8-on-os-x</id>
     <content type="html"><![CDATA[<p>I wasted a considerable amount of time following the instructions from <a href="http://subclipse.tigris.org/wiki/JavaHL">this page</a> on how to install Subclipse on OS X, trying to get MacPorts to install the right version of Subversion (Why subversion, you may ask? Because a customer is still using it, that&rsquo;s why&hellip;).</p>
 
 <p>It turns out that MacPorts doesn&rsquo;t even have the 1.8 version of Subversion &ndash; it&rsquo;s only got 1.7, which won&rsquo;t work with the version of Subclipse I&rsquo;m using. So, I had to go to <a href="http://www.wandisco.com/subversion/download#osx">WanDisco</a> and download it (after removing the MacPorts versions first), and then everything worked.</p>
@@ -26,9 +26,9 @@
   
   <entry>
     <title type="html"><![CDATA[Creating RESTEasy Project with Eclipse and Maven]]></title>
-    <link href="http://jacklund.github.io/blog/2013/05/20/Creating-RESTEasy-Project-with-Eclipse-and-Maven/"/>
+    <link href="http://www.geekheads.net/blog/2013/05/20/Creating-RESTEasy-Project-with-Eclipse-and-Maven/"/>
     <updated>2013-05-20T00:00:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/05/20/Creating-RESTEasy-Project-with-Eclipse-and-Maven</id>
+    <id>http://www.geekheads.net/blog/2013/05/20/Creating-RESTEasy-Project-with-Eclipse-and-Maven</id>
     <content type="html"><![CDATA[<p>Handy safety tip: to create a RESTEasy-friendly Maven project in Eclipse, do the following:</p>
 
 <ol>

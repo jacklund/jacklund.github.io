@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: architecture | Everything Is Code]]></title>
-  <link href="http://jacklund.github.io/blog/categories/architecture/atom.xml" rel="self"/>
-  <link href="http://jacklund.github.io/"/>
-  <updated>2013-06-20T10:18:05-05:00</updated>
-  <id>http://jacklund.github.io/</id>
+  <title><![CDATA[Category: architecture | Geekheads]]></title>
+  <link href="http://www.geekheads.net/blog/categories/architecture/atom.xml" rel="self"/>
+  <link href="http://www.geekheads.net/"/>
+  <updated>2013-06-20T10:35:01-05:00</updated>
+  <id>http://www.geekheads.net/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Rethinking Architecture]]></title>
-    <link href="http://jacklund.github.io/blog/2013/04/11/Rethinking-Architecture/"/>
+    <link href="http://www.geekheads.net/blog/2013/04/11/Rethinking-Architecture/"/>
     <updated>2013-04-11T22:30:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/04/11/Rethinking-Architecture</id>
+    <id>http://www.geekheads.net/blog/2013/04/11/Rethinking-Architecture</id>
     <content type="html"><![CDATA[<p>So, I&rsquo;ve been rethinking the architecture we used with a customer, and which we are planning on using, in slightly modified form, for some in-house projects.</p>
 
 <p>The application is, basically, a cloud-based service which takes data from devices, analyzes and stores it, and presents it to the user in a web site.</p>

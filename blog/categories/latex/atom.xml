@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: latex | Everything Is Code]]></title>
-  <link href="http://jacklund.github.io/blog/categories/latex/atom.xml" rel="self"/>
-  <link href="http://jacklund.github.io/"/>
-  <updated>2013-06-20T10:18:05-05:00</updated>
-  <id>http://jacklund.github.io/</id>
+  <title><![CDATA[Category: latex | Geekheads]]></title>
+  <link href="http://www.geekheads.net/blog/categories/latex/atom.xml" rel="self"/>
+  <link href="http://www.geekheads.net/"/>
+  <updated>2013-06-20T10:35:01-05:00</updated>
+  <id>http://www.geekheads.net/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[I Hate LaTeX]]></title>
-    <link href="http://jacklund.github.io/blog/2013/05/30/I-Hate-LaTeX/"/>
+    <link href="http://www.geekheads.net/blog/2013/05/30/I-Hate-LaTeX/"/>
     <updated>2013-05-30T11:30:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/05/30/I-Hate-LaTeX</id>
+    <id>http://www.geekheads.net/blog/2013/05/30/I-Hate-LaTeX</id>
     <content type="html"><![CDATA[<p>No, I really do. It&rsquo;s not hyperbole. I hate it.</p>
 
 <p>It&rsquo;s frickin' 2013, people. We should not have to deal with languages that look like this:</p>
