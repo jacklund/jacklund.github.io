@@ -9,7 +9,7 @@
   <meta name="author" content="Jack Lund">
 
   
-  <meta name="description" content="I wasted a considerable amount of time following the instructions from this page on how to install Subclipse on OS X, trying to get MacPorts to &hellip;">
+  <meta name="description" content="I had this idea for doing a Scala project integrating WebSockets with Kafka, so I spent a good bit of today trying out different configurations for &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -74,6 +74,56 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/06/21/Scala-Development-Setup/">Scala Development Setup</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-21T21:56:00-05:00" pubdate data-updated="true">Jun 21<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I had this idea for doing a Scala project integrating WebSockets with <a href="http://kafka.apache.org/">Kafka</a>, so I spent a good bit of today trying out different configurations for doing Scala development. My first pass was to try <a href="http://www.jetbrains.com/idea/features/scala.html">IntellijIDEA</a> from JetBrains. I really liked their <a href="http://www.jetbrains.com/ruby/">RubyMine</a> IDE for Ruby, and people were raving about IDEA for Scala development, so I gave it a go.</p>
+
+<p>It&rsquo;s actually not a bad IDE. I had some trouble navigating, but most of that was because I was so used to Eclipse. However, the big thing that was lacking was good <a href="http://www.scala-sbt.org/">sbt</a> support. Whatever project I was going to use sbt, since that seems to be the builder of choice, and the integration with IDEA seemed to be, well, not really good. You can use sbt to generate the IDEA project, but there didn&rsquo;t seem to be a good way to have IDEA use the dependencies defined in the sbt build file for the code completion, which seemed to me to be a big problem.</p>
+
+<p>So, I tried out using Eclipse (which wasn&rsquo;t a stretch since I use it for my Java work), and <a href="https://github.com/typesafehub/sbteclipse">sbteclipse</a>, which is an sbt plugin for Eclipse. It worked really well! Basically, you install the plugin per the instructions, create a minimal sbt build file for the project, and then type <code>sbt eclipse</code> to generate the Eclipse configuration. The cool thing is, you can do this at any time, so if you add a dependency to the build file, just do <code>sbt eclipse</code> again, then refresh the project in Eclipse, and suddenly it has your dependency. Very nice.</p>
+
+<p>The one thing I needed to do, which I eventually found out how to do, was to have sbt use my local maven repository as one of its repositories. sbt uses <a href="http://ant.apache.org/ivy/">ivy</a> under the covers, so Maven integration is there, it just doesn&rsquo;t know about all the local Maven repositories. to add it, I just had to add the following to my <code>~/.sbt/global.sbt</code> file:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>resolvers += "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and, voila, it worked!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -628,105 +678,6 @@ You should consider updating Angstrom!
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/05/07/Falling-in-Love-with-Git/">Falling in Love With Git</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-07T17:00:00-05:00" pubdate data-updated="true">May 7<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>As I mentioned earlier, we&rsquo;re transitioning from subversion to git, and one of the things we need to do is convert from many-projects-per-repository, which is what we had in subversion, to one-project-per-repository for git. This is partly to make things nicer, and partly because it will make <a href="http://jenkins-ci.org/">Jenkins</a> work better. So, thinking in subversion-terms, I thought I&rsquo;d have to do it myself, and even tried by renaming all the files in one of the projects into the upper-level directory, removing all the other projects, committing locally, and then pushing to a new repo. Royal pain.</p>
-
-<p>And then, I came across <a href="https://help.github.com/articles/splitting-a-subpath-out-into-a-new-repository">this</a>. Oh. My. God. Git actually does the work for you. It&rsquo;s so easy, you just do the <code>git filter-branch</code> command, and suddenly your project is its own repository! Then, you just change the remote repository (<code>git remote rm origin</code> followed by <code>git remote add</code> <em>new-url</em>), and Bob&rsquo;s your uncle, you have a new, smaller repository.</p>
-
-<p>I mean, seriously? That is AWESOME!</p>
-
-<p>So, to be explicit, here&rsquo;s the series of commands:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clone repo-url
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>repo
-</span><span class='line'><span class="nv">$ </span>git filter-branch --prune-empty --subdirectory-filter subdir-name master
-</span><span class='line'><span class="nv">$ </span>git remote rm origin
-</span><span class='line'><span class="nv">$ </span>git remote add new-repo-url
-</span><span class='line'><span class="nv">$ </span>git push -u origin --all --tags
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Updated 05/12/2013</strong>
-Okay, after messing around with this for some time, I&rsquo;ve discovered that the above doesn&rsquo;t work quite right, because the pathnames in the commits are wrong &ndash; instead of being <em>subdir-name</em><code>/src/foo/Bar.java</code>, it ends up being <code>src/foo/Bar.java</code>, which doesn&rsquo;t work. So, instead of trying to pull each subdirectory into their own repository, I&rsquo;m taking the existing repository, with a bunch of subdirs, including the ones I&rsquo;m interested in, and simply using <code>git filter-branch</code> to get rid of the ones I&rsquo;m not interested in, as well as update the tags. So, here&rsquo;s what I&rsquo;ve got now, which seems to work well:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Get a list of the directories I&#39;m not interested in</span>
-</span><span class='line'><span class="nv">$ excludes</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> <span class="nv">$*</span> | tr <span class="s2">&quot; &quot;</span> <span class="s2">&quot;|&quot;</span><span class="sb">`</span>
-</span><span class='line'><span class="nv">$ files</span><span class="o">=</span><span class="sb">`</span>ls | egrep -v <span class="nv">$excludes</span> | tr <span class="s2">&quot;\\n&quot;</span> <span class="s2">&quot; &quot;</span><span class="sb">`</span>
-</span><span class='line'><span class="c"># Disconnect from remote for safety</span>
-</span><span class='line'><span class="nv">$ </span>git remote rm origin
-</span><span class='line'><span class="c"># Get rid of all tags that don&#39;t fit my pattern</span>
-</span><span class='line'><span class="nv">$ </span>git tag -l | grep -v <span class="nv">$pattern</span> | xargs git tag -d
-</span><span class='line'><span class="c"># Prune the directories I&#39;m not interested in</span>
-</span><span class='line'><span class="nv">$ </span>git filter-branch --tag-name-filter cat --prune-empty <span class="se">\</span>
-</span><span class='line'>    --tree-filter <span class="s2">&quot;rm -rf ${files}&quot;</span> -- --all
-</span><span class='line'><span class="c"># Reset the indexes</span>
-</span><span class='line'><span class="nv">$ </span>git reset --hard
-</span><span class='line'><span class="c"># Get rid of obsolete references in the logs</span>
-</span><span class='line'><span class="nv">$ </span>git <span class="k">for</span>-each-ref --format<span class="o">=</span><span class="s2">&quot;%(refname)&quot;</span> refs/original/ | <span class="se">\</span>
-</span><span class='line'>    xargs -n 1 git update-ref -d
-</span><span class='line'><span class="nv">$ </span>git reflog expire --expire<span class="o">=</span>now --all
-</span><span class='line'><span class="nv">$ </span>git gc --aggressive --prune<span class="o">=</span>now
-</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -740,6 +691,10 @@ Okay, after messing around with this for some time, I&rsquo;ve discovered that t
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/06/21/Scala-Development-Setup/">Scala Development Setup</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/06/18/eclipse-with-subversion-1-dot-8-on-os-x/">Eclipse with Subversion 1.8 on OS X</a>
@@ -757,15 +712,11 @@ Okay, after messing around with this for some time, I&rsquo;ve discovered that t
         <a href="/blog/2013/06/12/Node.js/">Node.js</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black/">Setting up NTP on BeagleBone Black</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 130.0%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 130.0%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 160.0%'>beaglebone</a>   <a href='/blog/categories/cobertura' style='font-size: 130.0%'>cobertura</a>   <a href='/blog/categories/documents' style='font-size: 130.0%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 160.0%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 130.0%'>eskrima</a>   <a href='/blog/categories/git' style='font-size: 160.0%'>git</a>   <a href='/blog/categories/github' style='font-size: 130.0%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 130.0%'>hornetq</a>   <a href='/blog/categories/java' style='font-size: 160.0%'>java</a>   <a href='/blog/categories/jboss' style='font-size: 130.0%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 130.0%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 130.0%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 130.0%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 130.0%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 130.0%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 130.0%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 160.0%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 130.0%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 130.0%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 130.0%'>maven</a>   <a href='/blog/categories/node-js' style='font-size: 130.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 130.0%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 130.0%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 130.0%'>programming</a>   <a href='/blog/categories/rest' style='font-size: 130.0%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 130.0%'>resteasy</a>   <a href='/blog/categories/scalability' style='font-size: 130.0%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 130.0%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 130.0%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 130.0%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 130.0%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 130.0%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 130.0%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 130.0%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 130.0%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 130.0%'>windows</a>   <a href='/blog/categories/zookeeper' style='font-size: 130.0%'>zookeeper</a>   </ul>
+    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 120.0%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 120.0%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 140.0%'>beaglebone</a>   <a href='/blog/categories/cobertura' style='font-size: 120.0%'>cobertura</a>   <a href='/blog/categories/documents' style='font-size: 120.0%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 160.0%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 120.0%'>eskrima</a>   <a href='/blog/categories/git' style='font-size: 140.0%'>git</a>   <a href='/blog/categories/github' style='font-size: 120.0%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 120.0%'>hornetq</a>   <a href='/blog/categories/idea' style='font-size: 120.0%'>idea</a>   <a href='/blog/categories/java' style='font-size: 140.0%'>java</a>   <a href='/blog/categories/jboss' style='font-size: 120.0%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 120.0%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 120.0%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 120.0%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 120.0%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 120.0%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 120.0%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 140.0%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 120.0%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 120.0%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 140.0%'>maven</a>   <a href='/blog/categories/node-js' style='font-size: 120.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 120.0%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 120.0%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 120.0%'>programming</a>   <a href='/blog/categories/rest' style='font-size: 120.0%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 120.0%'>resteasy</a>   <a href='/blog/categories/sbt' style='font-size: 120.0%'>sbt</a>   <a href='/blog/categories/scala' style='font-size: 120.0%'>scala</a>   <a href='/blog/categories/scalability' style='font-size: 120.0%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 120.0%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 120.0%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 120.0%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 120.0%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 120.0%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 120.0%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 120.0%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 120.0%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 120.0%'>windows</a>   <a href='/blog/categories/zookeeper' style='font-size: 120.0%'>zookeeper</a>   </ul>
 </section>
 
 <section>
