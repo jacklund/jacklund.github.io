@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sbt | Geekheads]]></title>
   <link href="http://www.geekheads.net/blog/categories/sbt/atom.xml" rel="self"/>
   <link href="http://www.geekheads.net/"/>
-  <updated>2013-06-21T22:24:36-05:00</updated>
+  <updated>2013-06-25T10:04:59-05:00</updated>
   <id>http://www.geekheads.net/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Scala Is Disappointing]]></title>
+    <link href="http://www.geekheads.net/blog/2013/06/25/Scala-Is-Disappointing/"/>
+    <updated>2013-06-25T00:15:00-05:00</updated>
+    <id>http://www.geekheads.net/blog/2013/06/25/Scala-Is-Disappointing</id>
+    <content type="html"><![CDATA[<p>So, I&rsquo;ve been playing around with Scala, and, while I&rsquo;m quite impressed with the language syntax, it&rsquo;s a real pain-in-the-ass to deal with. To begin with, the various versions (2.7, 2.8, 2.9., 2.10) are <a href="http://lift.la/scalas-version-fragility-make-the-enterprise">binary incompatible</a>, which is really annoying. I understand that the language is still in development, but you would think they&rsquo;d have the core of the language all worked out by now.</p>
+
+<p>I understand the <a href="http://suereth.blogspot.com/2011/12/scala-fresh-is-alive.html">reasons behind it</a>: they&rsquo;re still making changes to the base traits which causes all the objects to change. But, really, this is one of those things that every language (well, every language with a base class or interface) goes through. These are the things you go through, however, when you&rsquo;re doing the pre-1.0 releases of the language, not 2.x; at most, you make these changes when you transition between major revisions &ndash; from 2.x to 3.0, for instance &ndash; <em>not</em> between minor revisions.</p>
+
+<p>What concerns me with this, besides the PIA factor, is that a) the language developers don&rsquo;t seem to think this is a problem, and b) that it indicates a tendency to want to &ldquo;fiddle&rdquo; with the language. I understand the desire to &ldquo;fiddle&rdquo;, it&rsquo;s one of those things that every software developer goes through, the desire to &ldquo;tweak it just a little bit more&rdquo; after it&rsquo;s released. It&rsquo;s also one of those things that mature software developers grow out of. &ldquo;The perfect is the enemy of the good&rdquo;.</p>
+
+<p>They don&rsquo;t seem to realize that this is going to make it <em>really</em> hard for it to be taken seriously as a general-purpose language. When you&rsquo;re trying to make a business case for using a new language, one of the things that you have to demonstrate is that the language is mature enough to not change out from under you. Scala is changing constantly, and the Scala developers seem to think this is a virtue, rather than a problem.</p>
+
+<p>Why is this a problem? Well, the fact that you have Scala libraries having to label themselves with the version of Scala they&rsquo;re compiled against is an immediate indication. If I&rsquo;m trying to do a project that&rsquo;s dependent on libraries, I now have to make absolutely sure that there is some version of Scala that they&rsquo;re all compatible with, and then use that version for my project, rather than using the version based on the feature set I need. What&rsquo;s more, if there is no overlap &ndash; if one of my dependencies is only compatible with, say, 2.9, and another only builds on 2.7, then I&rsquo;m hosed. I either have to try to build one or the other on a different version of the compiler, which may or may not work, or use different libraries.</p>
+
+<p>The other bit of craziness is the Eclipse Scala plugin can&rsquo;t change versions, and, you can&rsquo;t have more than one version running at a time. Even more fun: the only Scala plugins for Eclipse Juno are for 2.9 and 2.10 &ndash; if you have to use 2.8, you&rsquo;re either going to have to use Indigo, or cross-compile to a newer version of Scala.</p>
+
+<p>All in all, I&rsquo;d have to say that, as much as I like the idea of Scala, I can&rsquo;t see using it for anything significant until it becomes more stable.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Scala Development Setup]]></title>
