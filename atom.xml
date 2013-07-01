@@ -4,7 +4,7 @@
   <title><![CDATA[Geekheads]]></title>
   <link href="http://www.geekheads.net/atom.xml" rel="self"/>
   <link href="http://www.geekheads.net/"/>
-  <updated>2013-07-01T17:39:14-05:00</updated>
+  <updated>2013-07-01T17:42:28-05:00</updated>
   <id>http://www.geekheads.net/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
@@ -30,7 +30,7 @@
 
 <p>Look, I understand that everybody&rsquo;s busy and all, but, really, you couldn&rsquo;t, in the last THREE YEARS break out the GATT code into a library so that people can access it? Really?</p>
 
-<p>Of course, I shouldn&rsquo;t complain, I guess, they do provide a nice little command-line tool, <code>gatttool</code>, to let you do GATT stuff from the command line. Somebody (who is much braver than I) is even trying to <a href="https://github.com/msaunby/ble-sensor-pi">access that via Python and pexpect</a>, which works, sort of, but, uh, really, there has to be a better way.</p>
+<p>Of course, I shouldn&rsquo;t complain, I guess &ndash; they do provide a nice little command-line tool, <code>gatttool</code>, to let you do GATT stuff, just nothing to do, you know, programming with. Somebody (who is much braver than I) is even trying to <a href="https://github.com/msaunby/ble-sensor-pi">access that via Python and pexpect</a>, which works, sort of, but, uh, really, there has to be a better way.</p>
 
 <p>So, I guess my only option is to pull the GATT code out of the BlueZ project and add it to the Python project. It&rsquo;s ugly, but it&rsquo;s better than expect scripts.</p>
 
