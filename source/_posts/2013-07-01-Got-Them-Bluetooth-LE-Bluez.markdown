@@ -17,7 +17,7 @@ Which brings me to problem #2: the developers of the [BlueZ](http://www.bluez.or
 
 Look, I understand that everybody's busy and all, but, really, you couldn't, in the last THREE YEARS break out the GATT code into a library so that people can access it? Really?
 
-Of course, I shouldn't complain, I guess, they do provide a nice little command-line tool, ``gatttool``, to let you do GATT stuff from the command line. Somebody (who is much braver than I) is even trying to [access that via Python and pexpect](https://github.com/msaunby/ble-sensor-pi), which works, sort of, but, uh, really, there has to be a better way.
+Of course, I shouldn't complain, I guess - they do provide a nice little command-line tool, ``gatttool``, to let you do GATT stuff, just nothing to do, you know, programming with. Somebody (who is much braver than I) is even trying to [access that via Python and pexpect](https://github.com/msaunby/ble-sensor-pi), which works, sort of, but, uh, really, there has to be a better way.
 
 So, I guess my only option is to pull the GATT code out of the BlueZ project and add it to the Python project. It's ugly, but it's better than expect scripts.
 
