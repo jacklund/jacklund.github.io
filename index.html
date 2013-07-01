@@ -9,7 +9,7 @@
   <meta name="author" content="Jack Lund">
 
   
-  <meta name="description" content="I have a lot of computers on my network now &ndash; my laptop and desktop, my wife&rsquo;s 3(!) computers, her iPad, two Linux servers and &hellip;">
+  <meta name="description" content="I&rsquo;m trying to get my Raspberry Pi to talk to my TI Sensortag over Bluetooth LE, using an IOGear Bluetooth 4.0 USB adapter. I chose that adapter &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -74,6 +74,60 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez/">Got Them Bluetooth LE Bluez</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-01T17:15:00-05:00" pubdate data-updated="true">Jul 1<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&rsquo;m trying to get my Raspberry Pi to talk to my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?INTC=SensorTag&amp;HQS=sensortag">TI Sensortag</a> over Bluetooth LE, using an <a href="http://www.iogear.com/product/GBU521/">IOGear Bluetooth 4.0 USB adapter</a>. I chose that adapter because it is supported by Linux, and so far it works quite nicely with the Pi.</p>
+
+<p>To start with, I&rsquo;d like to write something to pull the sensor data &ndash; temperature, humidity, pressure, etc &ndash; from the SensorTag and publish it over <a href="http://mqtt.org/">MQTT</a>. However, reading the data seems to be problematic.</p>
+
+<p>Problem #1 is that the most-used bluetooth package for Python, <a href="https://code.google.com/p/pybluez/">PyBluez</a> had their last release (0.18) in November, 2009, which, obviously, doesn&rsquo;t include Bluetooth LE. Not a problem, I thought, I&rsquo;ll just fork the project, add the bindings for LE, and off we go!</p>
+
+<p>Which brings me to problem #2: the developers of the <a href="http://www.bluez.org/">BlueZ</a> protocol stack, which is how you access bluetooth from, well, pretty much everywhere, haven&rsquo;t seen fit to include <a href="http://en.wikipedia.org/wiki/Bluetooth_profile#Generic_Attribute_Profile_.28GATT.29">GATT</a> support either via a public library or via D-Bus, despite the fact that they&rsquo;ve had the code in their codebase since around 2010.</p>
+
+<p>*<strong><em>facepalm</em></strong>*</p>
+
+<p>Look, I understand that everybody&rsquo;s busy and all, but, really, you couldn&rsquo;t, in the last THREE YEARS break out the GATT code into a library so that people can access it? Really?</p>
+
+<p>Of course, I shouldn&rsquo;t complain, I guess, they do provide a nice little command-line tool, <code>gatttool</code>, to let you do GATT stuff from the command line. Somebody (who is much braver than I) is even trying to <a href="https://github.com/msaunby/ble-sensor-pi">access that via Python and pexpect</a>, which works, sort of, but, uh, really, there has to be a better way.</p>
+
+<p>So, I guess my only option is to pull the GATT code out of the BlueZ project and add it to the Python project. It&rsquo;s ugly, but it&rsquo;s better than expect scripts.</p>
+
+<p>And, really, BlueZ developers: Come on, throw us a bone here.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -617,94 +671,6 @@ You should consider updating Angstrom!
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/05/30/I-Hate-LaTeX/">I Hate LaTeX</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-30T11:30:00-05:00" pubdate data-updated="true">May 30<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>No, I really do. It&rsquo;s not hyperbole. I hate it.</p>
-
-<p>It&rsquo;s frickin&#8217; 2013, people. We should not have to deal with languages that look like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='latex'><span class='line'><span class="k">\renewcommand</span><span class="nb">{</span><span class="k">\href</span><span class="nb">}</span>[2]<span class="nb">{</span>#2<span class="k">\footnote</span><span class="nb">{</span><span class="k">\url</span><span class="nb">{</span>#1<span class="nb">}}}</span>
-</span><span class='line'><span class="s">$</span><span class="nb">endif</span><span class="s">$</span>
-</span><span class='line'><span class="s">$</span><span class="nb">if</span><span class="o">(</span><span class="nb">strikeout</span><span class="o">)</span><span class="s">$</span>
-</span><span class='line'><span class="k">\usepackage</span><span class="na">[normalem]</span><span class="nb">{</span>ulem<span class="nb">}</span>
-</span><span class='line'><span class="c">% avoid problems with \sout in headers with hyperref:</span>
-</span><span class='line'><span class="k">\pdfstringdefDisableCommands</span><span class="nb">{</span><span class="k">\renewcommand</span><span class="nb">{</span><span class="k">\sout</span><span class="nb">}{}}</span>
-</span><span class='line'><span class="s">$</span><span class="nb">endif</span><span class="s">$</span>
-</span><span class='line'><span class="k">\setlength</span><span class="nb">{</span><span class="k">\parindent</span><span class="nb">}{</span>0pt<span class="nb">}</span>
-</span><span class='line'><span class="k">\setlength</span><span class="nb">{</span><span class="k">\parskip</span><span class="nb">}{</span>6pt plus 2pt minus 1pt<span class="nb">}</span>
-</span><span class='line'><span class="k">\setlength</span><span class="nb">{</span><span class="k">\emergencystretch</span><span class="nb">}{</span>3em<span class="nb">}</span>  <span class="c">% prevent overfull lines</span>
-</span><span class='line'><span class="s">$</span><span class="nb">if</span><span class="o">(</span><span class="nb">numbersections</span><span class="o">)</span><span class="s">$</span>
-</span><span class='line'><span class="k">\setcounter</span><span class="nb">{</span>secnumdepth<span class="nb">}{</span>5<span class="nb">}</span>
-</span><span class='line'><span class="s">$</span><span class="nb">else</span><span class="s">$</span>
-</span><span class='line'><span class="k">\setcounter</span><span class="nb">{</span>secnumdepth<span class="nb">}{</span>0<span class="nb">}</span>
-</span><span class='line'><span class="s">$</span><span class="nb">endif</span><span class="s">$</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>and parsers that give errors like this:</p>
-
-<pre><code>paragraph ended before Gin@iii was completed.
-</code></pre>
-
-<p>The reason I&rsquo;m even messing with this is that I want a way to convert <a href="http://daringfireball.net/projects/markdown/">markdown</a> to PDF. Should be easy, right?</p>
-
-<p>Guess again. Just about everything either converts from markdown to HTML, then to PDF, which renders pretty badly, or from markdown to LaTeX to PDF, which renders rather nicely. Except, in order to tweak it (like adding a logo to the title) you have to hack LaTeX. Ugh.</p>
-
-<p>One of the most flexible converters, <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>, which, don&rsquo;t get me wrong, is a very nice package, requires you to tweak a <code>default.latex</code> file to modify the default format, hence my problem: I just spent around an hour and a half just trying to get a frickin&#8217; logo on the cover page where I want it (there&rsquo;s a LaTeX package called &ldquo;titlepic&rdquo; which puts it where <em>it</em> wants, but if you want it elsewhere, you&rsquo;re SOL).</p>
-
-<p>Again, it&rsquo;s 2013 and document creation shouldn&rsquo;t be frickin&#8217; rocket science! The whole point of writing in markdown is that we don&rsquo;t want to have to mess with complex document formats. I should be able to take a markdown document, pass it into a converter, give it some options in a syntax that doesn&rsquo;t look like 80&rsquo;s-era gobbledygook, and get a decent-looking document out the other end.</p>
-
-<p><em>facepalm</em></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -718,6 +684,10 @@ You should consider updating Angstrom!
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez/">Got Them Bluetooth LE Bluez</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/06/27/Zeroconf-Rocks/">Zeroconf Rocks!</a>
@@ -735,15 +705,11 @@ You should consider updating Angstrom!
         <a href="/blog/2013/06/18/eclipse-with-subversion-1-dot-8-on-os-x/">Eclipse with Subversion 1.8 on OS X</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2013/06/18/moved-to-github-slash-octopress/">Moved to GitHub/Octopress</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 115.0%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 115.0%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 130.0%'>beaglebone</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 115.0%'>beaglebone-black</a>   <a href='/blog/categories/bonjour' style='font-size: 115.0%'>bonjour</a>   <a href='/blog/categories/cobertura' style='font-size: 115.0%'>cobertura</a>   <a href='/blog/categories/documents' style='font-size: 115.0%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 160.0%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 115.0%'>eskrima</a>   <a href='/blog/categories/git' style='font-size: 130.0%'>git</a>   <a href='/blog/categories/github' style='font-size: 115.0%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 115.0%'>hornetq</a>   <a href='/blog/categories/idea' style='font-size: 115.0%'>idea</a>   <a href='/blog/categories/java' style='font-size: 130.0%'>java</a>   <a href='/blog/categories/jboss' style='font-size: 115.0%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 115.0%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 115.0%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 115.0%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 115.0%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 115.0%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 115.0%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 145.0%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 115.0%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 115.0%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 130.0%'>maven</a>   <a href='/blog/categories/node-js' style='font-size: 115.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 115.0%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 115.0%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 115.0%'>programming</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 115.0%'>raspberry-pi</a>   <a href='/blog/categories/rest' style='font-size: 115.0%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 115.0%'>resteasy</a>   <a href='/blog/categories/sbt' style='font-size: 130.0%'>sbt</a>   <a href='/blog/categories/scala' style='font-size: 130.0%'>scala</a>   <a href='/blog/categories/scalability' style='font-size: 115.0%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 115.0%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 115.0%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 115.0%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 115.0%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 115.0%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 115.0%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 115.0%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 115.0%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 115.0%'>windows</a>   <a href='/blog/categories/zeroconf' style='font-size: 115.0%'>zeroconf</a>   <a href='/blog/categories/zookeeper' style='font-size: 115.0%'>zookeeper</a>   </ul>
+    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 115.0%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 115.0%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 130.0%'>beaglebone</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 115.0%'>beaglebone-black</a>   <a href='/blog/categories/bluetooth-le' style='font-size: 115.0%'>bluetooth_le</a>   <a href='/blog/categories/bluez' style='font-size: 115.0%'>bluez</a>   <a href='/blog/categories/bonjour' style='font-size: 115.0%'>bonjour</a>   <a href='/blog/categories/cobertura' style='font-size: 115.0%'>cobertura</a>   <a href='/blog/categories/documents' style='font-size: 115.0%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 160.0%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 115.0%'>eskrima</a>   <a href='/blog/categories/gatt' style='font-size: 115.0%'>gatt</a>   <a href='/blog/categories/git' style='font-size: 130.0%'>git</a>   <a href='/blog/categories/github' style='font-size: 115.0%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 115.0%'>hornetq</a>   <a href='/blog/categories/idea' style='font-size: 115.0%'>idea</a>   <a href='/blog/categories/java' style='font-size: 130.0%'>java</a>   <a href='/blog/categories/jboss' style='font-size: 115.0%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 115.0%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 115.0%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 115.0%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 115.0%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 115.0%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 115.0%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 145.0%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 115.0%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 115.0%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 130.0%'>maven</a>   <a href='/blog/categories/mqtt' style='font-size: 115.0%'>mqtt</a>   <a href='/blog/categories/node-js' style='font-size: 115.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 115.0%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 115.0%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 115.0%'>programming</a>   <a href='/blog/categories/python' style='font-size: 115.0%'>python</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 115.0%'>raspberry-pi</a>   <a href='/blog/categories/rest' style='font-size: 115.0%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 115.0%'>resteasy</a>   <a href='/blog/categories/sbt' style='font-size: 130.0%'>sbt</a>   <a href='/blog/categories/scala' style='font-size: 130.0%'>scala</a>   <a href='/blog/categories/scalability' style='font-size: 115.0%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 115.0%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 115.0%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 115.0%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 115.0%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 115.0%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 115.0%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 115.0%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 115.0%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 115.0%'>windows</a>   <a href='/blog/categories/zeroconf' style='font-size: 115.0%'>zeroconf</a>   <a href='/blog/categories/zookeeper' style='font-size: 115.0%'>zookeeper</a>   </ul>
 </section>
 
 <section>

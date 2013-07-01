@@ -4,7 +4,7 @@
   <title><![CDATA[Geekheads]]></title>
   <link href="http://www.geekheads.net/atom.xml" rel="self"/>
   <link href="http://www.geekheads.net/"/>
-  <updated>2013-07-01T08:59:12-05:00</updated>
+  <updated>2013-07-01T17:39:14-05:00</updated>
   <id>http://www.geekheads.net/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
@@ -12,6 +12,31 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Got Them Bluetooth LE Bluez]]></title>
+    <link href="http://www.geekheads.net/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez/"/>
+    <updated>2013-07-01T17:15:00-05:00</updated>
+    <id>http://www.geekheads.net/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m trying to get my Raspberry Pi to talk to my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?INTC=SensorTag&amp;HQS=sensortag">TI Sensortag</a> over Bluetooth LE, using an <a href="http://www.iogear.com/product/GBU521/">IOGear Bluetooth 4.0 USB adapter</a>. I chose that adapter because it is supported by Linux, and so far it works quite nicely with the Pi.</p>
+
+<p>To start with, I&rsquo;d like to write something to pull the sensor data &ndash; temperature, humidity, pressure, etc &ndash; from the SensorTag and publish it over <a href="http://mqtt.org/">MQTT</a>. However, reading the data seems to be problematic.</p>
+
+<p>Problem #1 is that the most-used bluetooth package for Python, <a href="https://code.google.com/p/pybluez/">PyBluez</a> had their last release (0.18) in November, 2009, which, obviously, doesn&rsquo;t include Bluetooth LE. Not a problem, I thought, I&rsquo;ll just fork the project, add the bindings for LE, and off we go!</p>
+
+<p>Which brings me to problem #2: the developers of the <a href="http://www.bluez.org/">BlueZ</a> protocol stack, which is how you access bluetooth from, well, pretty much everywhere, haven&rsquo;t seen fit to include <a href="http://en.wikipedia.org/wiki/Bluetooth_profile#Generic_Attribute_Profile_.28GATT.29">GATT</a> support either via a public library or via D-Bus, despite the fact that they&rsquo;ve had the code in their codebase since around 2010.</p>
+
+<p>*<strong><em>facepalm</em></strong>*</p>
+
+<p>Look, I understand that everybody&rsquo;s busy and all, but, really, you couldn&rsquo;t, in the last THREE YEARS break out the GATT code into a library so that people can access it? Really?</p>
+
+<p>Of course, I shouldn&rsquo;t complain, I guess, they do provide a nice little command-line tool, <code>gatttool</code>, to let you do GATT stuff from the command line. Somebody (who is much braver than I) is even trying to <a href="https://github.com/msaunby/ble-sensor-pi">access that via Python and pexpect</a>, which works, sort of, but, uh, really, there has to be a better way.</p>
+
+<p>So, I guess my only option is to pull the GATT code out of the BlueZ project and add it to the Python project. It&rsquo;s ugly, but it&rsquo;s better than expect scripts.</p>
+
+<p>And, really, BlueZ developers: Come on, throw us a bone here.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Zeroconf Rocks!]]></title>
@@ -632,111 +657,6 @@ Okay, after messing around with this for some time, I&rsquo;ve discovered that t
 <p>However, well-written code does more than that: it also expresses the aesthetic choices of the programmer in such a way that the person reading the code can use those aesthetic choices to better understand the intent of the code, and to see how all the pieces of code fit together. If the code is written with no, or multiple, aesthetic styles, then the code becomes more difficult to understand as the reader tries to follow one set of aesthetic choices in one part of the code, and then a completely different set of choices in another part.</p>
 
 <p>This is no different than what a writer does with a novel &ndash; a given problem exists (for example, there are two characters which need to interact in such a way as to move the plot in the desired direction), there are multiple solutions available (the characters can interact in many different ways, choose not to interact, etc), and the novelist must choose the solution that not only solves the problem, but that does it in a way that is clear to the reader and which expresses the aesthetic style of the writer. If the writer changes styles, where on one page things seem to go one way, but on another page the aesthetic style changes abruptly, then the novel becomes both unpleasant to read and difficult to follow. The same is true of code &ndash; the reader needs to be able to get a feeling for the aesthetic style of the code, and use that to understand how the different pieces work and flow together.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Fixed the deployment issues!!!]]></title>
-    <link href="http://www.geekheads.net/blog/2012/04/04/Fixed-the-deployment-issues%21%21%21/"/>
-    <updated>2012-04-04T00:00:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2012/04/04/Fixed-the-deployment-issues!!!</id>
-    <content type="html"><![CDATA[<p>I finally figured out how to get Ant + Ivy to copy artifacts from one Artifactory repository to another, modifying the appropriate metadata (AKA &ldquo;promotion&rdquo;). First, you need a separate ivy.xml file (I call mine &ldquo;ivy-publish.xml&rdquo;) that looks like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;ivy-module</span> <span class="na">version=</span><span class="s">&quot;2.0&quot;</span>
-</span><span class='line'>       <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
-</span><span class='line'>       <span class="na">xsi:noNamespaceSchemaLocation=</span>
-</span><span class='line'>         <span class="s">&quot;http://ant.apache.org/ivy/schemas/ivy.xsd&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;info</span> <span class="na">organisation=</span><span class="s">&quot;foo&quot;</span> <span class="na">module=</span><span class="s">&quot;FooDeploy&quot;</span> <span class="na">status=</span><span class="s">&quot;integration&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nt">&lt;configurations&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;conf</span> <span class="na">name=</span><span class="s">&quot;integration&quot;</span><span class="nt">/&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;conf</span> <span class="na">name=</span><span class="s">&quot;milestone&quot;</span><span class="nt">/&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;conf</span> <span class="na">name=</span><span class="s">&quot;release&quot;</span><span class="nt">/&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;/configurations&gt;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nt">&lt;publications&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;artifact</span> <span class="na">name=</span><span class="s">&quot;Foo&quot;</span> <span class="na">ext=</span><span class="s">&quot;war&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;artifact</span> <span class="na">name=</span><span class="s">&quot;Foo-src&quot;</span> <span class="na">ext=</span><span class="s">&quot;jar&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/publications&gt;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nt">&lt;dependencies&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;dependency</span> <span class="na">org=</span><span class="s">&quot;foo&quot;</span> <span class="na">name=</span><span class="s">&quot;Foo&quot;</span> <span class="na">rev=</span><span class="s">&quot;latest.integration&quot;</span>
-</span><span class='line'>          <span class="na">conf=</span><span class="s">&quot;integration-&gt;deploy&quot;</span> <span class="na">transitive=</span><span class="s">&quot;false&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;dependency</span> <span class="na">org=</span><span class="s">&quot;foo&quot;</span> <span class="na">name=</span><span class="s">&quot;Foo&quot;</span> <span class="na">rev=</span><span class="s">&quot;latest.milestone&quot;</span>
-</span><span class='line'>          <span class="na">conf=</span><span class="s">&quot;milestone-&gt;deploy&quot;</span> <span class="na">transitive=</span><span class="s">&quot;false&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;dependency</span> <span class="na">org=</span><span class="s">&quot;foo&quot;</span> <span class="na">name=</span><span class="s">&quot;Foo&quot;</span> <span class="na">rev=</span><span class="s">&quot;latest.release&quot;</span>
-</span><span class='line'>          <span class="na">conf=</span><span class="s">&quot;release-&gt;deploy&quot;</span> <span class="na">transitive=</span><span class="s">&quot;false&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/dependencies&gt;</span>
-</span><span class='line'><span class="nt">&lt;/ivy-module&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And then, you need an ant target that looks like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;target</span> <span class="na">name=</span><span class="s">&quot;publish-stage&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;ivy:configure</span> <span class="na">file=</span><span class="s">&quot;${common.build.dir}/ivysettings.xml&quot;</span>
-</span><span class='line'>          <span class="na">host=</span><span class="s">&quot;myserver&quot;</span> <span class="na">realm=</span><span class="s">&quot;Artifactory Realm&quot;</span> <span class="na">username=</span><span class="s">&quot;user&quot;</span>
-</span><span class='line'>          <span class="na">passwd=</span><span class="s">&quot;password!&quot;</span> <span class="na">override=</span><span class="s">&quot;true&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;ivy:retrieve</span> <span class="na">file=</span><span class="s">&quot;ivy-publish.xml&quot;</span> <span class="na">conf=</span><span class="s">&quot;integration&quot;</span>
-</span><span class='line'>          <span class="na">pattern=</span><span class="s">&quot;${ivy.lib.dir}/[conf]/[artifact].[ext]&quot;</span>
-</span><span class='line'>          <span class="na">ivypattern=</span><span class="s">&quot;${ivy.lib.dir}/[conf]/ivy.xml&quot;</span><span class="nt">/&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;ivy:buildnumber</span> <span class="na">organisation=</span><span class="s">&quot;${ivy.organisation}&quot;</span>
-</span><span class='line'>          <span class="na">module=</span><span class="s">&quot;${ivy.module}&quot;</span> <span class="na">revision=</span><span class="s">&quot;1.0&quot;</span> <span class="na">defaultBuildNumber=</span><span class="s">&quot;1&quot;</span>
-</span><span class='line'>          <span class="na">resolver=</span><span class="s">&quot;stage&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;ivy:publish</span> <span class="na">resolver=</span><span class="s">&quot;stage&quot;</span>
-</span><span class='line'>          <span class="na">pubrevision=</span><span class="s">&quot;1.0.${ivy.new.build.number}&quot;</span>
-</span><span class='line'>          <span class="na">status=</span><span class="s">&quot;milestone&quot;</span> <span class="na">overwrite=</span><span class="s">&quot;true&quot;</span> <span class="na">update=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;artifacts</span> <span class="na">pattern=</span><span class="s">&quot;${lib}/integration/[artifact].[ext]&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/ivy:publish&gt;</span>
-</span><span class='line'><span class="nt">&lt;/target&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>What this does is first retrieve the &ldquo;dependencies&rdquo; (the artifacts we&rsquo;re interested in) specified in the ivy-publish.xml file to lib/integration. Then, it turns around and publishes them, changing the status from &ldquo;integration&rdquo; to &ldquo;milestone&rdquo;.</p>
-
-<p>Works like a charm.</p>
 ]]></content>
   </entry>
   
