@@ -4,7 +4,7 @@
   <title><![CDATA[Geekheads]]></title>
   <link href="http://www.geekheads.net/atom.xml" rel="self"/>
   <link href="http://www.geekheads.net/"/>
-  <updated>2013-07-01T17:42:28-05:00</updated>
+  <updated>2013-07-01T22:08:19-05:00</updated>
   <id>http://www.geekheads.net/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
@@ -35,6 +35,14 @@
 <p>So, I guess my only option is to pull the GATT code out of the BlueZ project and add it to the Python project. It&rsquo;s ugly, but it&rsquo;s better than expect scripts.</p>
 
 <p>And, really, BlueZ developers: Come on, throw us a bone here.</p>
+
+<h3>Update</h3>
+
+<p>Well, it looks like I spoke too soon. Because the BlueZ developers have the GATT-layer stuff hooked heavily into glib 2.0 using callbacks, it would be much more work than I&rsquo;m willing to put into it to do this within Python, which probably explains why nobody else has done it either. Thanks again, BlueZ team! <em>sigh</em></p>
+
+<p>So, I guess what I&rsquo;m going to have to end up doing is writing all this in C/C++, and pulling parts of their GATT code into my project. Either that, or just implementing the parts I need myself.</p>
+
+<p>My guess is that the BlueZ developers are really more interested in writing kernel code than user-space code. It really sucks for anybody who wants to play with LE applications, though &ndash; right now everybody seems to be just writing wrappers around the BlueZ command-line apps and calling it a day. Not a great way to help with adoption of a standard, guys!</p>
 ]]></content>
   </entry>
   
