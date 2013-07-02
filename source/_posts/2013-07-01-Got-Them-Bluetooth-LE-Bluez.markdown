@@ -22,3 +22,10 @@ Of course, I shouldn't complain, I guess - they do provide a nice little command
 So, I guess my only option is to pull the GATT code out of the BlueZ project and add it to the Python project. It's ugly, but it's better than expect scripts.
 
 And, really, BlueZ developers: Come on, throw us a bone here.
+
+### Update
+Well, it looks like I spoke too soon. Because the BlueZ developers have the GATT-layer stuff hooked heavily into glib 2.0 using callbacks, it would be much more work than I'm willing to put into it to do this within Python, which probably explains why nobody else has done it either. Thanks again, BlueZ team! *sigh*
+
+So, I guess what I'm going to have to end up doing is writing all this in C/C++, and pulling parts of their GATT code into my project. Either that, or just implementing the parts I need myself.
+
+My guess is that the BlueZ developers are really more interested in writing kernel code than user-space code. It really sucks for anybody who wants to play with LE applications, though - right now everybody seems to be just writing wrappers around the BlueZ command-line apps and calling it a day. Not a great way to help with adoption of a standard, guys!
