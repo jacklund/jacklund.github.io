@@ -4,7 +4,7 @@
   <title><![CDATA[Category: beaglebone | Geekheads]]></title>
   <link href="http://www.geekheads.net/blog/categories/beaglebone/atom.xml" rel="self"/>
   <link href="http://www.geekheads.net/"/>
-  <updated>2013-07-07T21:20:21-05:00</updated>
+  <updated>2013-07-07T21:40:58-05:00</updated>
   <id>http://www.geekheads.net/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
@@ -92,6 +92,29 @@
 <li>Now, reboot and see if the clock gets set correctly</li>
 </ol>
 
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[BeagleBone Black]]></title>
+    <link href="http://www.geekheads.net/blog/2013/06/09/BeagleBone-Black/"/>
+    <updated>2013-06-09T20:00:00-05:00</updated>
+    <id>http://www.geekheads.net/blog/2013/06/09/BeagleBone-Black</id>
+    <content type="html"><![CDATA[<p>Got my two <a href="http://beagleboard.org/Products/BeagleBone%20Black">BeagleBone Blacks</a> from <a href="http://adafruit.com/">AdaFruit</a> on Friday. Really nice. I bought them without enclosures because, well, the enclosures were $20, and the BeagleBones themselves were only $45. The nice thing is, though, that they fit exactly into an Altoids tin, so I turned two into my enclosures. I used tin snips to cut holes for power and Ethernet, and lined them with electrical tape to insulate the board from the box. Here&rsquo;s what they ended up looking like:</p>
+
+<p><img src="https://dl.dropbox.com/s/bpgc7lc5azhazw5/altoids_closed.jpg" title="Closed" alt="" /></p>
+
+<p><img src="https://dl.dropbox.com/s/d87y38ydxqtcv2q/altoids_open.jpg" title="Open" alt="" /></p>
+
+<p><img src="https://dl.dropbox.com/s/7nocbp8nnb65pwn/altoids_working.jpg" title="Running" alt="" /></p>
+
+<p>By default, they run <a href="http://www.angstrom-distribution.org/">Ångström Linux</a>. The default programming environment for them is a variant of Javascript they call <a href="http://beagleboard.org/Support/BoneScript">&ldquo;Bonescript&rdquo;</a>, which runs via <a href="http://nodejs.org/">Node.js</a>. However, a kind soul had put together a Python library called <a href="https://github.com/alexanderhiam/PyBBIO">PyBBIO</a>, which I downloaded and tried to install. I kept getting the following warning, however:</p>
+
+<pre><code>Warning: you seem to have a BeagleBone image which only has drivers for the PWM1 module, PWM2A and PWM2B will not be available in PyBBIO.
+You should consider updating Angstrom!
+</code></pre>
+
+<p>I tried updating the OS using <a href="http://learn.adafruit.com/beaglebone-black-installing-operating-systems/overview">these instructions</a>, however it didn&rsquo;t make the problem go away. That&rsquo;s when I discovered that PyBBIO <a href="https://github.com/alexanderhiam/PyBBIO/issues/18">doesn&rsquo;t support the 3.8 kernel that comes with BB Blacks</a>, so it looks like I&rsquo;m stuck with Javascript for the moment.</p>
 ]]></content>
   </entry>
   
