@@ -1,0 +1,759 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Geekheads</title>
+  <meta name="author" content="Jack Lund">
+
+  
+  <meta name="description" content="Programmers often talk about code being “beautiful”, but often writing “pretty” code is disparaged as being a luxury that can&rsquo;t be afforded &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.geekheads.net/blog/page/3/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Geekheads" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <!--
+  <div id="logo">
+  	<div id="logoLeft">{</div>
+  	<div id="logoText">GH</div>
+  	<div id="logoRight">}</div>
+  	<div class="clear"></div>
+  </div> -->
+  <h1><a href="/">Geekheads</a></h1>
+  
+    <h2>Geeks are people, too. Sort of.</h2>
+  
+  <div class="clear"></div>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.geekheads.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2012/10/01/beautiful-code/">Beautiful Code</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-01T21:11:00-05:00" pubdate data-updated="true">Oct 1<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Programmers often talk about code being “beautiful”, but often writing “pretty” code is disparaged as being a luxury that can&rsquo;t be afforded under tight schedules. The result is really ugly code that ends up being difficult to maintain, but most people don&rsquo;t seem to see the correlation between “beauty” and “maintainability”.</p>
+
+<p>Experience has shown me that beautiful code and maintainable code, if not identical, are closely related. The reason, I believe, is very simple: coding is expression. What I mean by this is that, for any given problem that is trying to be solved by code, there are usually many, many different ways to go about solving it within the context of a given language and environment &ndash; there are usually many different solutions which “work”. Because of this, the choice of how to solve the problem is, all else being equal, an aesthetic choice. In other words, given a number of different ways of going about solving the given problem, one way of choosing among all the different possible solutions is to choose the one that seems the “prettiest”, that appeals to the programmers aesthetic style.</p>
+
+<p>This assumes, of course, that the programmer has access to all, or many, of the possible solutions. A less-experienced or less-talented programmer may only see one possible way of solving the problem, or may be too lazy or unmotivated to find or utilize more than one possible solution &ndash; this is one source of much bad, “ugly”, and unmaintainable code. However, when the programmer is talented and/or experienced enough, and properly motivated, the multiple possibilities open up, and the choice becomes available. This, incidentally, is one difference between a good, talented programmer and a hack &ndash; the talented programmer will always be aware of the various possible solutions available, and will have a good grasp of the consequences of each decision.</p>
+
+<p>So, how does this make the choice an aesthetic one, and why would the “prettiest” choice turn out to be the best? Because, as I said earlier, code is expression. Who or what do we write code for? Is it just to be turned into machine code and run? No, because if that were the case, we&rsquo;d all be writing in assembler. No, we write code for humans &ndash; other people who will be looking at the code, and maintaining it. Good code is written to express the solution to a particular problem in the clearest possible manner to the people who will be reading the code later. A good programmer writes the code in such a way as to express their view of the most straightforward and conceptually clear way of solving the given problem, so that the person reading the code will easily understand what is being done, why it&rsquo;s being done, and why it&rsquo;s being done in that particular way. That&rsquo;s not to say that the way it&rsquo;s being done is, somehow, the best way of doing it, but simply that it expresses the problem and the solution in a way that the reader can grasp easily.</p>
+
+<p>However, well-written code does more than that: it also expresses the aesthetic choices of the programmer in such a way that the person reading the code can use those aesthetic choices to better understand the intent of the code, and to see how all the pieces of code fit together. If the code is written with no, or multiple, aesthetic styles, then the code becomes more difficult to understand as the reader tries to follow one set of aesthetic choices in one part of the code, and then a completely different set of choices in another part.</p>
+
+<p>This is no different than what a writer does with a novel &ndash; a given problem exists (for example, there are two characters which need to interact in such a way as to move the plot in the desired direction), there are multiple solutions available (the characters can interact in many different ways, choose not to interact, etc), and the novelist must choose the solution that not only solves the problem, but that does it in a way that is clear to the reader and which expresses the aesthetic style of the writer. If the writer changes styles, where on one page things seem to go one way, but on another page the aesthetic style changes abruptly, then the novel becomes both unpleasant to read and difficult to follow. The same is true of code &ndash; the reader needs to be able to get a feeling for the aesthetic style of the code, and use that to understand how the different pieces work and flow together.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2012/04/04/Fixed-the-deployment-issues%21%21%21/">Fixed the Deployment Issues!!!</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-04T00:00:00-05:00" pubdate data-updated="true">Apr 4<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I finally figured out how to get Ant + Ivy to copy artifacts from one Artifactory repository to another, modifying the appropriate metadata (AKA &ldquo;promotion&rdquo;). First, you need a separate ivy.xml file (I call mine &ldquo;ivy-publish.xml&rdquo;) that looks like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;ivy-module</span> <span class="na">version=</span><span class="s">&quot;2.0&quot;</span>
+</span><span class='line'>       <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+</span><span class='line'>       <span class="na">xsi:noNamespaceSchemaLocation=</span>
+</span><span class='line'>         <span class="s">&quot;http://ant.apache.org/ivy/schemas/ivy.xsd&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;info</span> <span class="na">organisation=</span><span class="s">&quot;foo&quot;</span> <span class="na">module=</span><span class="s">&quot;FooDeploy&quot;</span> <span class="na">status=</span><span class="s">&quot;integration&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nt">&lt;configurations&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;conf</span> <span class="na">name=</span><span class="s">&quot;integration&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;conf</span> <span class="na">name=</span><span class="s">&quot;milestone&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;conf</span> <span class="na">name=</span><span class="s">&quot;release&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/configurations&gt;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nt">&lt;publications&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;artifact</span> <span class="na">name=</span><span class="s">&quot;Foo&quot;</span> <span class="na">ext=</span><span class="s">&quot;war&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;artifact</span> <span class="na">name=</span><span class="s">&quot;Foo-src&quot;</span> <span class="na">ext=</span><span class="s">&quot;jar&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/publications&gt;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nt">&lt;dependencies&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;dependency</span> <span class="na">org=</span><span class="s">&quot;foo&quot;</span> <span class="na">name=</span><span class="s">&quot;Foo&quot;</span> <span class="na">rev=</span><span class="s">&quot;latest.integration&quot;</span>
+</span><span class='line'>          <span class="na">conf=</span><span class="s">&quot;integration-&gt;deploy&quot;</span> <span class="na">transitive=</span><span class="s">&quot;false&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;dependency</span> <span class="na">org=</span><span class="s">&quot;foo&quot;</span> <span class="na">name=</span><span class="s">&quot;Foo&quot;</span> <span class="na">rev=</span><span class="s">&quot;latest.milestone&quot;</span>
+</span><span class='line'>          <span class="na">conf=</span><span class="s">&quot;milestone-&gt;deploy&quot;</span> <span class="na">transitive=</span><span class="s">&quot;false&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;dependency</span> <span class="na">org=</span><span class="s">&quot;foo&quot;</span> <span class="na">name=</span><span class="s">&quot;Foo&quot;</span> <span class="na">rev=</span><span class="s">&quot;latest.release&quot;</span>
+</span><span class='line'>          <span class="na">conf=</span><span class="s">&quot;release-&gt;deploy&quot;</span> <span class="na">transitive=</span><span class="s">&quot;false&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/dependencies&gt;</span>
+</span><span class='line'><span class="nt">&lt;/ivy-module&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And then, you need an ant target that looks like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;target</span> <span class="na">name=</span><span class="s">&quot;publish-stage&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;ivy:configure</span> <span class="na">file=</span><span class="s">&quot;${common.build.dir}/ivysettings.xml&quot;</span>
+</span><span class='line'>          <span class="na">host=</span><span class="s">&quot;myserver&quot;</span> <span class="na">realm=</span><span class="s">&quot;Artifactory Realm&quot;</span> <span class="na">username=</span><span class="s">&quot;user&quot;</span>
+</span><span class='line'>          <span class="na">passwd=</span><span class="s">&quot;password!&quot;</span> <span class="na">override=</span><span class="s">&quot;true&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;ivy:retrieve</span> <span class="na">file=</span><span class="s">&quot;ivy-publish.xml&quot;</span> <span class="na">conf=</span><span class="s">&quot;integration&quot;</span>
+</span><span class='line'>          <span class="na">pattern=</span><span class="s">&quot;${ivy.lib.dir}/[conf]/[artifact].[ext]&quot;</span>
+</span><span class='line'>          <span class="na">ivypattern=</span><span class="s">&quot;${ivy.lib.dir}/[conf]/ivy.xml&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;ivy:buildnumber</span> <span class="na">organisation=</span><span class="s">&quot;${ivy.organisation}&quot;</span>
+</span><span class='line'>          <span class="na">module=</span><span class="s">&quot;${ivy.module}&quot;</span> <span class="na">revision=</span><span class="s">&quot;1.0&quot;</span> <span class="na">defaultBuildNumber=</span><span class="s">&quot;1&quot;</span>
+</span><span class='line'>          <span class="na">resolver=</span><span class="s">&quot;stage&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;ivy:publish</span> <span class="na">resolver=</span><span class="s">&quot;stage&quot;</span>
+</span><span class='line'>          <span class="na">pubrevision=</span><span class="s">&quot;1.0.${ivy.new.build.number}&quot;</span>
+</span><span class='line'>          <span class="na">status=</span><span class="s">&quot;milestone&quot;</span> <span class="na">overwrite=</span><span class="s">&quot;true&quot;</span> <span class="na">update=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;artifacts</span> <span class="na">pattern=</span><span class="s">&quot;${lib}/integration/[artifact].[ext]&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/ivy:publish&gt;</span>
+</span><span class='line'><span class="nt">&lt;/target&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>What this does is first retrieve the &ldquo;dependencies&rdquo; (the artifacts we&rsquo;re interested in) specified in the ivy-publish.xml file to lib/integration. Then, it turns around and publishes them, changing the status from &ldquo;integration&rdquo; to &ldquo;milestone&rdquo;.</p>
+
+<p>Works like a charm.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2012/04/03/Deployment-Sucks/">Deployment Sucks</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-03T00:00:00-05:00" pubdate data-updated="true">Apr 3<span>rd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>We&rsquo;re using Ant + Ivy + Jenkins + Artifactory to do our builds &ndash; Ant to build, Ivy for dependency management, Jenkins for continuous integration, and Artifactory to store the build artifacts. One thing we&rsquo;re struggling with is how to promote an artifact through the three stages &ndash; build &ndash;> stage &ndash;> release. Jenkins puts it into the build repository once it passes CI, so that part is easy. However, having an automated process for moving the artifacts from build to stage and from stage to release is painful, at best, which is surprising.</p>
+
+<p>The problem is with Ivy. It&rsquo;s a pretty good tool for dependency management &ndash; it finds and downloads specific versions of jars for you, which is nice, but it&rsquo;s not so good at going outside that realm, like, for instance, pulling down an artifact from the repository, and then pushing it back again with updated metadata, into a different repository.</p>
+
+<p>We&rsquo;ve tried just specifying the artifact as the depndency, giving it a revision of &ldquo;latest.integration&rdquo; to pull it from build, and then publishing to stage, for instance, but Ivy complains that it can&rsquo;t be its own dependency, which makes sense. We&rsquo;ve tried publishing it as a different module name to stage, for instance, but then you run into the same problem getting it from stage to release.</p>
+
+<p>There has to be a better way. Unfortunately, the Artifactory people aren&rsquo;t much help &ndash; their solutions involve buying their &ldquo;pro&rdquo; version, and using their REST interface. Blech.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2012/04/01/Stef-Sick/">Stef Sick</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-01T00:00:00-05:00" pubdate data-updated="true">Apr 1<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>About 3 AM Stef woke up complaining about chills. I tried to keep her warm, but she had a real hard time getting back to sleep. This morning, she had a 100 degree fever &ndash; clearly the Flu. Unfortunately, she had scheduled the family party for the girl&rsquo;s birthday today. I wanted to postpone/cancel it, but she felt like the girls were really excited about it, and didn&rsquo;t want to disappoint them. It turned out kind of nice &ndash; I grilled burgers and brats despite the rainy cold weather, and we all ate, and the girls opened presents.</p>
+
+<p>Stef spent the rest of the day crashed out (in fact, she&rsquo;s crashed out right now on the sofa next to me).</p>
+
+<p>I also had heartburn all day, starting after breakfast. Everything I ate seemed to trigger it, so at dinner I opted for the BRAT diet (Bananas Rice Applesauce Toast) which seemed to make things better.</p>
+
+<p>The girls seemed to like their party.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2012/01/18/Young-Dubliners-Really-Wakes-You-Up/">Young Dubliners Really Wakes You Up</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-18T00:00:00-06:00" pubdate data-updated="true">Jan 18<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So, I&rsquo;ve started getting into the groove of going down to my basement office in the morning and getting stuff done. I&rsquo;ve discovered that cranking up the Young Dubliners station on Pandora is a good way to wake up &ndash; just the right mix of Punk and Irish pissed-off-edness. Usually have to tone it down by noon, but still, a good way to get things going.</p>
+
+<p>Had to buy a space heater for my office &ndash; it being around zero with wind chill outside now. Still, I got a good bit done today &ndash; rearranged some of the projects and package names, created a couple of services which our front-end web service will use to validate the data coming in, created a nightly job to generate the javadocs and publish them on the web. Also, got Redmine and svn to play nice together, so now we should be able to associate issues and fixes with specific versions of code.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2012/01/16/First-Day-of-Work-in-the-New-Office/">First Day of Work in the New Office</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-16T00:00:00-06:00" pubdate data-updated="true">Jan 16<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>My first day of work in the new office in my basement. Worked out pretty well, although I <em>do</em> need to figure out a way to take more frequent breaks, and maybe do something at lunchtime other than sitting.</p>
+
+<p>I&rsquo;ve discovered more really cool stuff with <a href="http://www.jboss.org/resteasy">RESTEasy</a>: not only does it automagically convert JSON to java.util.Map&lt;String, Object>, but it also can convert XML input into an org.w3c.dom.Document. Also, they were thoughtful enough to allow you to have different interface methods for different content types for the same URI, which means that I can have data coming in as JSON call one method (the one with a Map&lt;String, Object> in the signature), and XML call another. Really cool.</p>
+
+<p>Also, got my Groovy integration tests working. Since our architecture is basically a RESTful web service putting data onto a queue, and a MDB taking it off and calling multiple handlers to handle it, I just created another handler to dump the data onto a queue which the integration test reads from (remotely), allowing me to make sure the data got all the way through intact. Very nice.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2012/01/15/New-Server-Hell/">New Server Hell</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-15T00:00:00-06:00" pubdate data-updated="true">Jan 15<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So, one of the other guys in my new company ordered the parts for a Linux server to be sent to me (because we still live in a time when it&rsquo;s cheaper to build your own Linux server than to buy one pre-made), which I built the other day. This was somewhat interesting in that I haven&rsquo;t put together a new machine in quite a while, but, fortunately, it seems like these things get easier rather than harder as the technology progresses.</p>
+
+<p>The machine was built, and I had to add services to it. The first thing we needed was our Redmine installation, which up until now was running on my home Linux box. Both machines are running Ubuntu (for no other reason than it&rsquo;s easily accessible and has a very large user base), so it was just a matter of installing MySQL and Redmine from the Ubuntu repos, dumping the MySQL database from the other machine and moving it to this machine. This worked…mostly. For some strange reason the user passwords didn&rsquo;t work, so I had to start by resetting the admin password (using the instructions from <a href="http://www.redmine.org/boards/2/topics/3364">this post</a>), and then resetting all the user passwords. The only other hitch was that the main page reset to the default main page rather than the wiki page for my company, which I had set up a while ago. Easy enough to fix with <a href="http://www.supermind.org/blog/830/change-redmine-homepage-to-project-page">these instructions</a>. So far so good.</p>
+
+<p>Next, I had to move our subversion repository over from a machine running Windows to this new server. Again, easy enough, you just have to dump the repository and load it again, as per <a href="http://dotnot.org/blog/archives/2005/01/13/move-a-subversion-repository-from-one-machine-to-another/">these instructions</a>. Then, I just had to make sure svn+ssh worked (I had already setup SSH on the machine and set up accounts for our guys), and then I had to setup SVN through WebDAV, which was really just a matter of enabling some of the Apache mods.</p>
+
+<p>The big kicker, though, was that I&rsquo;m temporarily hosting our server at my house, so it&rsquo;s part of my network. Since I already have a web server (on my Linux box) running exposed to the world, for Redmine, I had to enable mod_proxy on my home Linux box to reverse-proxy the requests to the new box. WebDAV I simply made HTTPS, so I could set up a separate port forward for it directly to the new box.</p>
+
+<p>All in all, one big sysadmin day for a guy who doesn&rsquo;t especially like sysadmin work.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2012/01/14/Eskrima-class%2C-Snow%2C-and-a-New-Server-for-Work/">Eskrima Class, Snow, and a New Server for Work</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-14T00:00:00-06:00" pubdate data-updated="true">Jan 14<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Had a killer eskrima class this morning. In the kids class, Guro worked us hard &ndash; one minute of strikes against the bag as fast as we can, alternating with planks and footwork. After that, during the adult class, lots of sparring. I ended up sparring continuously for, like, ten minutes, with only a few seconds break between rounds. It felt a lot better than last week&rsquo;s &ndash; I had a hard time getting back into the groove right after the holidays.</p>
+
+<p>After class, dropped the girls off to their first practice for their Willy Wonka musical, came back and had to do some sysadmin work for my lovely wife, then went back and picked up the girls, and we went sledding down the hill next to the Gurnee Park District building, where their musical practice was. Lots of fun, but after the class in the morning (and me being off my workout schedule and recovering from a sinus infection) it pretty much wiped me out.</p>
+
+<p>Then, I came home and put Ubuntu on the work Linux machine I built over the last couple of days. I got it installed, and set up on the network. Now, I just need to set up accounts, start up the services, install all the stuff we need, and we should be golden.</p>
+
+<p>Busy, busy day.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2012/01/12/Getting-My-Office-Set-Up/">Getting My Office Set Up</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-12T00:00:00-06:00" pubdate data-updated="true">Jan 12<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Spent today putting together my desk and chair, moving the network stuff (cable modem, wireless router, NAS server) into the furnace room (now server room) in the basement, and setting up my new Mac Mini server, which will be my desktop (I also have a MacBook Pro which I will continue to use).</p>
+
+<p>Discovered an interesting &ldquo;backdoor&rdquo; to JBoss&#8217; queues &ndash; they publish a &ldquo;netty&rdquo; port which makes the queues accessible directly, i.e. not through JNDI. The problem is that JBoss 7.0.2 doesn&rsquo;t yet publish the queues remotely via JNDI, and I had wanted to set up the integration tests to send a message to the web service, which would put it on the queue for the EJB, which would invoke a handler which would put it on <em>another</em> queue, which the integration test script would then read. That way, the integration test would be truly end-to-end, and we wouldn&rsquo;t have to worry about messages not making it all the way through. That&#8217;w when I ran into that little issue with JNDI, but now, this backdoor approach seems to me like a way around that.</p>
+
+<p>The original code, which I modified, is <a href="http://code.google.com/p/javasupport/source/browse/branches/hornetq-examples/src/main/java/deng/hornetqexamples/core/NettyJmsClient.java?r=581">here</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2012/01/11/Last-Day/">Last Day</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-11T00:00:00-06:00" pubdate data-updated="true">Jan 11<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Morning of my last day at the old job. Came down with what could be either a sinus or ear infection last night &ndash; no energy, feelling somewhat dizzy. For some reason, they don&rsquo;t really have anything planned for me today, but they want to keep me at work all day &ndash; they&rsquo;ve planned my exit interview after the close. Oh, well.</p>
+
+<p>On the plus side, got a good bit done on building my home office desk last night, before this infection thing hit me. Still have the desk to finish, my chair and bookcase to put together, whiteboard to mount, network stuff to move downstairs, and my machines to set up. Busy, busy, busy.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/4/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/2/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/08/30/what-to-do/">What to do?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez/">Got Them Bluetooth LE Bluez</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/27/Zeroconf-Rocks/">Zeroconf Rocks!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/25/Scala-Is-Disappointing/">Scala Is Disappointing</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/21/Scala-Development-Setup/">Scala Development Setup</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 115.0%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 115.0%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 130.0%'>beaglebone</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 115.0%'>beaglebone-black</a>   <a href='/blog/categories/bluetooth-le' style='font-size: 115.0%'>bluetooth_le</a>   <a href='/blog/categories/bluez' style='font-size: 115.0%'>bluez</a>   <a href='/blog/categories/bonjour' style='font-size: 115.0%'>bonjour</a>   <a href='/blog/categories/cobertura' style='font-size: 115.0%'>cobertura</a>   <a href='/blog/categories/documents' style='font-size: 115.0%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 160.0%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 115.0%'>eskrima</a>   <a href='/blog/categories/gatt' style='font-size: 115.0%'>gatt</a>   <a href='/blog/categories/git' style='font-size: 130.0%'>git</a>   <a href='/blog/categories/github' style='font-size: 115.0%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 115.0%'>hornetq</a>   <a href='/blog/categories/idea' style='font-size: 115.0%'>idea</a>   <a href='/blog/categories/java' style='font-size: 130.0%'>java</a>   <a href='/blog/categories/jboss' style='font-size: 115.0%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 115.0%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 115.0%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 115.0%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 115.0%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 115.0%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 115.0%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 145.0%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 115.0%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 115.0%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 130.0%'>maven</a>   <a href='/blog/categories/mqtt' style='font-size: 115.0%'>mqtt</a>   <a href='/blog/categories/node-js' style='font-size: 115.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 115.0%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 115.0%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 115.0%'>programming</a>   <a href='/blog/categories/python' style='font-size: 115.0%'>python</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 115.0%'>raspberry-pi</a>   <a href='/blog/categories/rest' style='font-size: 115.0%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 115.0%'>resteasy</a>   <a href='/blog/categories/sbt' style='font-size: 130.0%'>sbt</a>   <a href='/blog/categories/scala' style='font-size: 130.0%'>scala</a>   <a href='/blog/categories/scalability' style='font-size: 115.0%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 115.0%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 115.0%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 115.0%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 115.0%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 115.0%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 115.0%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 115.0%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 115.0%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 115.0%'>windows</a>   <a href='/blog/categories/zeroconf' style='font-size: 115.0%'>zeroconf</a>   <a href='/blog/categories/zookeeper' style='font-size: 115.0%'>zookeeper</a>   </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/jacklund">@jacklund</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jacklund',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+<section>
+	<h1>My PGP Key</h1>
+	<ul>
+		<li><a href="http://pgp.mit.edu:11371/pks/lookup?op=vindex&search=0x755E427235B39D61">From the MIT Keyserver</a></li>
+		<li><a href="/about/pgp.txt">Text file</a></li>
+	</ul>
+</section><section>
+  <h1>Other Places To Find Me</h1>
+  <ul>
+    <li><a href="https://geekli.st/jacklund">Geeklist</a></li>
+    <li><a href="http://www.pandora.com/profile/jackl0">Pandora</a></li>
+    <li><a href="http://www.linkedin.com/in/jacklund">LinkedIn</a></li>
+    <li><a href="https://plus.google.com/105150092995925691816/about">Google+</a></li>
+    <li><a href="https://alpha.app.net/jacklund">App.net</a></li>
+    <li><a href="https://www.facebook.com/jack.lund">Facebook</a></li>
+    <li><a href="https://jacklund.trovebox.com/">Trovebox</a></li>
+    <li><a href="http://jacklund.tumblr.com/">Tumblr</a></li>
+    <li><a href="http://pinterest.com/jacklund/">Pinterest</a></li>
+    <li><a href="http://www.scribd.com/jack_lund">Scribd</a></li>
+    <li><a href="http://www.shelfari.com/jacklund">Shelfari</a></li>
+    <li><a href="http://www.librarything.com/home/jacklund">LibraryThing</a></li>
+  </ul>
+</section>
+<section>
+  <h1>Share</h1>
+  <ul>
+    <li><a href="javascript:document.getElementsByTagName('body')[0].appendChild(document.createElement('script')).setAttribute('src','//geekli.st/javascript/bookmarklet/bookmarklet.js')"><img src="//geekli.st/images/assets/GeekIt_wFace.png"></a></li>
+    <li>
+      <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+      <g:plusone annotation="none"></g:plusone>
+    </li>
+  </ul>
+</section>
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Jack Lund -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span> - 
+  <span class="credit">Layout by <a href="https://github.com/amelandri/darkstripes">DarkStripes</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'geekheads';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

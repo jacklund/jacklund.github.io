@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: apple | Geekheads]]></title>
+  <link href="http://www.geekheads.net/blog/categories/apple/atom.xml" rel="self"/>
+  <link href="http://www.geekheads.net/"/>
+  <updated>2013-08-30T23:09:39-05:00</updated>
+  <id>http://www.geekheads.net/</id>
+  <author>
+    <name><![CDATA[Jack Lund]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Airport Extreme]]></title>
+    <link href="http://www.geekheads.net/blog/2013/05/06/Airport-Extreme/"/>
+    <updated>2013-05-06T22:05:00-05:00</updated>
+    <id>http://www.geekheads.net/blog/2013/05/06/Airport-Extreme</id>
+    <content type="html"><![CDATA[<p>Had to replace my old, crappy Netgear router over the weekend &ndash; it was getting flaky, and causing my Skype calls to freak out at inopportune moments. I was thinking about going the <a href="http://en.wikipedia.org/wiki/DD-WRT">DD-WRT</a> route (if you&rsquo;ll excuse the pun), but it looked like it required more of a time commitment than I am able to manage at the moment. Since almost everything we have in this house is some form of Apple product, I decided to try out the Airport Extreme.</p>
+
+<p>Man, was that thing easy to set up, especially compared to the Living Hell that is most router setups. I just went into Airport Utility on my laptop, it automagically found the router, I configured it right there, and it just frickin' worked! Unbelievable! Admittedly, it&rsquo;s a pricey router, but I think it&rsquo;s worth it with the time it saved me.</p>
+
+<p>It also seems to be a <strong>lot</strong> more powerful than those underpowered Netgear POSes, which is an added benefit.</p>
+]]></content>
+  </entry>
+  
+</feed>
