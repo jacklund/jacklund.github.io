@@ -9,7 +9,7 @@
   <meta name="author" content="Jack Lund">
 
   
-  <meta name="description" content="So, I haven&rsquo;t posted in almost 2 months. Part of that is the fact that the last two months have been very busy &ndash; work is crazy busy &hellip;">
+  <meta name="description" content="Well, I published my Node.js module for Bluetooth LE, btle.js (pronounced &ldquo;Beetle Juice&rdquo;) to npm. Even though it&rsquo;s labeled version &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -74,6 +74,50 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/09/10/published-bluetooth-le-module/">Published Bluetooth LE Module</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-10T22:31:00-05:00" pubdate data-updated="true">Sep 10<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Well, I published my Node.js module for Bluetooth LE, <a href="https://github.com/jacklund/btle.js">btle.js</a> (pronounced &ldquo;Beetle Juice&rdquo;) to <a href="https://npmjs.org/package/btle.js">npm</a>. Even though it&rsquo;s labeled version 0.1.0, it&rsquo;s got most of the functionality that&rsquo;s necessary for Bluetooth LE &ndash; reading attributes, writing commands and requests, and listening for notifications. I&rsquo;m hoping to add more functionality over the next few weeks/months.</p>
+
+<p>The main reason I was doing this was to get my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?DCMP=sensortag&amp;HQS=sensortag-bn">TI SensorTag</a> working with my Raspberry Pi and Bluetooth LE dongle, which it now does. I&rsquo;ve even got the beginnings of a Node.js module for the sensortag, <a href="https://github.com/jacklund/sensortag.js">sensortag.js</a>, which is built on top of btle.js. I&rsquo;ve got everything working except the Barometric Pressure sensor readings and the Gyroscope readings.</p>
+
+<p>The nice thing about btle.js is that it&rsquo;s purely native C++ code, talking directly to the Linux Bluetooth stack &ndash; it&rsquo;s not having to shell out to run gatttool, for instance, which is pretty nice.</p>
+
+<p>For anyone wanting to write some Bluetooth LE code for Linux in a non-Node.js environment, I extracted the low-level I/O code from the <a href="http://www.bluez.org/">Bluez</a> project, removing the dependency on glib so that it&rsquo;s a true, low-level Linux I/O package. The higher-level code is dependant on <a href="https://github.com/joyent/libuv">libuv</a>, of course &ndash; I couldn&rsquo;t figure out any good way to separate them &ndash; but it shouldn&rsquo;t be too difficult to extract what you need from there as well.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -565,129 +609,6 @@ allow this access for now by executing:
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black/">Setting Up NTP on BeagleBone Black</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-10T11:50:00-05:00" pubdate data-updated="true">Jun 10<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>For some reason, they didn&rsquo;t seem to see the need to set up the time service on the BeagleBone Blacks by default. I tried using the instructions from <a href="http://derekmolloy.ie/automatically-setting-the-beaglebone-black-time-using-ntp/">this gentleman</a>, but I had to make some modifications.</p>
-
-<ol>
-<li>Install NTP</li>
-</ol>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>    <span class="nv">$ </span>opkg update <span class="o">&amp;&amp;</span> opkg install ntp
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ol>
-<li>Edit <code>/etc/ntp.conf</code>, adding <code>pool.ntp.org</code> as the server:</li>
-</ol>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='apache'><span class='line'>    <span class="c"># This is the most basic ntp configuration file</span>
-</span><span class='line'>    <span class="c"># The driftfile must remain in a place specific to this</span>
-</span><span class='line'>    <span class="c"># machine - it records the machine specific clock error</span>
-</span><span class='line'>    <span class="nb">driftfile</span> <span class="sx">/etc/ntp.drift</span>
-</span><span class='line'>    <span class="c"># This obtains a random server which will be close</span>
-</span><span class='line'>    <span class="c"># (in IP terms) to the machine.  Add other servers</span>
-</span><span class='line'>    <span class="c"># as required, or change this.</span>
-</span><span class='line'>    <span class="nb">server</span> pool.ntp.org
-</span><span class='line'>    <span class="c"># Using local hardware clock as fallback</span>
-</span><span class='line'>    <span class="c"># Disable this when using ntpd -q -g -x as ntpdate or it will sync to itself</span>
-</span><span class='line'>    <span class="nb">server</span> <span class="m">127.127.1.0</span>
-</span><span class='line'>    <span class="nb">fudge</span> <span class="m">127.127.1.0</span> stratum <span class="m">14</span>
-</span><span class='line'>    <span class="c"># Defining a default security setting</span>
-</span><span class='line'>    <span class="nb">restrict</span> default
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ol>
-<li>Set your local time:</li>
-</ol>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>    <span class="nv">$ </span><span class="nb">cd</span> /etc
-</span><span class='line'>    <span class="nv">$ </span>rm -f localtime
-</span><span class='line'>    <span class="nv">$ </span>ln -s ../usr/share/zoneinfo/America/Chicago localtime
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ol>
-<li>Edit <code>/etc/default/ntpdate</code>:</li>
-</ol>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='apache'><span class='line'>    <span class="c"># Configuration script used by ntpdate-sync script</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="err">NTPSERVERS=&quot;pool</span>.<span class="err">ntp</span>.<span class="err">org&quot;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c"># Set to &quot;yes&quot; to write time to hardware clock on success</span>
-</span><span class='line'>    <span class="err">UPDATE_HWCLOCK=&quot;yes&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ol>
-<li>Now, reboot and see if the clock gets set correctly</li>
-</ol>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -701,6 +622,10 @@ allow this access for now by executing:
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/09/10/published-bluetooth-le-module/">Published Bluetooth LE Module</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/08/30/what-to-do/">What to do?</a>
@@ -718,15 +643,11 @@ allow this access for now by executing:
         <a href="/blog/2013/06/25/Scala-Is-Disappointing/">Scala Is Disappointing</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2013/06/21/Scala-Development-Setup/">Scala Development Setup</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 115.0%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 115.0%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 130.0%'>beaglebone</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 115.0%'>beaglebone-black</a>   <a href='/blog/categories/bluetooth-le' style='font-size: 115.0%'>bluetooth_le</a>   <a href='/blog/categories/bluez' style='font-size: 115.0%'>bluez</a>   <a href='/blog/categories/bonjour' style='font-size: 115.0%'>bonjour</a>   <a href='/blog/categories/cobertura' style='font-size: 115.0%'>cobertura</a>   <a href='/blog/categories/documents' style='font-size: 115.0%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 160.0%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 115.0%'>eskrima</a>   <a href='/blog/categories/gatt' style='font-size: 115.0%'>gatt</a>   <a href='/blog/categories/git' style='font-size: 130.0%'>git</a>   <a href='/blog/categories/github' style='font-size: 115.0%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 115.0%'>hornetq</a>   <a href='/blog/categories/idea' style='font-size: 115.0%'>idea</a>   <a href='/blog/categories/java' style='font-size: 130.0%'>java</a>   <a href='/blog/categories/jboss' style='font-size: 115.0%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 115.0%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 115.0%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 115.0%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 115.0%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 115.0%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 115.0%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 145.0%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 115.0%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 115.0%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 130.0%'>maven</a>   <a href='/blog/categories/mqtt' style='font-size: 115.0%'>mqtt</a>   <a href='/blog/categories/node-js' style='font-size: 115.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 115.0%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 115.0%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 115.0%'>programming</a>   <a href='/blog/categories/python' style='font-size: 115.0%'>python</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 115.0%'>raspberry-pi</a>   <a href='/blog/categories/rest' style='font-size: 115.0%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 115.0%'>resteasy</a>   <a href='/blog/categories/sbt' style='font-size: 130.0%'>sbt</a>   <a href='/blog/categories/scala' style='font-size: 130.0%'>scala</a>   <a href='/blog/categories/scalability' style='font-size: 115.0%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 115.0%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 115.0%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 115.0%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 115.0%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 115.0%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 115.0%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 115.0%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 115.0%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 115.0%'>windows</a>   <a href='/blog/categories/zeroconf' style='font-size: 115.0%'>zeroconf</a>   <a href='/blog/categories/zookeeper' style='font-size: 115.0%'>zookeeper</a>   </ul>
+    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 115.0%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 115.0%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 130.0%'>beaglebone</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 115.0%'>beaglebone-black</a>   <a href='/blog/categories/bluetooth' style='font-size: 115.0%'>bluetooth</a>   <a href='/blog/categories/bluetooth-le' style='font-size: 130.0%'>bluetooth_le</a>   <a href='/blog/categories/bluez' style='font-size: 115.0%'>bluez</a>   <a href='/blog/categories/bonjour' style='font-size: 115.0%'>bonjour</a>   <a href='/blog/categories/c-' style='font-size: 115.0%'>c++</a>   <a href='/blog/categories/cobertura' style='font-size: 115.0%'>cobertura</a>   <a href='/blog/categories/documents' style='font-size: 115.0%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 160.0%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 115.0%'>eskrima</a>   <a href='/blog/categories/gatt' style='font-size: 115.0%'>gatt</a>   <a href='/blog/categories/git' style='font-size: 130.0%'>git</a>   <a href='/blog/categories/github' style='font-size: 115.0%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 115.0%'>hornetq</a>   <a href='/blog/categories/idea' style='font-size: 115.0%'>idea</a>   <a href='/blog/categories/java' style='font-size: 130.0%'>java</a>   <a href='/blog/categories/jboss' style='font-size: 115.0%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 115.0%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 115.0%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 115.0%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 115.0%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 115.0%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 115.0%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 145.0%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 115.0%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 115.0%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 130.0%'>maven</a>   <a href='/blog/categories/mqtt' style='font-size: 115.0%'>mqtt</a>   <a href='/blog/categories/node-js' style='font-size: 130.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 115.0%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 115.0%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 115.0%'>programming</a>   <a href='/blog/categories/python' style='font-size: 115.0%'>python</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 115.0%'>raspberry-pi</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 115.0%'>raspberry_pi</a>   <a href='/blog/categories/rest' style='font-size: 115.0%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 115.0%'>resteasy</a>   <a href='/blog/categories/sbt' style='font-size: 130.0%'>sbt</a>   <a href='/blog/categories/scala' style='font-size: 130.0%'>scala</a>   <a href='/blog/categories/scalability' style='font-size: 115.0%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 115.0%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 115.0%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 130.0%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 115.0%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 115.0%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 115.0%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 115.0%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 115.0%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 115.0%'>windows</a>   <a href='/blog/categories/zeroconf' style='font-size: 115.0%'>zeroconf</a>   <a href='/blog/categories/zookeeper' style='font-size: 115.0%'>zookeeper</a>   </ul>
 </section>
 
 <section>
