@@ -9,7 +9,8 @@
   <meta name="author" content="Jack Lund">
 
   
-  <meta name="description" content="So, I&rsquo;ve decided to try to play with ZigBee, and since I have a couple of BeagleBone Blacks hanging around doing nothing, I thought I&rsquo;d &hellip;">
+  <meta name="description" content="I just (okay, a few days ago) released version 0.2.0 of btle.js to
+npm. This has a bunch of API changes &ndash; the connect method now gives you a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -74,6 +75,50 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/">btle.js 0.2.0 Released</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-18T23:08:00-05:00" pubdate data-updated="true">Oct 18<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I just (okay, a few days ago) released version 0.2.0 of <a href="https://github.com/jacklund/btle.js">btle.js</a> to
+<a href="https://npmjs.org/package/btle.js">npm</a>. This has a bunch of API changes &ndash; the <code>connect</code> method now gives you a
+<code>Device</code> object, instead of a <code>Connection</code>. All the ATT methods are now on the <code>Device</code> object, but, in addition, you can
+access all the GATT functionality by querying the device for services, which returns <code>Service</code> objects, and services for
+characteristics, which return <code>Characteristics</code> objects.</p>
+
+<p>I&rsquo;m also working on <a href="https://github.com/jacklund/btle.js/wiki/API-Docs">API docs</a> for the whole thing.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -556,46 +601,6 @@ option subnet 255.255.255.0
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/06/18/moved-to-github-slash-octopress/">Moved to GitHub/Octopress</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-18T10:51:00-05:00" pubdate data-updated="true">Jun 18<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I finally gave up on <a href="http://www.scriptogr.am">scriptogr.am</a>. I was struggling with their syntax highlighting, even sent a message to their support. The only answer I got back was from another user (who was very helpful, but it didn&rsquo;t really fix my problem). So, I&rsquo;m done.</p>
-
-<p>I&rsquo;m now using <a href="http://pages.github.com/">GitHub Pages</a>, which generates their pages using <a href="https://github.com/mojombo/jekyll">Jekyll</a>. I&rsquo;m also using <a href="http://octopress.org/">Octopress</a> for the layout, which makes it all pretty easy (well, that is, once you go through the somewhat painful ruby setup).</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -611,6 +616,10 @@ option subnet 255.255.255.0
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/">btle.js 0.2.0 released</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/09/25/fun-with-beaglebone-black/">Fun with BeagleBone Black</a>
       </li>
     
@@ -624,10 +633,6 @@ option subnet 255.255.255.0
     
       <li class="post">
         <a href="/blog/2013/08/30/what-to-do/">What to do?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez/">Got Them Bluetooth LE Bluez</a>
       </li>
     
   </ul>

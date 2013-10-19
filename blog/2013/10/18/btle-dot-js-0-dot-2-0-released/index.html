@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: rest - Geekheads</title>
+  <title>btle.js 0.2.0 released - Geekheads</title>
   <meta name="author" content="Jack Lund">
 
   
-  <meta name="description" content="Category: rest">
+  <meta name="description" content="I just (okay, a few days ago) released version 0.2.0 of btle.js to
+npm. This has a bunch of API changes &ndash; the connect method now gives you a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.geekheads.netblog/categories/rest/">
+  <link rel="canonical" href="http://www.geekheads.net/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -73,36 +74,93 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Rest</h1>
+    
+      
+        <h1 class="entry-title">btle.js 0.2.0 Released</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-18T23:08:00-05:00" pubdate data-updated="true">Oct 18<span>th</span>, 2013</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>I just (okay, a few days ago) released version 0.2.0 of <a href="https://github.com/jacklund/btle.js">btle.js</a> to
+<a href="https://npmjs.org/package/btle.js">npm</a>. This has a bunch of API changes &ndash; the <code>connect</code> method now gives you a
+<code>Device</code> object, instead of a <code>Connection</code>. All the ATT methods are now on the <code>Device</code> object, but, in addition, you can
+access all the GATT functionality by querying the device for services, which returns <code>Service</code> objects, and services for
+characteristics, which return <code>Characteristics</code> objects.</p>
 
-  
-  <h2>2013</h2>
-
-<article>
-  
-<h1><a href="/blog/2013/04/11/Rethinking-Architecture/">Rethinking Architecture</a></h1>
-<time datetime="2013-04-11T22:30:00-05:00" pubdate><span class='month'>Apr</span> <span class='day'>11</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/architecture/'>architecture</a>, <a class='category' href='/blog/categories/hornetq/'>hornetq</a>, <a class='category' href='/blog/categories/jboss/'>jboss</a>, <a class='category' href='/blog/categories/jetty/'>jetty</a>, <a class='category' href='/blog/categories/kafka/'>kafka</a>, <a class='category' href='/blog/categories/rest/'>rest</a>, <a class='category' href='/blog/categories/scalability/'>scalability</a>, <a class='category' href='/blog/categories/spring/'>spring</a>, <a class='category' href='/blog/categories/tomcat/'>tomcat</a>, <a class='category' href='/blog/categories/zookeeper/'>zookeeper</a></span>
-</footer>
-
-
-</article>
-
+<p>I&rsquo;m also working on <a href="https://github.com/jacklund/btle.js/wiki/API-Docs">API docs</a> for the whole thing.</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Jack Lund</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-18T23:08:00-05:00" pubdate data-updated="true">Oct 18<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.geekheads.net/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/" data-via="" data-counturl="http://www.geekheads.net/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left articlenav" href="/blog/2013/09/25/fun-with-beaglebone-black/" title="Previous Post: Fun with BeagleBone Black">&laquo; Fun with BeagleBone Black</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -224,7 +282,10 @@
       var disqus_shortname = 'geekheads';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.geekheads.net/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/';
+        var disqus_url = 'http://www.geekheads.net/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

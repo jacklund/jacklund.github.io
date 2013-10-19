@@ -9,7 +9,7 @@
   <meta name="author" content="Jack Lund">
 
   
-  <meta name="description" content="I needed to set up Jenkins so that it could run an agent on another Linux box. To do this the default way, you need to allow Jenkins to access the &hellip;">
+  <meta name="description" content="I finally gave up on scriptogr.am. I was struggling with their syntax highlighting, even sent a message to their support. The only answer I got back &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -74,6 +74,46 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/06/18/moved-to-github-slash-octopress/">Moved to GitHub/Octopress</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-18T10:51:00-05:00" pubdate data-updated="true">Jun 18<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I finally gave up on <a href="http://www.scriptogr.am">scriptogr.am</a>. I was struggling with their syntax highlighting, even sent a message to their support. The only answer I got back was from another user (who was very helpful, but it didn&rsquo;t really fix my problem). So, I&rsquo;m done.</p>
+
+<p>I&rsquo;m now using <a href="http://pages.github.com/">GitHub Pages</a>, which generates their pages using <a href="https://github.com/mojombo/jekyll">Jekyll</a>. I&rsquo;m also using <a href="http://octopress.org/">Octopress</a> for the layout, which makes it all pretty easy (well, that is, once you go through the somewhat painful ruby setup).</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -689,51 +729,6 @@ Okay, after messing around with this for some time, I&rsquo;ve discovered that t
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/05/06/VerifyError-with-JDK-7/">VerifyError With JDK 7</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-06T21:43:00-05:00" pubdate data-updated="true">May 6<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>We had been using nothing higher than JDK 6 with our project up until now, but when I built a new build machine using Fedora 18, JDK 7 was our only real option (okay, that and JDK 5). However, once I got things building using ant, I got the following cryptic error in the unit tests:</p>
-
-<pre><code>java.lang.VerifyError: Expecting a stackmap frame at branch target 41 in method com.m2mci.correlation.CorrelationId.equals(Ljava/lang/Object;)Z at offset 24
-</code></pre>
-
-<p>After some <a href="http://www.javacraft.org/2012/07/cobertura-with-jdk7.html">digging</a>, I found out that the kind folks at Oracle/Sun had changed the bytecode in JDK 7 such that there was a verifier frame now included where there wasn&rsquo;t before. This is fine as long as everything knows about this, but we&rsquo;ve been using <a href="http://cobertura.sourceforge.net/">Cobertura</a> for code coverage, which instruments the bytecode, and which apparently doesn&rsquo;t know about the fancy new verifier stack frame. What&rsquo;s worse, they don&rsquo;t seem (from what I can tell from their website) to have any interest in adding it any time soon.</p>
-
-<p>So, what to do? Our two alternatives are a) drop Cobertura, or b) include the JVM argument <code>-XX:-UseSplitVerifier</code> every time we run our code. To me, the former seems the better way to go, especially since we&rsquo;re not really <em>using</em> code coverage right now (we probably should, but for now, we&rsquo;re not).</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -751,6 +746,10 @@ Okay, after messing around with this for some time, I&rsquo;ve discovered that t
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/">btle.js 0.2.0 released</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/09/25/fun-with-beaglebone-black/">Fun with BeagleBone Black</a>
       </li>
     
@@ -764,10 +763,6 @@ Okay, after messing around with this for some time, I&rsquo;ve discovered that t
     
       <li class="post">
         <a href="/blog/2013/08/30/what-to-do/">What to do?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez/">Got Them Bluetooth LE Bluez</a>
       </li>
     
   </ul>

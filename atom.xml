@@ -4,7 +4,7 @@
   <title><![CDATA[Geekheads]]></title>
   <link href="http://www.geekheads.net/atom.xml" rel="self"/>
   <link href="http://www.geekheads.net/"/>
-  <updated>2013-09-25T11:25:19-05:00</updated>
+  <updated>2013-10-18T23:18:18-05:00</updated>
   <id>http://www.geekheads.net/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
@@ -12,6 +12,21 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[btle.js 0.2.0 released]]></title>
+    <link href="http://www.geekheads.net/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/"/>
+    <updated>2013-10-18T23:08:00-05:00</updated>
+    <id>http://www.geekheads.net/blog/2013/10/18/btle-dot-js-0-dot-2-0-released</id>
+    <content type="html"><![CDATA[<p>I just (okay, a few days ago) released version 0.2.0 of <a href="https://github.com/jacklund/btle.js">btle.js</a> to
+<a href="https://npmjs.org/package/btle.js">npm</a>. This has a bunch of API changes &ndash; the <code>connect</code> method now gives you a
+<code>Device</code> object, instead of a <code>Connection</code>. All the ATT methods are now on the <code>Device</code> object, but, in addition, you can
+access all the GATT functionality by querying the device for services, which returns <code>Service</code> objects, and services for
+characteristics, which return <code>Characteristics</code> objects.</p>
+
+<p>I&rsquo;m also working on <a href="https://github.com/jacklund/btle.js/wiki/API-Docs">API docs</a> for the whole thing.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Fun with BeagleBone Black]]></title>
@@ -594,22 +609,6 @@ Okay, after messing around with this for some time, I&rsquo;ve discovered that t
 <p>Man, was that thing easy to set up, especially compared to the Living Hell that is most router setups. I just went into Airport Utility on my laptop, it automagically found the router, I configured it right there, and it just frickin&#8217; worked! Unbelievable! Admittedly, it&rsquo;s a pricey router, but I think it&rsquo;s worth it with the time it saved me.</p>
 
 <p>It also seems to be a <strong>lot</strong> more powerful than those underpowered Netgear POSes, which is an added benefit.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[VerifyError with JDK 7]]></title>
-    <link href="http://www.geekheads.net/blog/2013/05/06/VerifyError-with-JDK-7/"/>
-    <updated>2013-05-06T21:43:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/05/06/VerifyError-with-JDK-7</id>
-    <content type="html"><![CDATA[<p>We had been using nothing higher than JDK 6 with our project up until now, but when I built a new build machine using Fedora 18, JDK 7 was our only real option (okay, that and JDK 5). However, once I got things building using ant, I got the following cryptic error in the unit tests:</p>
-
-<pre><code>java.lang.VerifyError: Expecting a stackmap frame at branch target 41 in method com.m2mci.correlation.CorrelationId.equals(Ljava/lang/Object;)Z at offset 24
-</code></pre>
-
-<p>After some <a href="http://www.javacraft.org/2012/07/cobertura-with-jdk7.html">digging</a>, I found out that the kind folks at Oracle/Sun had changed the bytecode in JDK 7 such that there was a verifier frame now included where there wasn&rsquo;t before. This is fine as long as everything knows about this, but we&rsquo;ve been using <a href="http://cobertura.sourceforge.net/">Cobertura</a> for code coverage, which instruments the bytecode, and which apparently doesn&rsquo;t know about the fancy new verifier stack frame. What&rsquo;s worse, they don&rsquo;t seem (from what I can tell from their website) to have any interest in adding it any time soon.</p>
-
-<p>So, what to do? Our two alternatives are a) drop Cobertura, or b) include the JVM argument <code>-XX:-UseSplitVerifier</code> every time we run our code. To me, the former seems the better way to go, especially since we&rsquo;re not really <em>using</em> code coverage right now (we probably should, but for now, we&rsquo;re not).</p>
 ]]></content>
   </entry>
   
