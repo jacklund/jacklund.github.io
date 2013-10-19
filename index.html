@@ -9,7 +9,8 @@
   <meta name="author" content="Jack Lund">
 
   
-  <meta name="description" content="So, I haven&rsquo;t posted in almost 2 months. Part of that is the fact that the last two months have been very busy &ndash; work is crazy busy &hellip;">
+  <meta name="description" content="I just (okay, a few days ago) released version 0.2.0 of btle.js to
+npm. This has a bunch of API changes &ndash; the connect method now gives you a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -74,6 +75,204 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/">btle.js 0.2.0 Released</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-18T23:08:00-05:00" pubdate data-updated="true">Oct 18<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I just (okay, a few days ago) released version 0.2.0 of <a href="https://github.com/jacklund/btle.js">btle.js</a> to
+<a href="https://npmjs.org/package/btle.js">npm</a>. This has a bunch of API changes &ndash; the <code>connect</code> method now gives you a
+<code>Device</code> object, instead of a <code>Connection</code>. All the ATT methods are now on the <code>Device</code> object, but, in addition, you can
+access all the GATT functionality by querying the device for services, which returns <code>Service</code> objects, and services for
+characteristics, which return <code>Characteristics</code> objects.</p>
+
+<p>I&rsquo;m also working on <a href="https://github.com/jacklund/btle.js/wiki/API-Docs">API docs</a> for the whole thing.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/09/25/fun-with-beaglebone-black/">Fun With BeagleBone Black</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-25T11:02:00-05:00" pubdate data-updated="true">Sep 25<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So, I&rsquo;ve decided to try to play with <a href="http://en.wikipedia.org/wiki/ZigBee">ZigBee</a>, and since I have a couple of BeagleBone Blacks hanging around doing nothing, I thought I&rsquo;d try setting it up on them.</p>
+
+<p>First thing I came across was that the BBB&rsquo;s seem to have issues with <a href="https://groups.google.com/forum/#!topic/beagleboard/4e2T6XH-fNM">accessing their UARTS</a>. Even via bonescript, there seem to <a href="http://stackoverflow.com/questions/17497060/node-js-script-not-setting-beaglebone-black-mux">be issues</a>.</p>
+
+<p>So, first thing I did was to upgrade to the latest firmware, and then do <code>opkg update</code> followed by <code>opkg upgrade</code> to get all the latest stuff. However, when I tried to run a bonescript program (the one from <a href="http://stackoverflow.com/questions/17497060/node-js-script-not-setting-beaglebone-black-mux">here</a>), I got <code>module bonescript not found</code>!!!. WTF?</p>
+
+<p>Since I had seen in the <a href="http://beagleboard.org/Support/BoneScript/pinMode/">bonescript docs</a> that the <code>pinmode</code> call doesn&rsquo;t really work until bonescript 0.2.3, I figured I&rsquo;d be smart and just try to upgrade to the latest npm version of bonescript.</p>
+
+<p>Long story short: bad idea. I had to go through all sorts of hell to make the npm install work (including editing the node-gyp configuration file to avoid a bug in the python version check), I finally got bonescript 0.2.3 working. So, I tried my test program and&hellip;the network connection died. Every time I ran the program, the same thing happened.</p>
+
+<p>Turns out, this is an <a href="https://github.com/jadonk/bonescript/issues/51">issue with the latest bonescript</a>. So, I ended up having to back down to the previous version of bonescript via opkg. Once I investigated the <code>module bonescript not found</code> issue, it turned out that, for some reason, the bonescript module in <code>/usr/lib/node_modules</code> wasn&rsquo;t getting written, so I had to do a <code>opkg remove bonescript</code> followed by <code>opkg install bonescript</code> to make it all work.</p>
+
+<p>All this, and I haven&rsquo;t even tried to get the XBee stuff working yet. Oy.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/09/12/node-dot-js-bit-operations/">Node.js Bit Operations</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-12T09:07:00-05:00" pubdate data-updated="true">Sep 12<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I was working on trying to get the barometer readings from my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?DCMP=sensortag&amp;HQS=sensortag-bn">TI SensorTag</a> using Node.js when I came across this problem. See, the <a href="http://processors.wiki.ti.com/index.php/SensorTag_User_Guide#Barometric_Pressure_Sensor_2">user&rsquo;s guide</a> has two code examples for the algorithm for the pressure &ndash; one in C, and one in Java. The one in C uses primarily bit shift operations, whereas the one in Java uses <code>Math.pow()</code> to do the same thing. Naturally, I tended towards the bit shift operations since it makes the code a bit clearer as to what it&rsquo;s doing (ultimately, from a performance perspective, it doesn&rsquo;t matter since <code>Math.pow(2, x)</code> probably ultimately resolves to bit shifts anyway).</p>
+
+<p>However, when I did this, I kept on getting pressure values that were all over the place. When I broke it down, it looked like the &ldquo;offset&rdquo; and &ldquo;scale&rdquo; factors, which rely heavily on bit shifts, were bouncing all over the place.</p>
+
+<p>So, I did some looking, and discovered that, although Node.js stores all its variables as 64-bit floating point numbers, when it comes to bit operations, it does those as 32-bit numbers. A quick test showed that this is true:</p>
+
+<pre><code>&gt; a = Math.pow(2, 31)-1
+2147483647
+&gt; a &gt;&gt; 10
+2097151
+&gt; a = Math.pow(2, 32) -1
+4294967295
+&gt; a &gt;&gt; 10
+-1
+&gt; a &gt;&gt; 2
+-1
+</code></pre>
+
+<p>Notice the sharp transition once you hit that 32-bit border. What that meant was that any time I was doing bit operations, if the value I was operating on was less than 2<sup>32</sup>, I got the right answer, otherwise I got garbage. Fun.</p>
+
+<p>So, when I switched to the Java algorithm (modified, of course, because they seem to have forgotten to divide those values by 100 at the end) everything worked.</p>
+
+<p>Good. To. Know.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/09/10/published-bluetooth-le-module/">Published Bluetooth LE Module</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-10T22:31:00-05:00" pubdate data-updated="true">Sep 10<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Well, I published my Node.js module for Bluetooth LE, <a href="https://github.com/jacklund/btle.js">btle.js</a> (pronounced &ldquo;Beetle Juice&rdquo;) to <a href="https://npmjs.org/package/btle.js">npm</a>. Even though it&rsquo;s labeled version 0.1.0, it&rsquo;s got most of the functionality that&rsquo;s necessary for Bluetooth LE &ndash; reading attributes, writing commands and requests, and listening for notifications. I&rsquo;m hoping to add more functionality over the next few weeks/months.</p>
+
+<p>The main reason I was doing this was to get my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?DCMP=sensortag&amp;HQS=sensortag-bn">TI SensorTag</a> working with my Raspberry Pi and Bluetooth LE dongle, which it now does. I&rsquo;ve even got the beginnings of a Node.js module for the sensortag, <a href="https://github.com/jacklund/sensortag.js">sensortag.js</a>, which is built on top of btle.js. I&rsquo;ve got everything working except the Barometric Pressure sensor readings and the Gyroscope readings.</p>
+
+<p>The nice thing about btle.js is that it&rsquo;s purely native C++ code, talking directly to the Linux Bluetooth stack &ndash; it&rsquo;s not having to shell out to run gatttool, for instance, which is pretty nice.</p>
+
+<p>For anyone wanting to write some Bluetooth LE code for Linux in a non-Node.js environment, I extracted the low-level I/O code from the <a href="http://www.bluez.org/">Bluez</a> project, removing the dependency on glib so that it&rsquo;s a true, low-level Linux I/O package. The higher-level code is dependant on <a href="https://github.com/joyent/libuv">libuv</a>, of course &ndash; I couldn&rsquo;t figure out any good way to separate them &ndash; but it shouldn&rsquo;t be too difficult to extract what you need from there as well.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -402,292 +601,6 @@ option subnet 255.255.255.0
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/06/18/moved-to-github-slash-octopress/">Moved to GitHub/Octopress</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-18T10:51:00-05:00" pubdate data-updated="true">Jun 18<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I finally gave up on <a href="http://www.scriptogr.am">scriptogr.am</a>. I was struggling with their syntax highlighting, even sent a message to their support. The only answer I got back was from another user (who was very helpful, but it didn&rsquo;t really fix my problem). So, I&rsquo;m done.</p>
-
-<p>I&rsquo;m now using <a href="http://pages.github.com/">GitHub Pages</a>, which generates their pages using <a href="https://github.com/mojombo/jekyll">Jekyll</a>. I&rsquo;m also using <a href="http://octopress.org/">Octopress</a> for the layout, which makes it all pretty easy (well, that is, once you go through the somewhat painful ruby setup).</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/06/13/SELinux-and-SSH/">SELinux and SSH</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-13T13:30:00-05:00" pubdate data-updated="true">Jun 13<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I needed to set up Jenkins so that it could run an agent on another Linux box. To do this the default way, you need to allow Jenkins to access the remote box via SSH. So, I set up the Jenkins user and the SSH keys on the remote machine, but trying to do an ssh from the Jenkins user on one machine to the other still didn&rsquo;t work. After doing <code>sudo journalctl -f</code> on the remote machine, I saw the following:</p>
-
-<pre><code>Jun 13 12:41:50 m2m-linux setroubleshoot[701]: SELinux is preventing /usr/sbin/sshd from read access on the file authorized_keys. For complete SELinux messages. run sealert -l ca7b7aea-64cf-46e5-8bfa-6650ad23f55b
-</code></pre>
-
-<p>Running the suggested <code>sealert -l ca7b7aea-64cf-46e5-8bfa-6650ad23f55b</code> gave me the following (edited for brevity):</p>
-
-<pre><code>SELinux is preventing /usr/sbin/sshd from read access on the file authorized_keys.
-
-*****  Plugin catchall_labels (83.8 confidence) suggests  ****
-
-If you want to allow sshd to have read access on the authorized_keys file
-Then you need to change the label on authorized_keys
-Do
-# semanage fcontext -a -t FILE_TYPE 'authorized_keys'
-where FILE_TYPE is one of the following: NetworkManager_etc_rw_t, NetworkManager_etc_t,...
-Then execute:
-restorecon -v 'authorized_keys'
-
-
-*****  Plugin catchall (17.1 confidence) suggests  *************
-
-If you believe that sshd should be allowed read access on the authorized_keys file by default.
-Then you should report this as a bug.
-You can generate a local policy module to allow this access.
-Do
-allow this access for now by executing:
-# grep sshd /var/log/audit/audit.log | audit2allow -M mypol
-# semodule -i mypol.pp
-</code></pre>
-
-<p>Not really helpful, so I dug around the web and found <a href="http://serverfault.com/questions/50573/selinux-preventing-passwordless-ssh-login">this post on ServerFault</a>. It turns out that the problem is that I created the Jenkins user&rsquo;s home directory by hand (I had to, it was <code>/var/jenkins</code>, which <code>adduser</code> wouldn&rsquo;t create), so SELinux didn&rsquo;t know it was a home directory.</p>
-
-<p>To fix this, I added the following lines to the end of <code>/etc/selinux/targeted/contexts/files/file_contexts.homedirs</code>:</p>
-
-<pre><code>/var/jenkins/.+ unconfined_u:object_r:user_home_t:s0
-/var/jenkins/\.ssh(/.*)?      system_u:object_r:ssh_home_t:s0
-</code></pre>
-
-<p>and then did <code>sudo restorecon -R -v /var/jenkins</code>, and that fixed the problem.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/06/12/Node.js/">Node.js</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-12T16:10:00-05:00" pubdate data-updated="true">Jun 12<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Having my new <a href="/jacklund/post/beaglebone-black">BeagleBone Black</a> has made me look at the default programming environment for it, <a href="http://nodejs.org">Node.js</a>. Companies like <a href="http://www.linkedin.com">LinkedIn</a> are <a href="http://engineering.linkedin.com/nodejs/blazing-fast-nodejs-10-performance-tips-linkedin-mobile">using it</a> on the server side, which sort of surprises me. I can definitely see its uses in devices like the BeagleBone, since it has such a small footprint and minimal use of resources, but I was surprised at how many people are using it on the server side.</p>
-
-<p>It makes sense, though &ndash; as <a href="http://wiki.nginx.org/Main">Nginx</a> demonstrated, an event-driven model can eat a thread-based server&rsquo;s lunch, performance-wise, under certain circumstances. What are those circumstances, though?</p>
-
-<p>To begin with, your application would have to be overwhelmingly I/O-bound; anything that does a lot of CPU operations would gain no real benefit from the event-driven model. So, for example, an application which receives requests and stores data in the database without a lot of processing would work really well here. Why? Because in a thread-based model, you would spawn a thread to handle the request, and that thread would be waiting, doing, basically, nothing while waiting for the database request to return. In the Node.js model, you would handle the incoming request, send off an asynchronous call for the database insert, registering a callback, and then handle the next event.</p>
-
-<p>However, if you were doing a lot of processing of the data, your event handler would be running longer than you would really like, and the other requests might get starved. You could get around this by offloading the processing to another service, so you would send off the request, and go about your business until the response came back, and you could respond to your client.</p>
-
-<p>This is all very interesting, and it would be even more interesting to do some performance comparisons of a &ldquo;traditional&rdquo; app written in something like Java vs. a Node.js app.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black/">Setting Up NTP on BeagleBone Black</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-10T11:50:00-05:00" pubdate data-updated="true">Jun 10<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>For some reason, they didn&rsquo;t seem to see the need to set up the time service on the BeagleBone Blacks by default. I tried using the instructions from <a href="http://derekmolloy.ie/automatically-setting-the-beaglebone-black-time-using-ntp/">this gentleman</a>, but I had to make some modifications.</p>
-
-<ol>
-<li>Install NTP</li>
-</ol>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>    <span class="nv">$ </span>opkg update <span class="o">&amp;&amp;</span> opkg install ntp
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ol>
-<li>Edit <code>/etc/ntp.conf</code>, adding <code>pool.ntp.org</code> as the server:</li>
-</ol>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='apache'><span class='line'>    <span class="c"># This is the most basic ntp configuration file</span>
-</span><span class='line'>    <span class="c"># The driftfile must remain in a place specific to this</span>
-</span><span class='line'>    <span class="c"># machine - it records the machine specific clock error</span>
-</span><span class='line'>    <span class="nb">driftfile</span> <span class="sx">/etc/ntp.drift</span>
-</span><span class='line'>    <span class="c"># This obtains a random server which will be close</span>
-</span><span class='line'>    <span class="c"># (in IP terms) to the machine.  Add other servers</span>
-</span><span class='line'>    <span class="c"># as required, or change this.</span>
-</span><span class='line'>    <span class="nb">server</span> pool.ntp.org
-</span><span class='line'>    <span class="c"># Using local hardware clock as fallback</span>
-</span><span class='line'>    <span class="c"># Disable this when using ntpd -q -g -x as ntpdate or it will sync to itself</span>
-</span><span class='line'>    <span class="nb">server</span> <span class="m">127.127.1.0</span>
-</span><span class='line'>    <span class="nb">fudge</span> <span class="m">127.127.1.0</span> stratum <span class="m">14</span>
-</span><span class='line'>    <span class="c"># Defining a default security setting</span>
-</span><span class='line'>    <span class="nb">restrict</span> default
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ol>
-<li>Set your local time:</li>
-</ol>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>    <span class="nv">$ </span><span class="nb">cd</span> /etc
-</span><span class='line'>    <span class="nv">$ </span>rm -f localtime
-</span><span class='line'>    <span class="nv">$ </span>ln -s ../usr/share/zoneinfo/America/Chicago localtime
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ol>
-<li>Edit <code>/etc/default/ntpdate</code>:</li>
-</ol>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='apache'><span class='line'>    <span class="c"># Configuration script used by ntpdate-sync script</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="err">NTPSERVERS=&quot;pool</span>.<span class="err">ntp</span>.<span class="err">org&quot;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c"># Set to &quot;yes&quot; to write time to hardware clock on success</span>
-</span><span class='line'>    <span class="err">UPDATE_HWCLOCK=&quot;yes&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ol>
-<li>Now, reboot and see if the clock gets set correctly</li>
-</ol>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -703,30 +616,30 @@ allow this access for now by executing:
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/">btle.js 0.2.0 released</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/25/fun-with-beaglebone-black/">Fun with BeagleBone Black</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/12/node-dot-js-bit-operations/">Node.js Bit Operations</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/10/published-bluetooth-le-module/">Published Bluetooth LE Module</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/08/30/what-to-do/">What to do?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez/">Got Them Bluetooth LE Bluez</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/27/Zeroconf-Rocks/">Zeroconf Rocks!</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/25/Scala-Is-Disappointing/">Scala Is Disappointing</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/21/Scala-Development-Setup/">Scala Development Setup</a>
       </li>
     
   </ul>
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 115.0%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 115.0%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 130.0%'>beaglebone</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 115.0%'>beaglebone-black</a>   <a href='/blog/categories/bluetooth-le' style='font-size: 115.0%'>bluetooth_le</a>   <a href='/blog/categories/bluez' style='font-size: 115.0%'>bluez</a>   <a href='/blog/categories/bonjour' style='font-size: 115.0%'>bonjour</a>   <a href='/blog/categories/cobertura' style='font-size: 115.0%'>cobertura</a>   <a href='/blog/categories/documents' style='font-size: 115.0%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 160.0%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 115.0%'>eskrima</a>   <a href='/blog/categories/gatt' style='font-size: 115.0%'>gatt</a>   <a href='/blog/categories/git' style='font-size: 130.0%'>git</a>   <a href='/blog/categories/github' style='font-size: 115.0%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 115.0%'>hornetq</a>   <a href='/blog/categories/idea' style='font-size: 115.0%'>idea</a>   <a href='/blog/categories/java' style='font-size: 130.0%'>java</a>   <a href='/blog/categories/jboss' style='font-size: 115.0%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 115.0%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 115.0%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 115.0%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 115.0%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 115.0%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 115.0%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 145.0%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 115.0%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 115.0%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 130.0%'>maven</a>   <a href='/blog/categories/mqtt' style='font-size: 115.0%'>mqtt</a>   <a href='/blog/categories/node-js' style='font-size: 115.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 115.0%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 115.0%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 115.0%'>programming</a>   <a href='/blog/categories/python' style='font-size: 115.0%'>python</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 115.0%'>raspberry-pi</a>   <a href='/blog/categories/rest' style='font-size: 115.0%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 115.0%'>resteasy</a>   <a href='/blog/categories/sbt' style='font-size: 130.0%'>sbt</a>   <a href='/blog/categories/scala' style='font-size: 130.0%'>scala</a>   <a href='/blog/categories/scalability' style='font-size: 115.0%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 115.0%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 115.0%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 115.0%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 115.0%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 115.0%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 115.0%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 115.0%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 115.0%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 115.0%'>windows</a>   <a href='/blog/categories/zeroconf' style='font-size: 115.0%'>zeroconf</a>   <a href='/blog/categories/zookeeper' style='font-size: 115.0%'>zookeeper</a>   </ul>
+    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 115.0%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 115.0%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 130.0%'>beaglebone</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 115.0%'>beaglebone-black</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 115.0%'>beaglebone_black</a>   <a href='/blog/categories/bluetooth' style='font-size: 115.0%'>bluetooth</a>   <a href='/blog/categories/bluetooth-le' style='font-size: 130.0%'>bluetooth_le</a>   <a href='/blog/categories/bluez' style='font-size: 115.0%'>bluez</a>   <a href='/blog/categories/bonescript' style='font-size: 115.0%'>bonescript</a>   <a href='/blog/categories/bonjour' style='font-size: 115.0%'>bonjour</a>   <a href='/blog/categories/c-' style='font-size: 115.0%'>c++</a>   <a href='/blog/categories/cobertura' style='font-size: 115.0%'>cobertura</a>   <a href='/blog/categories/documents' style='font-size: 115.0%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 160.0%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 115.0%'>eskrima</a>   <a href='/blog/categories/gatt' style='font-size: 115.0%'>gatt</a>   <a href='/blog/categories/git' style='font-size: 130.0%'>git</a>   <a href='/blog/categories/github' style='font-size: 115.0%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 115.0%'>hornetq</a>   <a href='/blog/categories/idea' style='font-size: 115.0%'>idea</a>   <a href='/blog/categories/java' style='font-size: 130.0%'>java</a>   <a href='/blog/categories/jboss' style='font-size: 115.0%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 115.0%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 115.0%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 115.0%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 115.0%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 115.0%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 115.0%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 145.0%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 115.0%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 115.0%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 130.0%'>maven</a>   <a href='/blog/categories/mqtt' style='font-size: 115.0%'>mqtt</a>   <a href='/blog/categories/node-js' style='font-size: 160.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 115.0%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 115.0%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 115.0%'>programming</a>   <a href='/blog/categories/python' style='font-size: 115.0%'>python</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 115.0%'>raspberry-pi</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 115.0%'>raspberry_pi</a>   <a href='/blog/categories/rest' style='font-size: 115.0%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 115.0%'>resteasy</a>   <a href='/blog/categories/sbt' style='font-size: 130.0%'>sbt</a>   <a href='/blog/categories/scala' style='font-size: 130.0%'>scala</a>   <a href='/blog/categories/scalability' style='font-size: 115.0%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 115.0%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 115.0%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 145.0%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 115.0%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 115.0%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 115.0%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 115.0%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 115.0%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 115.0%'>windows</a>   <a href='/blog/categories/zeroconf' style='font-size: 115.0%'>zeroconf</a>   <a href='/blog/categories/zigbee' style='font-size: 115.0%'>zigbee</a>   <a href='/blog/categories/zookeeper' style='font-size: 115.0%'>zookeeper</a>   </ul>
 </section>
 
 <section>

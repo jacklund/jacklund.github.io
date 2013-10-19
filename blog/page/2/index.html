@@ -9,7 +9,7 @@
   <meta name="author" content="Jack Lund">
 
   
-  <meta name="description" content="Got my two BeagleBone Blacks from AdaFruit on Friday. Really nice. I bought them without enclosures because, well, the enclosures were $20, and the &hellip;">
+  <meta name="description" content="I finally gave up on scriptogr.am. I was struggling with their syntax highlighting, even sent a message to their support. The only answer I got back &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -74,6 +74,292 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/06/18/moved-to-github-slash-octopress/">Moved to GitHub/Octopress</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-18T10:51:00-05:00" pubdate data-updated="true">Jun 18<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I finally gave up on <a href="http://www.scriptogr.am">scriptogr.am</a>. I was struggling with their syntax highlighting, even sent a message to their support. The only answer I got back was from another user (who was very helpful, but it didn&rsquo;t really fix my problem). So, I&rsquo;m done.</p>
+
+<p>I&rsquo;m now using <a href="http://pages.github.com/">GitHub Pages</a>, which generates their pages using <a href="https://github.com/mojombo/jekyll">Jekyll</a>. I&rsquo;m also using <a href="http://octopress.org/">Octopress</a> for the layout, which makes it all pretty easy (well, that is, once you go through the somewhat painful ruby setup).</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/06/13/SELinux-and-SSH/">SELinux and SSH</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-13T13:30:00-05:00" pubdate data-updated="true">Jun 13<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I needed to set up Jenkins so that it could run an agent on another Linux box. To do this the default way, you need to allow Jenkins to access the remote box via SSH. So, I set up the Jenkins user and the SSH keys on the remote machine, but trying to do an ssh from the Jenkins user on one machine to the other still didn&rsquo;t work. After doing <code>sudo journalctl -f</code> on the remote machine, I saw the following:</p>
+
+<pre><code>Jun 13 12:41:50 m2m-linux setroubleshoot[701]: SELinux is preventing /usr/sbin/sshd from read access on the file authorized_keys. For complete SELinux messages. run sealert -l ca7b7aea-64cf-46e5-8bfa-6650ad23f55b
+</code></pre>
+
+<p>Running the suggested <code>sealert -l ca7b7aea-64cf-46e5-8bfa-6650ad23f55b</code> gave me the following (edited for brevity):</p>
+
+<pre><code>SELinux is preventing /usr/sbin/sshd from read access on the file authorized_keys.
+
+*****  Plugin catchall_labels (83.8 confidence) suggests  ****
+
+If you want to allow sshd to have read access on the authorized_keys file
+Then you need to change the label on authorized_keys
+Do
+# semanage fcontext -a -t FILE_TYPE 'authorized_keys'
+where FILE_TYPE is one of the following: NetworkManager_etc_rw_t, NetworkManager_etc_t,...
+Then execute:
+restorecon -v 'authorized_keys'
+
+
+*****  Plugin catchall (17.1 confidence) suggests  *************
+
+If you believe that sshd should be allowed read access on the authorized_keys file by default.
+Then you should report this as a bug.
+You can generate a local policy module to allow this access.
+Do
+allow this access for now by executing:
+# grep sshd /var/log/audit/audit.log | audit2allow -M mypol
+# semodule -i mypol.pp
+</code></pre>
+
+<p>Not really helpful, so I dug around the web and found <a href="http://serverfault.com/questions/50573/selinux-preventing-passwordless-ssh-login">this post on ServerFault</a>. It turns out that the problem is that I created the Jenkins user&rsquo;s home directory by hand (I had to, it was <code>/var/jenkins</code>, which <code>adduser</code> wouldn&rsquo;t create), so SELinux didn&rsquo;t know it was a home directory.</p>
+
+<p>To fix this, I added the following lines to the end of <code>/etc/selinux/targeted/contexts/files/file_contexts.homedirs</code>:</p>
+
+<pre><code>/var/jenkins/.+ unconfined_u:object_r:user_home_t:s0
+/var/jenkins/\.ssh(/.*)?      system_u:object_r:ssh_home_t:s0
+</code></pre>
+
+<p>and then did <code>sudo restorecon -R -v /var/jenkins</code>, and that fixed the problem.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/06/12/Node.js/">Node.js</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-12T16:10:00-05:00" pubdate data-updated="true">Jun 12<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Having my new <a href="/jacklund/post/beaglebone-black">BeagleBone Black</a> has made me look at the default programming environment for it, <a href="http://nodejs.org">Node.js</a>. Companies like <a href="http://www.linkedin.com">LinkedIn</a> are <a href="http://engineering.linkedin.com/nodejs/blazing-fast-nodejs-10-performance-tips-linkedin-mobile">using it</a> on the server side, which sort of surprises me. I can definitely see its uses in devices like the BeagleBone, since it has such a small footprint and minimal use of resources, but I was surprised at how many people are using it on the server side.</p>
+
+<p>It makes sense, though &ndash; as <a href="http://wiki.nginx.org/Main">Nginx</a> demonstrated, an event-driven model can eat a thread-based server&rsquo;s lunch, performance-wise, under certain circumstances. What are those circumstances, though?</p>
+
+<p>To begin with, your application would have to be overwhelmingly I/O-bound; anything that does a lot of CPU operations would gain no real benefit from the event-driven model. So, for example, an application which receives requests and stores data in the database without a lot of processing would work really well here. Why? Because in a thread-based model, you would spawn a thread to handle the request, and that thread would be waiting, doing, basically, nothing while waiting for the database request to return. In the Node.js model, you would handle the incoming request, send off an asynchronous call for the database insert, registering a callback, and then handle the next event.</p>
+
+<p>However, if you were doing a lot of processing of the data, your event handler would be running longer than you would really like, and the other requests might get starved. You could get around this by offloading the processing to another service, so you would send off the request, and go about your business until the response came back, and you could respond to your client.</p>
+
+<p>This is all very interesting, and it would be even more interesting to do some performance comparisons of a &ldquo;traditional&rdquo; app written in something like Java vs. a Node.js app.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black/">Setting Up NTP on BeagleBone Black</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-10T11:50:00-05:00" pubdate data-updated="true">Jun 10<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>For some reason, they didn&rsquo;t seem to see the need to set up the time service on the BeagleBone Blacks by default. I tried using the instructions from <a href="http://derekmolloy.ie/automatically-setting-the-beaglebone-black-time-using-ntp/">this gentleman</a>, but I had to make some modifications.</p>
+
+<ol>
+<li>Install NTP</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>    <span class="nv">$ </span>opkg update <span class="o">&amp;&amp;</span> opkg install ntp
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Edit <code>/etc/ntp.conf</code>, adding <code>pool.ntp.org</code> as the server:</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='apache'><span class='line'>    <span class="c"># This is the most basic ntp configuration file</span>
+</span><span class='line'>    <span class="c"># The driftfile must remain in a place specific to this</span>
+</span><span class='line'>    <span class="c"># machine - it records the machine specific clock error</span>
+</span><span class='line'>    <span class="nb">driftfile</span> <span class="sx">/etc/ntp.drift</span>
+</span><span class='line'>    <span class="c"># This obtains a random server which will be close</span>
+</span><span class='line'>    <span class="c"># (in IP terms) to the machine.  Add other servers</span>
+</span><span class='line'>    <span class="c"># as required, or change this.</span>
+</span><span class='line'>    <span class="nb">server</span> pool.ntp.org
+</span><span class='line'>    <span class="c"># Using local hardware clock as fallback</span>
+</span><span class='line'>    <span class="c"># Disable this when using ntpd -q -g -x as ntpdate or it will sync to itself</span>
+</span><span class='line'>    <span class="nb">server</span> <span class="m">127.127.1.0</span>
+</span><span class='line'>    <span class="nb">fudge</span> <span class="m">127.127.1.0</span> stratum <span class="m">14</span>
+</span><span class='line'>    <span class="c"># Defining a default security setting</span>
+</span><span class='line'>    <span class="nb">restrict</span> default
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Set your local time:</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>    <span class="nv">$ </span><span class="nb">cd</span> /etc
+</span><span class='line'>    <span class="nv">$ </span>rm -f localtime
+</span><span class='line'>    <span class="nv">$ </span>ln -s ../usr/share/zoneinfo/America/Chicago localtime
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Edit <code>/etc/default/ntpdate</code>:</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='apache'><span class='line'>    <span class="c"># Configuration script used by ntpdate-sync script</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="err">NTPSERVERS=&quot;pool</span>.<span class="err">ntp</span>.<span class="err">org&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c"># Set to &quot;yes&quot; to write time to hardware clock on success</span>
+</span><span class='line'>    <span class="err">UPDATE_HWCLOCK=&quot;yes&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Now, reboot and see if the clock gets set correctly</li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -443,273 +729,6 @@ Okay, after messing around with this for some time, I&rsquo;ve discovered that t
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/05/06/VerifyError-with-JDK-7/">VerifyError With JDK 7</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-06T21:43:00-05:00" pubdate data-updated="true">May 6<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>We had been using nothing higher than JDK 6 with our project up until now, but when I built a new build machine using Fedora 18, JDK 7 was our only real option (okay, that and JDK 5). However, once I got things building using ant, I got the following cryptic error in the unit tests:</p>
-
-<pre><code>java.lang.VerifyError: Expecting a stackmap frame at branch target 41 in method com.m2mci.correlation.CorrelationId.equals(Ljava/lang/Object;)Z at offset 24
-</code></pre>
-
-<p>After some <a href="http://www.javacraft.org/2012/07/cobertura-with-jdk7.html">digging</a>, I found out that the kind folks at Oracle/Sun had changed the bytecode in JDK 7 such that there was a verifier frame now included where there wasn&rsquo;t before. This is fine as long as everything knows about this, but we&rsquo;ve been using <a href="http://cobertura.sourceforge.net/">Cobertura</a> for code coverage, which instruments the bytecode, and which apparently doesn&rsquo;t know about the fancy new verifier stack frame. What&rsquo;s worse, they don&rsquo;t seem (from what I can tell from their website) to have any interest in adding it any time soon.</p>
-
-<p>So, what to do? Our two alternatives are a) drop Cobertura, or b) include the JVM argument <code>-XX:-UseSplitVerifier</code> every time we run our code. To me, the former seems the better way to go, especially since we&rsquo;re not really <em>using</em> code coverage right now (we probably should, but for now, we&rsquo;re not).</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/05/06/Getting-Jenkins-on-Windows-Working-with-Git/">Getting Jenkins on Windows Working With Git</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-06T20:46:00-05:00" pubdate data-updated="true">May 6<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>We&rsquo;re transitioning, as a company, from Subversion to Git, which is a Good Thing, but has its complications. One of them was getting <a href="http://jenkins-ci.org/">Jenkins</a>, which we use for <a href="http://en.wikipedia.org/wiki/Continuous_integration">continuous integration</a>, to work with our Git repositories.</p>
-
-<p>I had started out by thinking that I would have to create a user in our repository provider (we&rsquo;re using <a href="http://bitbucket.org">BitBucket</a>) which would have read permisisons to our repositories, a &ldquo;jenkins&rdquo; user. Turns out its not the case. All you need to do for read-only access is to generate SSH keys that you register with the repository, and which Jenkins uses to clone the repository.</p>
-
-<p>On Linux, this would be trivial. On Windows, of course, very little is trivial.</p>
-
-<p>So, following <a href="http://computercamp.cdwilson.us/jenkins-git-clone-via-ssh-on-windows-7-x64">this guide</a>(with some modifications) I managed it this way:</p>
-
-<ol>
-<li>Install <a href="http://git-scm.com/downloads">Git</a></li>
-<li>Generate the new SSH keys on my local machine using <code>ssh-keygen</code>. Make sure to specify a file <strong>other</strong> than the default (unless you like the idea of overwriting any existing keys you might have).</li>
-<li>Install the public key in the repository. In BitBucket, you do this under the account settings for the user or group who owns the repositories. Do it at the user/group level, not at the repository level (unless you want separate keys for each repository). Just cut and paste the contents of the public key to the web page, and click &ldquo;Add&rdquo;</li>
-<li>Install <a href="http://technet.microsoft.com/en-us/sysinternals/bb896649.aspx">PsTools</a> (<em>Note</em>: the link given in the guide mentioned above didn&rsquo;t work for me). Extract the zip file wherever you want (I put mine in the root dir)</li>
-<li>Run the following in a command shell <em>running as administrator</em>: <code>\PsTools\PsExec.exe -i -s cmd.exe</code> (<em>Note:</em> the guide says use a normal shell, but that will fail the first time, because it tries to instal something that needs Admin privileges). To do this, find the command shell icon in the menu, right-click, and select <em>Run as Administrator&hellip;</em>.</li>
-<li>Do <code>echo %USERPROFILE%</code> in the shell to find out where the system user (and, hence, Jenkins) runs from as its home directory. Mine turned out to be <code>C:\Windows\system32\config\systemprofile</code>. YMMV.</li>
-<li>Make a folder named <code>.ssh</code> in that home directory</li>
-<li>Copy the keys (private and public) to the Windows machine in the <code>.ssh</code> folder</li>
-<li>Run <code>"C:\Program Files(x86)\Git\bin\ssh.exe" -T git@bitbucket.org</code> (<em>Note:</em> the location of git on your install may be different than mine). When you get the usual &ldquo;unknown host&rdquo; warning, type &ldquo;yes&rdquo; to get the server key in your known_hosts file</li>
-<li>Finally, test git by doing a <code>git ls-remote git@bitbucket.org:repo.git HEAD</code></li>
-</ol>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/04/11/Rethinking-Architecture/">Rethinking Architecture</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-11T22:30:00-05:00" pubdate data-updated="true">Apr 11<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>So, I&rsquo;ve been rethinking the architecture we used with a customer, and which we are planning on using, in slightly modified form, for some in-house projects.</p>
-
-<p>The application is, basically, a cloud-based service which takes data from devices, analyzes and stores it, and presents it to the user in a web site.</p>
-
-<p>We had decided, early on, to go with Java as our language of choice, both because it was what the customer was comfortable with, and because we felt like it offered the best performance/flexibility tradeoff (and, yes, performance is an issue here, especially on the data collection side).</p>
-
-<p>The pieces of our architecture include:</p>
-
-<ul>
-<li>A <a href="https://en.wikipedia.org/wiki/Rest">RESTful</a> web service, to both collect the data and to serve as an API for apps which want to access the data</li>
-<li>Some sort of queuing mechanism for taking the data in, and processing it on the back end asynchronously</li>
-<li>A database of some sort for storing the readings</li>
-<li>A website, utilizing static HTML and Javascript for accessing and presenting the data, and for managing the various assets (devices, etc)</li>
-<li>A database (possibly the same as the previous one) for storing the website data</li>
-<li>A notification framework for sending notifications (emails, SMS, etc) of various events from the devices</li>
-</ul>
-
-
-<p>Now, one of the things I&rsquo;ve learned about architecture (or, at least I thought I had learned) was to only use what you absolutely need, nothing more. A lean architecture is a good architecture. However, we made some decisions early on which, now, I feel like violate those principles.</p>
-
-<h3>JBoss</h3>
-
-<p>We opted to put the code in an app server for various reasons. We needed a Servlet engine to facilitate the web service, but we decided to use <a href="http://www.jboss.org/jbossas">JBoss AS 7</a> as the app server because we&rsquo;d all had experience with it in the past, and it was being used by the customer currently. We felt like the container could manage all the &ldquo;plumbing&rdquo; (threads, database connections, etc), rather than dealing with it ourselves. I think that decision came more from old architectural design assumptions (&ldquo;three-tiered good, two-tiered bad&rdquo;, &ldquo;managing resources is hard&rdquo;) which are no longer really relevant.</p>
-
-<p>However, more importantly (and I don&rsquo;t mean to bash JBoss here, I think this would be true of any app server), we ended up severely limiting our &ldquo;functional&rdquo; scalability by using an app server. Let me explain:</p>
-
-<p>When I refer to &ldquo;functional&rdquo; vs. &ldquo;theoretical&rdquo; scalability, I&rsquo;m referring to the fact that, while JBoss is certainly very scalable in theory (you can cluster the instances, and add new instances dynamically), in practice, it&rsquo;s really frickin&#8217; difficult to scale. The reason: you can&rsquo;t just &ldquo;add another instance&rdquo;, you need to go through the hell that is cluster configuration to add a new instance, which means, literally, making on the order of a dozen changes to the stock JBoss configuration files.</p>
-
-<p>To put an even finer point on it: the question you should ask yourself in terms of scalability is: if I were to get a call at 2 AM that we need to scale up because the application&rsquo;s pegged, could I scale it quickly and easily, even half-asleep? The answer in this case would be a resounding &ldquo;No!&rdquo;.</p>
-
-<p>The other answer might be to use a deployment system, like <a href="http://www.opscode.com/chef/">Chef</a> or <a href="https://puppetlabs.com/">Puppet</a>, but I&rsquo;ve tried putting together Puppet scripts for doing a JBoss clustered deployment, and it&rsquo;s a nightmare as well.</p>
-
-<p>A lot of this came out of a gig we had auditing another consulting company for a customer. They hired us to talk to the other company with them, because things weren&rsquo;t going well and they needed a second opinion on whether they were being &ldquo;took&rdquo; (we said &ldquo;yes, kinda&rdquo;). However, the most interesting thing was that they had a very similar architecture to ours, but it was seriously slow, so they were constantly having to add in servers in the back end. The sys admin who worked there (and who was probably the smartest guy in the company, as far as I could tell), pointed out that starting up new instances was trivial, because their backend server was a simple process &ndash; no app server, no nothing. He could start it up from the command line if he wanted.</p>
-
-<p>That&rsquo;s how it all <strong><em>should</em></strong> work! It&rsquo;s the Google/Facebook architecture vs. the old-school &ldquo;Big Iron&rdquo; approach. It was a serious &ldquo;Aha!&rdquo; moment for me.</p>
-
-<p>So, what are we getting from using JBoss? EJBs? We are using them, but we don&rsquo;t need them (they&rsquo;re not on the list I mentioned above) &ndash; the web service should be our internal as well as our external API. Thread pools? They used to be complicated, but since JDK 1.5, it&rsquo;s trivial. Database connection pools? Same thing. Caching? We&rsquo;re using a third-party caching mechanism, so no.</p>
-
-<p>Time to ditch JBoss.</p>
-
-<h3>HornetQ</h3>
-
-<p>The queue that comes with JBoss is <a href="http://www.jboss.org/hornetq">HornetQ</a>. It&rsquo;s supposedly a very fast queue, and it comes embedded in JBoss. However, there are several issues with it:</p>
-
-<ul>
-<li>It, also, doesn&rsquo;t functionally scale well. You can cluster it, but it&rsquo;s painful, and a configuration nightmare, just like JBoss</li>
-<li>It doesn&rsquo;t handle having the queue fill up very gracefully, in my opinion. While I was doing load testing of the app, sometimes the back end would not quite be able to keep up, and when a large number of journal files ended up in the queue, it froze, and needed not just to be restarted, but to have the journal files cleared out first.</li>
-<li>It&rsquo;s not trivial swapping out a different queue in JBoss. It&rsquo;s doable, but not very well documented, and it&rsquo;s hard to say how JBoss would handle it.</li>
-</ul>
-
-
-<h3>Spring</h3>
-
-<p>Another questionable architectural decision (and I can say this because I was one of the big advocates) was to use <a href="http://www.springsource.org/">Spring</a>. Now, don&rsquo;t get me wrong &ndash; I <em>love</em> Spring, but it has a tendency to take over once you start using it. We had even talked about, early on, how we weren&rsquo;t going to use Spring for &ldquo;everything&rdquo;, but we ended up using it way too much, IMHO. Plus, I think if we rearchitect everything to be in terms of standalone services, we&rsquo;ll have a lot less need for that sort of configurational complexity.</p>
-
-<h3>Emphasize the Positive</h3>
-
-<p>So, those are the things I think we should ditch. What should our architecture look like? I think we could function well with the web services being in something like <a href="http://tomcat.apache.org/">Tomcat</a> or <a href="http://www.eclipse.org/jetty/">Jetty</a>, with everything else being standalone Java services (i.e., no containers, just POJOs with a main()).</p>
-
-<p>That takes care of the big pieces, but what about the glue to put it together? I was looking around for scalable, distributed queues, when I came across <a href="http://kafka.apache.org/">Kafka</a>. It&rsquo;s not really a queue so much as a pub/sub framework, which you can use like a queue. However, once I started playing with it (which will be the subject of a different post), I came to the realization that it could be used for more than just the queue &ndash; it could be the communication mechanism between the services, basically a communication bus for the architecture. And, it&rsquo;s functionally scalable, because you can add new server instances dynamically using <a href="http://zookeeper.apache.org/">ZooKeeper</a>. We could also reuse ZooKeeper as our own service locater service to allow us to dynamically add new services.</p>
-
-<p>Now, suddenly, things are looking very different. Rather than an app server with all our code deployed on it, we would have compact, self-contained services which communicate via Kafka, find new instances via ZooKeeper, and which scale by just starting up new instances to take on the load. Doing this then implies that the web service front-end would have to be very thin &ndash; just a façade for taking in web service requests, which would then be delegated to the back-end services.</p>
-
-<p>The key would be to define the services well, so they would be small, light, decoupled, and cohesive.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/04/11/Bad-Blogger%21-Bad%21/">Bad Blogger! Bad!</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-11T09:00:00-05:00" pubdate data-updated="true">Apr 11<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>It&rsquo;s been over a year since I last used <a href="http://scriptogr.am">scriptogr.am</a>. Mostly I haven&rsquo;t had much time to actually post &ndash; work has been rather intense, but in a good way. :&ndash;)</p>
-
-<p>Recently, I&rsquo;ve been looking around for blog solutions, and I keep coming back to this.  I&rsquo;ve been getting more and more into using <a href="http://daringfireball.net/projects/markdown/">Markdown</a>, and <a href="http://fletcherpenney.net/multimarkdown/">MultiMarkdown</a> for lots of things, from note taking to creating documents. I&rsquo;ll try to put together another post about that sometime soon. However, for blogging, I wanted to use Markdown, so I looked at <a href="http://jekyllrb.com/">jekyll</a>, which is what <a href="http://pages.github.com/">github pages</a> uses, but it kind of requires some work in terms of setting up the templates, css, etc (although there is a <a href="http://jekyllbootstrap.com/">Jekyll Bootstrap</a> project which helps a lot), and, being the lazy (not to mention busy) guy I am, I decided it was too much work after futzing with it for a couple of hours.</p>
-
-<p>This seems to be the most painless solution, so I&rsquo;m going with it.</p>
-
-<p>Code blocks seem to be handled relatively well:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Foo</span> <span class="o">{</span>
-</span><span class='line'>  <span class="kd">private</span> <span class="kt">int</span> <span class="n">bar</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getBar</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">bar</span><span class="o">;</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>So, I&rsquo;ll stick with this, for now.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -727,30 +746,30 @@ Okay, after messing around with this for some time, I&rsquo;ve discovered that t
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/">btle.js 0.2.0 released</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/25/fun-with-beaglebone-black/">Fun with BeagleBone Black</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/12/node-dot-js-bit-operations/">Node.js Bit Operations</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/10/published-bluetooth-le-module/">Published Bluetooth LE Module</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/08/30/what-to-do/">What to do?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez/">Got Them Bluetooth LE Bluez</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/27/Zeroconf-Rocks/">Zeroconf Rocks!</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/25/Scala-Is-Disappointing/">Scala Is Disappointing</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/21/Scala-Development-Setup/">Scala Development Setup</a>
       </li>
     
   </ul>
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 115.0%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 115.0%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 130.0%'>beaglebone</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 115.0%'>beaglebone-black</a>   <a href='/blog/categories/bluetooth-le' style='font-size: 115.0%'>bluetooth_le</a>   <a href='/blog/categories/bluez' style='font-size: 115.0%'>bluez</a>   <a href='/blog/categories/bonjour' style='font-size: 115.0%'>bonjour</a>   <a href='/blog/categories/cobertura' style='font-size: 115.0%'>cobertura</a>   <a href='/blog/categories/documents' style='font-size: 115.0%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 160.0%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 115.0%'>eskrima</a>   <a href='/blog/categories/gatt' style='font-size: 115.0%'>gatt</a>   <a href='/blog/categories/git' style='font-size: 130.0%'>git</a>   <a href='/blog/categories/github' style='font-size: 115.0%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 115.0%'>hornetq</a>   <a href='/blog/categories/idea' style='font-size: 115.0%'>idea</a>   <a href='/blog/categories/java' style='font-size: 130.0%'>java</a>   <a href='/blog/categories/jboss' style='font-size: 115.0%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 115.0%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 115.0%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 115.0%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 115.0%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 115.0%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 115.0%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 145.0%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 115.0%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 115.0%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 130.0%'>maven</a>   <a href='/blog/categories/mqtt' style='font-size: 115.0%'>mqtt</a>   <a href='/blog/categories/node-js' style='font-size: 115.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 115.0%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 115.0%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 115.0%'>programming</a>   <a href='/blog/categories/python' style='font-size: 115.0%'>python</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 115.0%'>raspberry-pi</a>   <a href='/blog/categories/rest' style='font-size: 115.0%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 115.0%'>resteasy</a>   <a href='/blog/categories/sbt' style='font-size: 130.0%'>sbt</a>   <a href='/blog/categories/scala' style='font-size: 130.0%'>scala</a>   <a href='/blog/categories/scalability' style='font-size: 115.0%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 115.0%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 115.0%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 115.0%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 115.0%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 115.0%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 115.0%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 115.0%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 115.0%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 115.0%'>windows</a>   <a href='/blog/categories/zeroconf' style='font-size: 115.0%'>zeroconf</a>   <a href='/blog/categories/zookeeper' style='font-size: 115.0%'>zookeeper</a>   </ul>
+    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 115.0%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 115.0%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 130.0%'>beaglebone</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 115.0%'>beaglebone-black</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 115.0%'>beaglebone_black</a>   <a href='/blog/categories/bluetooth' style='font-size: 115.0%'>bluetooth</a>   <a href='/blog/categories/bluetooth-le' style='font-size: 130.0%'>bluetooth_le</a>   <a href='/blog/categories/bluez' style='font-size: 115.0%'>bluez</a>   <a href='/blog/categories/bonescript' style='font-size: 115.0%'>bonescript</a>   <a href='/blog/categories/bonjour' style='font-size: 115.0%'>bonjour</a>   <a href='/blog/categories/c-' style='font-size: 115.0%'>c++</a>   <a href='/blog/categories/cobertura' style='font-size: 115.0%'>cobertura</a>   <a href='/blog/categories/documents' style='font-size: 115.0%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 160.0%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 115.0%'>eskrima</a>   <a href='/blog/categories/gatt' style='font-size: 115.0%'>gatt</a>   <a href='/blog/categories/git' style='font-size: 130.0%'>git</a>   <a href='/blog/categories/github' style='font-size: 115.0%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 115.0%'>hornetq</a>   <a href='/blog/categories/idea' style='font-size: 115.0%'>idea</a>   <a href='/blog/categories/java' style='font-size: 130.0%'>java</a>   <a href='/blog/categories/jboss' style='font-size: 115.0%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 115.0%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 115.0%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 115.0%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 115.0%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 115.0%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 115.0%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 145.0%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 115.0%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 115.0%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 130.0%'>maven</a>   <a href='/blog/categories/mqtt' style='font-size: 115.0%'>mqtt</a>   <a href='/blog/categories/node-js' style='font-size: 160.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 115.0%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 115.0%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 115.0%'>programming</a>   <a href='/blog/categories/python' style='font-size: 115.0%'>python</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 115.0%'>raspberry-pi</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 115.0%'>raspberry_pi</a>   <a href='/blog/categories/rest' style='font-size: 115.0%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 115.0%'>resteasy</a>   <a href='/blog/categories/sbt' style='font-size: 130.0%'>sbt</a>   <a href='/blog/categories/scala' style='font-size: 130.0%'>scala</a>   <a href='/blog/categories/scalability' style='font-size: 115.0%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 115.0%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 115.0%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 145.0%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 115.0%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 115.0%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 115.0%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 115.0%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 115.0%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 115.0%'>windows</a>   <a href='/blog/categories/zeroconf' style='font-size: 115.0%'>zeroconf</a>   <a href='/blog/categories/zigbee' style='font-size: 115.0%'>zigbee</a>   <a href='/blog/categories/zookeeper' style='font-size: 115.0%'>zookeeper</a>   </ul>
 </section>
 
 <section>
