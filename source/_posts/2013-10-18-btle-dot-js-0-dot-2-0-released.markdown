@@ -3,7 +3,7 @@ layout: post
 title: btle.js 0.2.0 released
 date: 2013-10-18 23:08
 comments: true
-categories: 
+categories: btle.js bluetooth bluetooth_le gatt node.js bluez c++
 ---
 I just (okay, a few days ago) released version 0.2.0 of [btle.js](https://github.com/jacklund/btle.js) to
 [npm](https://npmjs.org/package/btle.js). This has a bunch of API changes - the `connect` method now gives you a
