@@ -1,1 +1,876 @@
-My Octopress Page is coming soon &hellip;
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Geekheads</title>
+  <meta name="author" content="Jack Lund">
+
+  
+  <meta name="description" content="There&rsquo;s an excellent blog post by by James Nebeker and David G. Young about simulating an iBeacon using a Raspberry Pi and a bluetooth dongle. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.geekheads.net/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Geekheads" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <!--
+  <div id="logo">
+  	<div id="logoLeft">{</div>
+  	<div id="logoText">GH</div>
+  	<div id="logoRight">}</div>
+  	<div class="clear"></div>
+  </div> -->
+  <h1><a href="/">Geekheads</a></h1>
+  
+    <h2>Geeks are people, too. Sort of.</h2>
+  
+  <div class="clear"></div>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.geekheads.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon/">Using a Raspberry Pi as an iBeacon</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-15T16:00:00-06:00" pubdate data-updated="true">Nov 15<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>There&rsquo;s an excellent <a href="http://developer.radiusnetworks.com/2013/10/09/how-to-make-an-ibeacon-out-of-a-raspberry-pi.html">blog post by by James Nebeker and David G. Young</a> about simulating an <a href="http://en.wikipedia.org/wiki/IBeacon">iBeacon</a> using a Raspberry Pi and a bluetooth dongle. Since I already had both, I thought I&rsquo;d give it a try. It worked really well, and I&rsquo;ve even put together the files necessary to do it <a href="https://github.com/jacklund/piBeacon">in my GitHub repository</a>.</p>
+
+<p>You&rsquo;ll need to install <a href="http://www.bluez.org/">BlueZ</a> as well for this to work. Once you get it all installed and working you can use one of the mobile iBeacon apps, such as <a href="https://itunes.apple.com/us/app/ibeacon-locate/id738709014?ls=1&amp;mt=8">iBeacon Locate</a>. Very fun to play with, and a good way to be able to develop mobile apps to access iBeacons without having to wait for them to come out.</p>
+
+<p>Also, it&rsquo;s just fun to play with.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/10/19/more-fun-with-beaglebone-black/">More Fun With BeagleBone Black</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-19T21:10:00-05:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&rsquo;ve discovered that owning a BeagleBone Black (or, in my case, two) is kind of like owning one of those really, really nice
+cars that you buy but you can almost never drive because it spends so much time in the shop. It&rsquo;s a lovely piece of hardware, it
+really is, but the people who created it seem to have gone to great lengths to make sure that all you can do is sit back and admire
+it, because you certainly won&rsquo;t be able to do anything useful with it.</p>
+
+<p>My next foray into BBB craziness was attempting to get a wifi dongle to work with it, so I don&rsquo;t have to constantly hook it up
+to my wireless adapter. Should be easy, right? Of course not, this is the BeagleBone Black we&rsquo;re talking about. <em>Nothing</em> is easy.</p>
+
+<p>I bought the <a href="http://www.edimax.com/en/produce_detail.php?pd_id=347&amp;pl1_id=1">Edimax EW-7811-UN</a>, which is recommended for BeagleBones,
+Raspberry Pi&rsquo;s, and the BBB. Unfortunately, what I didn&rsquo;t realize is that, while it <em>used</em> to work with the BBB, some OS changes were
+made to it so that it takes a lot of wrangling to get it to work, if you can get it to work at all (I couldn&rsquo;t).</p>
+
+<p>First of all, it seems that, at some point, the drivers weren&rsquo;t really available, so you would have to build them yourselves. I think
+the drivers are available now, but I went ahead and compiled the drivers per
+<a href="http://www.codealpha.net/864/how-to-set-up-a-rtl8192cu-on-the-beaglebone-black-bbb/">these instructions</a>.
+The next hurdle was getting it to work with <a href="https://connman.net/">connman</a>, the connection manager, which is, basically,
+almost completely undocumented &ndash; Fun! (<strong><em>Note to developers everywhere:</em></strong> in the words of an former boss &ndash; &ldquo;if it ain&rsquo;t documented,
+it doesn&rsquo;t exist&rdquo;).</p>
+
+<p>However, from what I can gather, <code>connman</code> uses <a href="http://hostap.epitest.fi/wpa_supplicant/">wpa_supplicant</a> for the WPA transactions
+(if you&rsquo;re using WPA, which, um, you should be). So, after fiddling around for a while, here&rsquo;s what my <code>/var/lib/connman/settings</code>
+file looks like:</p>
+
+<pre><code>[global]
+OfflineMode=false
+
+[Wired]
+Enable=true
+
+[WiFi]
+Enable=true
+</code></pre>
+
+<p>And here&rsquo;s my <code>/var/lib/connman/wifi.config</code> file:</p>
+
+<pre><code>[service_home]
+Type=wifi
+Name=my_ssid
+Security = wpa2-psk
+Passphrase=my_encrypted_passphrase
+</code></pre>
+
+<p>where <code>my_ssid</code> is my SSID name, and <code>my_encrypted_passphrase</code> is the result of running <code>wpa_passphrase &lt;ssid&gt; &lt;password&gt;</code>.</p>
+
+<p>Finally, my <code>/etc/wpa_supplicant.conf</code> &ndash; I&rsquo;m running WPA2-Personal on my wireless router, so this is, as far as I can tell, the
+way you set up <code>wpa_supplicant</code>:</p>
+
+<pre><code>ctrl_interface=/var/run/wpa_supplicant
+ctrl_interface_group=0
+update_config=1
+
+network={
+        ssid="my_ssid"
+        #psk=my_encrypted_passphrase
+        psk="my_unencrypted_passphrase"
+        key_mgmt=WPA-PSK
+        proto=RSN
+        pairwise=CCMP TKIP
+        group=CCMP TKIP
+}
+</code></pre>
+
+<p>Now, just getting to this point took a lot of tweaking and messing around with various settings. However, it&rsquo;s still not connecting.
+It&rsquo;s finding the access point, and even getting its MAC address, but it&rsquo;s unable to authenticate. Here&rsquo;s what happens when I run
+<code>wpa_supplicant</code> manually in debug mode:</p>
+
+<pre><code># wpa_supplicant -iwlan0 -c/etc/wpa_supplicant.conf -d
+  (irrelevant parts omitted)
+wlan0: New scan results available
+wlan0: Selecting BSS from priority group 0
+wlan0: 0: 5c:96:xx:xx:xx:83 ssid='my_ssid' wpa_ie_len=0 rsn_ie_len=20 caps=0x11 level=87
+wlan0:    selected based on RSN IE
+wlan0:    selected BSS 5c:96:xx:xx:xx:83 ssid='my_ssid'
+wlan0: Request association: reassociate: 0  selected: 5c:96:xx:xx:xx:83  bssid: 00:00:00:00:00:00  pending: 00:00:00:00:00:00  wpa_state: SCANNING
+wlan0: Trying to associate with 5c:96:xx:xx:xx:83 (SSID='my_ssid' freq=2462 MHz)
+wlan0: Cancelling scan request
+wlan0: WPA: clearing own WPA/RSN IE
+wlan0: Automatic auth_alg selection: 0x1
+RSN: PMKSA cache search - network_ctx=(nil) try_opportunistic=0
+RSN: Search for BSSID 5c:96:xx:xx:xx:83
+RSN: No PMKSA cache entry found
+wlan0: RSN: using IEEE 802.11i/D9.0
+wlan0: WPA: Selected cipher suites: group 16 pairwise 16 key_mgmt 2 proto 2
+wlan0: WPA: clearing AP WPA IE
+WPA: set AP RSN IE - hexdump(len=22): 30 14 01 00 00 0f ac 04 01 00 00 0f ac 04 01 00 00 0f ac 02 00 00
+wlan0: WPA: using GTK CCMP
+wlan0: WPA: using PTK CCMP
+wlan0: WPA: using KEY_MGMT WPA-PSK
+WPA: Set own WPA IE default - hexdump(len=22): 30 14 01 00 00 0f ac 04 01 00 00 0f ac 04 01 00 00 0f ac 02 00 00
+wlan0: No keys have been configured - skip key clearing
+wlan0: State: SCANNING -&gt; ASSOCIATING
+wpa_driver_wext_set_operstate: operstate 0-&gt;0 (DORMANT)
+netlink: Operstate: linkmode=-1, operstate=5
+Limit connection to BSSID 5c:96:xx:xx:xx:83 freq=2462 MHz based on scan results (bssid_set=0)
+wpa_driver_wext_associate
+wpa_driver_wext_set_drop_unencrypted
+wpa_driver_wext_set_psk
+wlan0: Setting authentication timeout: 10 sec 0 usec
+EAPOL: External notification - EAP success=0
+EAPOL: Supplicant port status: Unauthorized
+EAPOL: External notification - EAP fail=0
+EAPOL: Supplicant port status: Unauthorized
+EAPOL: External notification - portControl=Auto
+EAPOL: Supplicant port status: Unauthorized
+RSN: Ignored PMKID candidate without preauth flag
+</code></pre>
+
+<p>and basically it cycles through this over and over. Now, I&rsquo;m sure this all means something to whoever wrote this code, but to me
+there&rsquo;s absoutely nothing helpful here. it&rsquo;s written for someone to try to debug the program, not to help someone troubleshoot
+a problem with their setup. And, yet, this is, as far as I can tell, the only troubleshooting tool these fine folks have seen
+fit to provide. Nice.</p>
+
+<p>So, after wading through all this garbage, and trying a bunch of different things, I finally gleaned (with absolutely no help
+from whoever wrote this crappy software, thank you very much!) that it&rsquo;s failing authentication. Why? Who knows. Really, there&rsquo;s
+a special circle of hell for people who write error messages like this for their users to have to decode. When you get there,
+you spend eternity debugging Windows NT BSOD error messages.</p>
+
+<p>So, I tried looking up the incredibly clear message <code>EAPOL: Supplicant port status: Unauthorized</code>. Now, there are a number of posts that
+imply that you need to have <code>eth0</code> disconnected in order for this to work (which makes absolutely no sense to me whatsover &ndash;
+since when are you only able to connect to one network interface at a time?), but doing that seems to make no difference. I&rsquo;ve also
+seen a lot of descriptions of procedures people use to get this to work that are the technological equivalent of holding a dead
+chicken over the machine and praying. This didn&rsquo;t work for me either (well, okay, I didn&rsquo;t try the chicken&hellip;yet).</p>
+
+<p>Which brings up my gripe: why is this so $@%^!&amp;@ hard? Why do you have to go through this hell to just connect to a wireless access
+point &ndash; something that they do in the Mac and Windows worlds all the time? Would it be so bleeping hard to just spit out some relatively
+helpful messages &ndash; something along the lines of &ldquo;authentication failed&rdquo;, or even &ldquo;bad passphrase&rdquo;? Something.</p>
+
+<p>If you are guilty of writing software like this, do me a favor: go to the mirror, grab yourself by the collar and slap yourself
+repeatedly, saying &ldquo;Bad Programmer! Bad!&rdquo; over and over, because it&rsquo;s exactly what I&rsquo;d be doing if I were there with you.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/">btle.js 0.2.0 Released</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-18T23:08:00-05:00" pubdate data-updated="true">Oct 18<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I just (okay, a few days ago) released version 0.2.0 of <a href="https://github.com/jacklund/btle.js">btle.js</a> to
+<a href="https://npmjs.org/package/btle.js">npm</a>. This has a bunch of API changes &ndash; the <code>connect</code> method now gives you a
+<code>Device</code> object, instead of a <code>Connection</code>. All the ATT methods are now on the <code>Device</code> object, but, in addition, you can
+access all the GATT functionality by querying the device for services, which returns <code>Service</code> objects, and services for
+characteristics, which return <code>Characteristics</code> objects.</p>
+
+<p>I&rsquo;m also working on <a href="https://github.com/jacklund/btle.js/wiki/API-Docs">API docs</a> for the whole thing.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/09/25/fun-with-beaglebone-black/">Fun With BeagleBone Black</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-25T11:02:00-05:00" pubdate data-updated="true">Sep 25<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So, I&rsquo;ve decided to try to play with <a href="http://en.wikipedia.org/wiki/ZigBee">ZigBee</a>, and since I have a couple of BeagleBone Blacks hanging around doing nothing, I thought I&rsquo;d try setting it up on them.</p>
+
+<p>First thing I came across was that the BBB&rsquo;s seem to have issues with <a href="https://groups.google.com/forum/#!topic/beagleboard/4e2T6XH-fNM">accessing their UARTS</a>. Even via bonescript, there seem to <a href="http://stackoverflow.com/questions/17497060/node-js-script-not-setting-beaglebone-black-mux">be issues</a>.</p>
+
+<p>So, first thing I did was to upgrade to the latest firmware, and then do <code>opkg update</code> followed by <code>opkg upgrade</code> to get all the latest stuff. However, when I tried to run a bonescript program (the one from <a href="http://stackoverflow.com/questions/17497060/node-js-script-not-setting-beaglebone-black-mux">here</a>), I got <code>module bonescript not found</code>!!!. WTF?</p>
+
+<p>Since I had seen in the <a href="http://beagleboard.org/Support/BoneScript/pinMode/">bonescript docs</a> that the <code>pinmode</code> call doesn&rsquo;t really work until bonescript 0.2.3, I figured I&rsquo;d be smart and just try to upgrade to the latest npm version of bonescript.</p>
+
+<p>Long story short: bad idea. I had to go through all sorts of hell to make the npm install work (including editing the node-gyp configuration file to avoid a bug in the python version check), I finally got bonescript 0.2.3 working. So, I tried my test program and&hellip;the network connection died. Every time I ran the program, the same thing happened.</p>
+
+<p>Turns out, this is an <a href="https://github.com/jadonk/bonescript/issues/51">issue with the latest bonescript</a>. So, I ended up having to back down to the previous version of bonescript via opkg. Once I investigated the <code>module bonescript not found</code> issue, it turned out that, for some reason, the bonescript module in <code>/usr/lib/node_modules</code> wasn&rsquo;t getting written, so I had to do a <code>opkg remove bonescript</code> followed by <code>opkg install bonescript</code> to make it all work.</p>
+
+<p>All this, and I haven&rsquo;t even tried to get the XBee stuff working yet. Oy.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/09/12/node-dot-js-bit-operations/">Node.js Bit Operations</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-12T09:07:00-05:00" pubdate data-updated="true">Sep 12<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I was working on trying to get the barometer readings from my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?DCMP=sensortag&amp;HQS=sensortag-bn">TI SensorTag</a> using Node.js when I came across this problem. See, the <a href="http://processors.wiki.ti.com/index.php/SensorTag_User_Guide#Barometric_Pressure_Sensor_2">user&rsquo;s guide</a> has two code examples for the algorithm for the pressure &ndash; one in C, and one in Java. The one in C uses primarily bit shift operations, whereas the one in Java uses <code>Math.pow()</code> to do the same thing. Naturally, I tended towards the bit shift operations since it makes the code a bit clearer as to what it&rsquo;s doing (ultimately, from a performance perspective, it doesn&rsquo;t matter since <code>Math.pow(2, x)</code> probably ultimately resolves to bit shifts anyway).</p>
+
+<p>However, when I did this, I kept on getting pressure values that were all over the place. When I broke it down, it looked like the &ldquo;offset&rdquo; and &ldquo;scale&rdquo; factors, which rely heavily on bit shifts, were bouncing all over the place.</p>
+
+<p>So, I did some looking, and discovered that, although Node.js stores all its variables as 64-bit floating point numbers, when it comes to bit operations, it does those as 32-bit numbers. A quick test showed that this is true:</p>
+
+<pre><code>&gt; a = Math.pow(2, 31)-1
+2147483647
+&gt; a &gt;&gt; 10
+2097151
+&gt; a = Math.pow(2, 32) -1
+4294967295
+&gt; a &gt;&gt; 10
+-1
+&gt; a &gt;&gt; 2
+-1
+</code></pre>
+
+<p>Notice the sharp transition once you hit that 32-bit border. What that meant was that any time I was doing bit operations, if the value I was operating on was less than 2<sup>32</sup>, I got the right answer, otherwise I got garbage. Fun.</p>
+
+<p>So, when I switched to the Java algorithm (modified, of course, because they seem to have forgotten to divide those values by 100 at the end) everything worked.</p>
+
+<p>Good. To. Know.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/09/10/published-bluetooth-le-module/">Published Bluetooth LE Module</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-10T22:31:00-05:00" pubdate data-updated="true">Sep 10<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Well, I published my Node.js module for Bluetooth LE, <a href="https://github.com/jacklund/btle.js">btle.js</a> (pronounced &ldquo;Beetle Juice&rdquo;) to <a href="https://npmjs.org/package/btle.js">npm</a>. Even though it&rsquo;s labeled version 0.1.0, it&rsquo;s got most of the functionality that&rsquo;s necessary for Bluetooth LE &ndash; reading attributes, writing commands and requests, and listening for notifications. I&rsquo;m hoping to add more functionality over the next few weeks/months.</p>
+
+<p>The main reason I was doing this was to get my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?DCMP=sensortag&amp;HQS=sensortag-bn">TI SensorTag</a> working with my Raspberry Pi and Bluetooth LE dongle, which it now does. I&rsquo;ve even got the beginnings of a Node.js module for the sensortag, <a href="https://github.com/jacklund/sensortag.js">sensortag.js</a>, which is built on top of btle.js. I&rsquo;ve got everything working except the Barometric Pressure sensor readings and the Gyroscope readings.</p>
+
+<p>The nice thing about btle.js is that it&rsquo;s purely native C++ code, talking directly to the Linux Bluetooth stack &ndash; it&rsquo;s not having to shell out to run gatttool, for instance, which is pretty nice.</p>
+
+<p>For anyone wanting to write some Bluetooth LE code for Linux in a non-Node.js environment, I extracted the low-level I/O code from the <a href="http://www.bluez.org/">Bluez</a> project, removing the dependency on glib so that it&rsquo;s a true, low-level Linux I/O package. The higher-level code is dependant on <a href="https://github.com/joyent/libuv">libuv</a>, of course &ndash; I couldn&rsquo;t figure out any good way to separate them &ndash; but it shouldn&rsquo;t be too difficult to extract what you need from there as well.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/08/30/what-to-do/">What to Do?</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-30T22:38:00-05:00" pubdate data-updated="true">Aug 30<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So, I haven&rsquo;t posted in almost 2 months. Part of that is the fact that the last two months have been very busy &ndash; work is crazy busy trying to do all the work and get more, and I&rsquo;ve been busy with the family doing end-of-summer stuff. However, part of the problem is, basically, organization.</p>
+
+<p>I&rsquo;m, basically, a fairly organized guy, in that I manage to prioritize things and get the high-priority things done. However, I&rsquo;m also not particularly big on multi-tasking, so that, quite often, my high-priority tasks get all the attention, and all the little, lower-priority things (like this blog) get very little.</p>
+
+<p>One thing I&rsquo;m constantly searching for is a tool to help me manage all my projects, personal and professional. I&rsquo;ve tried every todo list/organizational tool out there. Some I stick with for months at a time, others go away almost instantly, but I&rsquo;ve never found one that&rsquo;s quite right.</p>
+
+<p>The problem is that none of them work the way I work, or organize things the way my mind organizes things, so whenever I use them, there&rsquo;s always this cognitive dissonance going on, which gets worse and worse over time until&hellip;I find suddenly that I haven&rsquo;t used it in a while, and everything&rsquo;s out of date.</p>
+
+<p>I think part of the problem is that every one I&rsquo;ve tried is basically designed like a todo list on steroids &ndash; lots of bells and whistles, but at the end of the day, it&rsquo;s just a list of things to get done. Unfortunately, that&rsquo;s not how things work with me. Projects very rarely gel into discrete things to do, at least none but the most trivial of projects. For me, a project is fairly amorphous until I&rsquo;m working on it, and the things to do suddenly appear to me &ndash; but by that time, I&rsquo;m either doing them or about to do them. I very rarely need to keep track of them at that point &ndash; usually, at that point, they&rsquo;re fairly obvious.</p>
+
+<p>What&rsquo;s worse, a task list is actually detrimental to my usual creative process. There&rsquo;s nothing that can strangle creativity faster than having a laundry list of tasks to complete. What I need is not &ldquo;Do A then B then C&rdquo; but &ldquo;Here&rsquo;s what I was thinking the direction might be. Does that make sense now, or should I take it in another direction?&rdquo;</p>
+
+<p>For me, the difficulty lies in keeping track of all the projects, primarily, keeping track of where I am with the project, and when it was I last did something on it, and finally, my thoughts on the project &ndash; where I think I&rsquo;ll be going next with it. In a way, it&rsquo;s really more like notes to my future self about where my present self left things, rather than a set of todos.</p>
+
+<p>Anyway, writing this down has helped me figure out at least a minimal set of requirements:</p>
+
+<ol>
+<li>I need something which will keep track of my projects</li>
+<li>Within the projects, I need some place to keep notes on the project, both notes about what I&rsquo;m doing, and also a way to talk about where I think the project could go</li>
+<li>I also need a way of capturing what things, in a general sense, that I think need to be done. These aren&rsquo;t necessarily tasks so much as general ideas about what I think might need to be done.</li>
+</ol>
+
+
+<p>The more I think about this, the more it seems like I need something GitHub-ish. For example, I just found <a href="http://www.lullabot.com/blog/article/managing-projects-github">this post</a> about managing projects with GitHub, and, while they&rsquo;re talking mainly development projects, maybe there&rsquo;s a way to leverage GitHub for my other projects, too.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez/">Got Them Bluetooth LE Bluez</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-01T17:15:00-05:00" pubdate data-updated="true">Jul 1<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&rsquo;m trying to get my Raspberry Pi to talk to my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?INTC=SensorTag&amp;HQS=sensortag">TI Sensortag</a> over Bluetooth LE, using an <a href="http://www.iogear.com/product/GBU521/">IOGear Bluetooth 4.0 USB adapter</a>. I chose that adapter because it is supported by Linux, and so far it works quite nicely with the Pi.</p>
+
+<p>To start with, I&rsquo;d like to write something to pull the sensor data &ndash; temperature, humidity, pressure, etc &ndash; from the SensorTag and publish it over <a href="http://mqtt.org/">MQTT</a>. However, reading the data seems to be problematic.</p>
+
+<p>Problem #1 is that the most-used bluetooth package for Python, <a href="https://code.google.com/p/pybluez/">PyBluez</a> had their last release (0.18) in November, 2009, which, obviously, doesn&rsquo;t include Bluetooth LE. Not a problem, I thought, I&rsquo;ll just fork the project, add the bindings for LE, and off we go!</p>
+
+<p>Which brings me to problem #2: the developers of the <a href="http://www.bluez.org/">BlueZ</a> protocol stack, which is how you access bluetooth from, well, pretty much everywhere, haven&rsquo;t seen fit to include <a href="http://en.wikipedia.org/wiki/Bluetooth_profile#Generic_Attribute_Profile_.28GATT.29">GATT</a> support either via a public library or via D-Bus, despite the fact that they&rsquo;ve had the code in their codebase since around 2010.</p>
+
+<p>*<strong><em>facepalm</em></strong>*</p>
+
+<p>Look, I understand that everybody&rsquo;s busy and all, but, really, you couldn&rsquo;t, in the last THREE YEARS break out the GATT code into a library so that people can access it? Really?</p>
+
+<p>Of course, I shouldn&rsquo;t complain, I guess &ndash; they do provide a nice little command-line tool, <code>gatttool</code>, to let you do GATT stuff, just nothing to do, you know, programming with. Somebody (who is much braver than I) is even trying to <a href="https://github.com/msaunby/ble-sensor-pi">access that via Python and pexpect</a>, which works, sort of, but, uh, really, there has to be a better way.</p>
+
+<p>So, I guess my only option is to pull the GATT code out of the BlueZ project and add it to the Python project. It&rsquo;s ugly, but it&rsquo;s better than expect scripts.</p>
+
+<p>And, really, BlueZ developers: Come on, throw us a bone here.</p>
+
+<h3>Update</h3>
+
+<p>Well, it looks like I spoke too soon. Because the BlueZ developers have the GATT-layer stuff hooked heavily into glib 2.0 using callbacks, it would be much more work than I&rsquo;m willing to put into it to do this within Python, which probably explains why nobody else has done it either. Thanks again, BlueZ team! <em>sigh</em></p>
+
+<p>So, I guess what I&rsquo;m going to have to end up doing is writing all this in C/C++, and pulling parts of their GATT code into my project. Either that, or just implementing the parts I need myself.</p>
+
+<p>My guess is that the BlueZ developers are really more interested in writing kernel code than user-space code. It really sucks for anybody who wants to play with LE applications, though &ndash; right now everybody seems to be just writing wrappers around the BlueZ command-line apps and calling it a day. Not a great way to help with adoption of a standard, guys!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/06/27/Zeroconf-Rocks/">Zeroconf Rocks!</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-27T22:27:00-05:00" pubdate data-updated="true">Jun 27<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have a lot of computers on my network now &ndash; my laptop and desktop, my wife&rsquo;s 3(!) computers, her iPad, two Linux servers and miscellaneous other devices, along with my Raspberry Pi and two BeagleBone Blacks, so managing all these was starting to be a pain. So, just on a hunch, I wanted to see if <a href="http://en.wikipedia.org/wiki/Zero-configuration_networking">Bonjour/Zeroconf/Avahi</a> could help. I did some investigation, and it turns out that you can access any machines that advertise on Zeroconf by <em>name</em>.local. Since I work predominantly on Macs, I was already pretty comfortable with the idea of dynamically finding service. When I brought up my Bonjour Browser application, however, I was surprised: My two BeagleBone Blacks were already advertising (the wrong IP address for my network, but still)!</p>
+
+<p>So, first step: set up the Raspberry Pi to do the same. Fortunately, the Internet came to the rescue, in the form of <a href="http://elinux.org/RPi_Advanced_Setup">this page</a> about setting up Zeroconf on the Pi. I just followed the instructions, and it worked.</p>
+
+<p>Next, I had to fix my BeagleBone Blacks. To do this, I found the DHCP daemon config file, <code>/etc/udhcpd.conf</code>, which looked like this:</p>
+
+<pre><code>start      192.168.7.1
+end        192.168.7.1
+interface  usb0
+max_leases 1
+option subnet 255.255.255.252
+</code></pre>
+
+<p>and which I changed to match my network:</p>
+
+<pre><code>start      192.168.1.2
+end        192.168.1.99
+interface  usb0
+max_leases 1
+option subnet 255.255.255.0
+</code></pre>
+
+<p>Then, I just restarted them, and they suddenly had the right IP addresses.</p>
+
+<p>Now, all I have to do to SSH into my Pi is do <code>ssh raspberry-pi.local</code>. For my BeagleBones, it would be <code>ssh beaglebone-red.local</code> or <code>ssh beaglebone-blue.local</code>.</p>
+
+<p>W00t!!!!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/06/25/Scala-Is-Disappointing/">Scala Is Disappointing</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-25T00:15:00-05:00" pubdate data-updated="true">Jun 25<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So, I&rsquo;ve been playing around with Scala, and, while I&rsquo;m quite impressed with the language syntax, it&rsquo;s a real pain-in-the-ass to deal with. To begin with, the various versions (2.7, 2.8, 2.9., 2.10) are <a href="http://lift.la/scalas-version-fragility-make-the-enterprise">binary incompatible</a>, which is really annoying. I understand that the language is still in development, but you would think they&rsquo;d have the core of the language all worked out by now.</p>
+
+<p>I understand the <a href="http://suereth.blogspot.com/2011/12/scala-fresh-is-alive.html">reasons behind it</a>: they&rsquo;re still making changes to the base traits which causes all the objects to change. But, really, this is one of those things that every language (well, every language with a base class or interface) goes through. These are the things you go through, however, when you&rsquo;re doing the pre-1.0 releases of the language, not 2.x; at most, you make these changes when you transition between major revisions &ndash; from 2.x to 3.0, for instance &ndash; <em>not</em> between minor revisions.</p>
+
+<p>What concerns me with this, besides the PIA factor, is that a) the language developers don&rsquo;t seem to think this is a problem, and b) that it indicates a tendency to want to &ldquo;fiddle&rdquo; with the language. I understand the desire to &ldquo;fiddle&rdquo;, it&rsquo;s one of those things that every software developer goes through, the desire to &ldquo;tweak it just a little bit more&rdquo; after it&rsquo;s released. It&rsquo;s also one of those things that mature software developers grow out of. &ldquo;The perfect is the enemy of the good&rdquo;.</p>
+
+<p>They don&rsquo;t seem to realize that this is going to make it <em>really</em> hard for it to be taken seriously as a general-purpose language. When you&rsquo;re trying to make a business case for using a new language, one of the things that you have to demonstrate is that the language is mature enough to not change out from under you. Scala is changing constantly, and the Scala developers seem to think this is a virtue, rather than a problem.</p>
+
+<p>Why is this a problem? Well, the fact that you have Scala libraries having to label themselves with the version of Scala they&rsquo;re compiled against is an immediate indication. If I&rsquo;m trying to do a project that&rsquo;s dependent on libraries, I now have to make absolutely sure that there is some version of Scala that they&rsquo;re all compatible with, and then use that version for my project, rather than using the version based on the feature set I need. What&rsquo;s more, if there is no overlap &ndash; if one of my dependencies is only compatible with, say, 2.9, and another only builds on 2.7, then I&rsquo;m hosed. I either have to try to build one or the other on a different version of the compiler, which may or may not work, or use different libraries.</p>
+
+<p>The other bit of craziness is the Eclipse Scala plugin can&rsquo;t change versions, and, you can&rsquo;t have more than one version running at a time. Even more fun: the only Scala plugins for Eclipse Juno are for 2.9 and 2.10 &ndash; if you have to use 2.8, you&rsquo;re either going to have to use Indigo, or cross-compile to a newer version of Scala.</p>
+
+<p>All in all, I&rsquo;d have to say that, as much as I like the idea of Scala, I can&rsquo;t see using it for anything significant until it becomes more stable.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/2/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon/">Using a Raspberry Pi as an iBeacon</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/19/more-fun-with-beaglebone-black/">More Fun With BeagleBone Black</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/">btle.js 0.2.0 released</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/25/fun-with-beaglebone-black/">Fun with BeagleBone Black</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/12/node-dot-js-bit-operations/">Node.js Bit Operations</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 124.0%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 112.0%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 124.0%'>beaglebone</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 112.0%'>beaglebone-black</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 124.0%'>beaglebone_black</a>   <a href='/blog/categories/bluetooth' style='font-size: 124.0%'>bluetooth</a>   <a href='/blog/categories/bluetooth-le' style='font-size: 136.0%'>bluetooth_le</a>   <a href='/blog/categories/bluez' style='font-size: 124.0%'>bluez</a>   <a href='/blog/categories/bonescript' style='font-size: 112.0%'>bonescript</a>   <a href='/blog/categories/bonjour' style='font-size: 112.0%'>bonjour</a>   <a href='/blog/categories/btle-js' style='font-size: 112.0%'>btle.js</a>   <a href='/blog/categories/c-' style='font-size: 124.0%'>c++</a>   <a href='/blog/categories/cobertura' style='font-size: 112.0%'>cobertura</a>   <a href='/blog/categories/documents' style='font-size: 112.0%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 148.0%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 112.0%'>eskrima</a>   <a href='/blog/categories/gatt' style='font-size: 124.0%'>gatt</a>   <a href='/blog/categories/git' style='font-size: 124.0%'>git</a>   <a href='/blog/categories/github' style='font-size: 112.0%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 112.0%'>hornetq</a>   <a href='/blog/categories/ibeacon' style='font-size: 112.0%'>iBeacon</a>   <a href='/blog/categories/idea' style='font-size: 112.0%'>idea</a>   <a href='/blog/categories/java' style='font-size: 124.0%'>java</a>   <a href='/blog/categories/jboss' style='font-size: 112.0%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 112.0%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 112.0%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 112.0%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 112.0%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 112.0%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 112.0%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 160.0%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 112.0%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 112.0%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 124.0%'>maven</a>   <a href='/blog/categories/mqtt' style='font-size: 112.0%'>mqtt</a>   <a href='/blog/categories/node-js' style='font-size: 160.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 112.0%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 112.0%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 112.0%'>programming</a>   <a href='/blog/categories/python' style='font-size: 112.0%'>python</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 124.0%'>raspberry-pi</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 112.0%'>raspberry_pi</a>   <a href='/blog/categories/rest' style='font-size: 112.0%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 112.0%'>resteasy</a>   <a href='/blog/categories/sbt' style='font-size: 124.0%'>sbt</a>   <a href='/blog/categories/scala' style='font-size: 124.0%'>scala</a>   <a href='/blog/categories/scalability' style='font-size: 112.0%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 112.0%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 112.0%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 136.0%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 112.0%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 112.0%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 112.0%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 112.0%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 124.0%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 112.0%'>windows</a>   <a href='/blog/categories/zeroconf' style='font-size: 112.0%'>zeroconf</a>   <a href='/blog/categories/zigbee' style='font-size: 112.0%'>zigbee</a>   <a href='/blog/categories/zookeeper' style='font-size: 112.0%'>zookeeper</a>   </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/jacklund">@jacklund</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jacklund',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+<section>
+	<h1>My PGP Key</h1>
+	<ul>
+		<li><a href="http://pgp.mit.edu:11371/pks/lookup?op=vindex&search=0x755E427235B39D61">From the MIT Keyserver</a></li>
+		<li><a href="/about/pgp.txt">Text file</a></li>
+	</ul>
+</section><section>
+  <h1>Other Places To Find Me</h1>
+  <ul>
+    <li><a href="https://geekli.st/jacklund">Geeklist</a></li>
+    <li><a href="http://www.pandora.com/profile/jackl0">Pandora</a></li>
+    <li><a href="http://www.linkedin.com/in/jacklund">LinkedIn</a></li>
+    <li><a href="https://plus.google.com/105150092995925691816/about">Google+</a></li>
+    <li><a href="https://alpha.app.net/jacklund">App.net</a></li>
+    <li><a href="https://www.facebook.com/jack.lund">Facebook</a></li>
+    <li><a href="https://jacklund.trovebox.com/">Trovebox</a></li>
+    <li><a href="http://jacklund.tumblr.com/">Tumblr</a></li>
+    <li><a href="http://pinterest.com/jacklund/">Pinterest</a></li>
+    <li><a href="http://www.scribd.com/jack_lund">Scribd</a></li>
+    <li><a href="http://www.shelfari.com/jacklund">Shelfari</a></li>
+    <li><a href="http://www.librarything.com/home/jacklund">LibraryThing</a></li>
+  </ul>
+</section>
+<section>
+  <h1>Share</h1>
+  <ul>
+    <li><a href="javascript:document.getElementsByTagName('body')[0].appendChild(document.createElement('script')).setAttribute('src','//geekli.st/javascript/bookmarklet/bookmarklet.js')"><img src="//geekli.st/images/assets/GeekIt_wFace.png"></a></li>
+    <li>
+      <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+      <g:plusone annotation="none"></g:plusone>
+    </li>
+  </ul>
+</section>
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Jack Lund -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span> - 
+  <span class="credit">Layout by <a href="https://github.com/amelandri/darkstripes">DarkStripes</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'geekheads';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

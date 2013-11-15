@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: jboss | Geekheads]]></title>
+  <link href="http://www.geekheads.net/blog/categories/jboss/atom.xml" rel="self"/>
+  <link href="http://www.geekheads.net/"/>
+  <updated>2013-11-15T16:38:20-06:00</updated>
+  <id>http://www.geekheads.net/</id>
+  <author>
+    <name><![CDATA[Jack Lund]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Rethinking Architecture]]></title>
+    <link href="http://www.geekheads.net/blog/2013/04/11/Rethinking-Architecture/"/>
+    <updated>2013-04-11T22:30:00-05:00</updated>
+    <id>http://www.geekheads.net/blog/2013/04/11/Rethinking-Architecture</id>
+    <content type="html"><![CDATA[<p>So, I&rsquo;ve been rethinking the architecture we used with a customer, and which we are planning on using, in slightly modified form, for some in-house projects.</p>
+
+<p>The application is, basically, a cloud-based service which takes data from devices, analyzes and stores it, and presents it to the user in a web site.</p>
+
+<p>We had decided, early on, to go with Java as our language of choice, both because it was what the customer was comfortable with, and because we felt like it offered the best performance/flexibility tradeoff (and, yes, performance is an issue here, especially on the data collection side).</p>
+
+<p>The pieces of our architecture include:</p>
+
+<ul>
+<li>A <a href="https://en.wikipedia.org/wiki/Rest">RESTful</a> web service, to both collect the data and to serve as an API for apps which want to access the data</li>
+<li>Some sort of queuing mechanism for taking the data in, and processing it on the back end asynchronously</li>
+<li>A database of some sort for storing the readings</li>
+<li>A website, utilizing static HTML and Javascript for accessing and presenting the data, and for managing the various assets (devices, etc)</li>
+<li>A database (possibly the same as the previous one) for storing the website data</li>
+<li>A notification framework for sending notifications (emails, SMS, etc) of various events from the devices</li>
+</ul>
+
+
+<p>Now, one of the things I&rsquo;ve learned about architecture (or, at least I thought I had learned) was to only use what you absolutely need, nothing more. A lean architecture is a good architecture. However, we made some decisions early on which, now, I feel like violate those principles.</p>
+
+<h3>JBoss</h3>
+
+<p>We opted to put the code in an app server for various reasons. We needed a Servlet engine to facilitate the web service, but we decided to use <a href="http://www.jboss.org/jbossas">JBoss AS 7</a> as the app server because we&rsquo;d all had experience with it in the past, and it was being used by the customer currently. We felt like the container could manage all the &ldquo;plumbing&rdquo; (threads, database connections, etc), rather than dealing with it ourselves. I think that decision came more from old architectural design assumptions (&ldquo;three-tiered good, two-tiered bad&rdquo;, &ldquo;managing resources is hard&rdquo;) which are no longer really relevant.</p>
+
+<p>However, more importantly (and I don&rsquo;t mean to bash JBoss here, I think this would be true of any app server), we ended up severely limiting our &ldquo;functional&rdquo; scalability by using an app server. Let me explain:</p>
+
+<p>When I refer to &ldquo;functional&rdquo; vs. &ldquo;theoretical&rdquo; scalability, I&rsquo;m referring to the fact that, while JBoss is certainly very scalable in theory (you can cluster the instances, and add new instances dynamically), in practice, it&rsquo;s really frickin' difficult to scale. The reason: you can&rsquo;t just &ldquo;add another instance&rdquo;, you need to go through the hell that is cluster configuration to add a new instance, which means, literally, making on the order of a dozen changes to the stock JBoss configuration files.</p>
+
+<p>To put an even finer point on it: the question you should ask yourself in terms of scalability is: if I were to get a call at 2 AM that we need to scale up because the application&rsquo;s pegged, could I scale it quickly and easily, even half-asleep? The answer in this case would be a resounding &ldquo;No!&rdquo;.</p>
+
+<p>The other answer might be to use a deployment system, like <a href="http://www.opscode.com/chef/">Chef</a> or <a href="https://puppetlabs.com/">Puppet</a>, but I&rsquo;ve tried putting together Puppet scripts for doing a JBoss clustered deployment, and it&rsquo;s a nightmare as well.</p>
+
+<p>A lot of this came out of a gig we had auditing another consulting company for a customer. They hired us to talk to the other company with them, because things weren&rsquo;t going well and they needed a second opinion on whether they were being &ldquo;took&rdquo; (we said &ldquo;yes, kinda&rdquo;). However, the most interesting thing was that they had a very similar architecture to ours, but it was seriously slow, so they were constantly having to add in servers in the back end. The sys admin who worked there (and who was probably the smartest guy in the company, as far as I could tell), pointed out that starting up new instances was trivial, because their backend server was a simple process &ndash; no app server, no nothing. He could start it up from the command line if he wanted.</p>
+
+<p>That&rsquo;s how it all <strong><em>should</em></strong> work! It&rsquo;s the Google/Facebook architecture vs. the old-school &ldquo;Big Iron&rdquo; approach. It was a serious &ldquo;Aha!&rdquo; moment for me.</p>
+
+<p>So, what are we getting from using JBoss? EJBs? We are using them, but we don&rsquo;t need them (they&rsquo;re not on the list I mentioned above) &ndash; the web service should be our internal as well as our external API. Thread pools? They used to be complicated, but since JDK 1.5, it&rsquo;s trivial. Database connection pools? Same thing. Caching? We&rsquo;re using a third-party caching mechanism, so no.</p>
+
+<p>Time to ditch JBoss.</p>
+
+<h3>HornetQ</h3>
+
+<p>The queue that comes with JBoss is <a href="http://www.jboss.org/hornetq">HornetQ</a>. It&rsquo;s supposedly a very fast queue, and it comes embedded in JBoss. However, there are several issues with it:</p>
+
+<ul>
+<li>It, also, doesn&rsquo;t functionally scale well. You can cluster it, but it&rsquo;s painful, and a configuration nightmare, just like JBoss</li>
+<li>It doesn&rsquo;t handle having the queue fill up very gracefully, in my opinion. While I was doing load testing of the app, sometimes the back end would not quite be able to keep up, and when a large number of journal files ended up in the queue, it froze, and needed not just to be restarted, but to have the journal files cleared out first.</li>
+<li>It&rsquo;s not trivial swapping out a different queue in JBoss. It&rsquo;s doable, but not very well documented, and it&rsquo;s hard to say how JBoss would handle it.</li>
+</ul>
+
+
+<h3>Spring</h3>
+
+<p>Another questionable architectural decision (and I can say this because I was one of the big advocates) was to use <a href="http://www.springsource.org/">Spring</a>. Now, don&rsquo;t get me wrong &ndash; I <em>love</em> Spring, but it has a tendency to take over once you start using it. We had even talked about, early on, how we weren&rsquo;t going to use Spring for &ldquo;everything&rdquo;, but we ended up using it way too much, IMHO. Plus, I think if we rearchitect everything to be in terms of standalone services, we&rsquo;ll have a lot less need for that sort of configurational complexity.</p>
+
+<h3>Emphasize the Positive</h3>
+
+<p>So, those are the things I think we should ditch. What should our architecture look like? I think we could function well with the web services being in something like <a href="http://tomcat.apache.org/">Tomcat</a> or <a href="http://www.eclipse.org/jetty/">Jetty</a>, with everything else being standalone Java services (i.e., no containers, just POJOs with a main()).</p>
+
+<p>That takes care of the big pieces, but what about the glue to put it together? I was looking around for scalable, distributed queues, when I came across <a href="http://kafka.apache.org/">Kafka</a>. It&rsquo;s not really a queue so much as a pub/sub framework, which you can use like a queue. However, once I started playing with it (which will be the subject of a different post), I came to the realization that it could be used for more than just the queue &ndash; it could be the communication mechanism between the services, basically a communication bus for the architecture. And, it&rsquo;s functionally scalable, because you can add new server instances dynamically using <a href="http://zookeeper.apache.org/">ZooKeeper</a>. We could also reuse ZooKeeper as our own service locater service to allow us to dynamically add new services.</p>
+
+<p>Now, suddenly, things are looking very different. Rather than an app server with all our code deployed on it, we would have compact, self-contained services which communicate via Kafka, find new instances via ZooKeeper, and which scale by just starting up new instances to take on the load. Doing this then implies that the web service front-end would have to be very thin &ndash; just a façade for taking in web service requests, which would then be delegated to the back-end services.</p>
+
+<p>The key would be to define the services well, so they would be small, light, decoupled, and cohesive.</p>
+]]></content>
+  </entry>
+  
+</feed>

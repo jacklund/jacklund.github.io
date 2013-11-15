@@ -1,0 +1,529 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Geekheads</title>
+  <meta name="author" content="Jack Lund">
+
+  
+  <meta name="description" content="So, I&rsquo;ve started getting into the groove of going down to my basement office in the morning and getting stuff done. I&rsquo;ve discovered that &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.geekheads.net/blog/page/4/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Geekheads" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <!--
+  <div id="logo">
+  	<div id="logoLeft">{</div>
+  	<div id="logoText">GH</div>
+  	<div id="logoRight">}</div>
+  	<div class="clear"></div>
+  </div> -->
+  <h1><a href="/">Geekheads</a></h1>
+  
+    <h2>Geeks are people, too. Sort of.</h2>
+  
+  <div class="clear"></div>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.geekheads.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2012/01/18/Young-Dubliners-Really-Wakes-You-Up/">Young Dubliners Really Wakes You Up</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-18T00:00:00-06:00" pubdate data-updated="true">Jan 18<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So, I&rsquo;ve started getting into the groove of going down to my basement office in the morning and getting stuff done. I&rsquo;ve discovered that cranking up the Young Dubliners station on Pandora is a good way to wake up &ndash; just the right mix of Punk and Irish pissed-off-edness. Usually have to tone it down by noon, but still, a good way to get things going.</p>
+
+<p>Had to buy a space heater for my office &ndash; it being around zero with wind chill outside now. Still, I got a good bit done today &ndash; rearranged some of the projects and package names, created a couple of services which our front-end web service will use to validate the data coming in, created a nightly job to generate the javadocs and publish them on the web. Also, got Redmine and svn to play nice together, so now we should be able to associate issues and fixes with specific versions of code.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2012/01/16/First-Day-of-Work-in-the-New-Office/">First Day of Work in the New Office</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-16T00:00:00-06:00" pubdate data-updated="true">Jan 16<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>My first day of work in the new office in my basement. Worked out pretty well, although I <em>do</em> need to figure out a way to take more frequent breaks, and maybe do something at lunchtime other than sitting.</p>
+
+<p>I&rsquo;ve discovered more really cool stuff with <a href="http://www.jboss.org/resteasy">RESTEasy</a>: not only does it automagically convert JSON to java.util.Map&lt;String, Object>, but it also can convert XML input into an org.w3c.dom.Document. Also, they were thoughtful enough to allow you to have different interface methods for different content types for the same URI, which means that I can have data coming in as JSON call one method (the one with a Map&lt;String, Object> in the signature), and XML call another. Really cool.</p>
+
+<p>Also, got my Groovy integration tests working. Since our architecture is basically a RESTful web service putting data onto a queue, and a MDB taking it off and calling multiple handlers to handle it, I just created another handler to dump the data onto a queue which the integration test reads from (remotely), allowing me to make sure the data got all the way through intact. Very nice.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2012/01/15/New-Server-Hell/">New Server Hell</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-15T00:00:00-06:00" pubdate data-updated="true">Jan 15<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So, one of the other guys in my new company ordered the parts for a Linux server to be sent to me (because we still live in a time when it&rsquo;s cheaper to build your own Linux server than to buy one pre-made), which I built the other day. This was somewhat interesting in that I haven&rsquo;t put together a new machine in quite a while, but, fortunately, it seems like these things get easier rather than harder as the technology progresses.</p>
+
+<p>The machine was built, and I had to add services to it. The first thing we needed was our Redmine installation, which up until now was running on my home Linux box. Both machines are running Ubuntu (for no other reason than it&rsquo;s easily accessible and has a very large user base), so it was just a matter of installing MySQL and Redmine from the Ubuntu repos, dumping the MySQL database from the other machine and moving it to this machine. This worked…mostly. For some strange reason the user passwords didn&rsquo;t work, so I had to start by resetting the admin password (using the instructions from <a href="http://www.redmine.org/boards/2/topics/3364">this post</a>), and then resetting all the user passwords. The only other hitch was that the main page reset to the default main page rather than the wiki page for my company, which I had set up a while ago. Easy enough to fix with <a href="http://www.supermind.org/blog/830/change-redmine-homepage-to-project-page">these instructions</a>. So far so good.</p>
+
+<p>Next, I had to move our subversion repository over from a machine running Windows to this new server. Again, easy enough, you just have to dump the repository and load it again, as per <a href="http://dotnot.org/blog/archives/2005/01/13/move-a-subversion-repository-from-one-machine-to-another/">these instructions</a>. Then, I just had to make sure svn+ssh worked (I had already setup SSH on the machine and set up accounts for our guys), and then I had to setup SVN through WebDAV, which was really just a matter of enabling some of the Apache mods.</p>
+
+<p>The big kicker, though, was that I&rsquo;m temporarily hosting our server at my house, so it&rsquo;s part of my network. Since I already have a web server (on my Linux box) running exposed to the world, for Redmine, I had to enable mod_proxy on my home Linux box to reverse-proxy the requests to the new box. WebDAV I simply made HTTPS, so I could set up a separate port forward for it directly to the new box.</p>
+
+<p>All in all, one big sysadmin day for a guy who doesn&rsquo;t especially like sysadmin work.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2012/01/14/Eskrima-class%2C-Snow%2C-and-a-New-Server-for-Work/">Eskrima Class, Snow, and a New Server for Work</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-14T00:00:00-06:00" pubdate data-updated="true">Jan 14<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Had a killer eskrima class this morning. In the kids class, Guro worked us hard &ndash; one minute of strikes against the bag as fast as we can, alternating with planks and footwork. After that, during the adult class, lots of sparring. I ended up sparring continuously for, like, ten minutes, with only a few seconds break between rounds. It felt a lot better than last week&rsquo;s &ndash; I had a hard time getting back into the groove right after the holidays.</p>
+
+<p>After class, dropped the girls off to their first practice for their Willy Wonka musical, came back and had to do some sysadmin work for my lovely wife, then went back and picked up the girls, and we went sledding down the hill next to the Gurnee Park District building, where their musical practice was. Lots of fun, but after the class in the morning (and me being off my workout schedule and recovering from a sinus infection) it pretty much wiped me out.</p>
+
+<p>Then, I came home and put Ubuntu on the work Linux machine I built over the last couple of days. I got it installed, and set up on the network. Now, I just need to set up accounts, start up the services, install all the stuff we need, and we should be golden.</p>
+
+<p>Busy, busy day.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2012/01/12/Getting-My-Office-Set-Up/">Getting My Office Set Up</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-12T00:00:00-06:00" pubdate data-updated="true">Jan 12<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Spent today putting together my desk and chair, moving the network stuff (cable modem, wireless router, NAS server) into the furnace room (now server room) in the basement, and setting up my new Mac Mini server, which will be my desktop (I also have a MacBook Pro which I will continue to use).</p>
+
+<p>Discovered an interesting &ldquo;backdoor&rdquo; to JBoss&#8217; queues &ndash; they publish a &ldquo;netty&rdquo; port which makes the queues accessible directly, i.e. not through JNDI. The problem is that JBoss 7.0.2 doesn&rsquo;t yet publish the queues remotely via JNDI, and I had wanted to set up the integration tests to send a message to the web service, which would put it on the queue for the EJB, which would invoke a handler which would put it on <em>another</em> queue, which the integration test script would then read. That way, the integration test would be truly end-to-end, and we wouldn&rsquo;t have to worry about messages not making it all the way through. That&#8217;w when I ran into that little issue with JNDI, but now, this backdoor approach seems to me like a way around that.</p>
+
+<p>The original code, which I modified, is <a href="http://code.google.com/p/javasupport/source/browse/branches/hornetq-examples/src/main/java/deng/hornetqexamples/core/NettyJmsClient.java?r=581">here</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2012/01/11/Last-Day/">Last Day</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-11T00:00:00-06:00" pubdate data-updated="true">Jan 11<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Morning of my last day at the old job. Came down with what could be either a sinus or ear infection last night &ndash; no energy, feelling somewhat dizzy. For some reason, they don&rsquo;t really have anything planned for me today, but they want to keep me at work all day &ndash; they&rsquo;ve planned my exit interview after the close. Oh, well.</p>
+
+<p>On the plus side, got a good bit done on building my home office desk last night, before this infection thing hit me. Still have the desk to finish, my chair and bookcase to put together, whiteboard to mount, network stuff to move downstairs, and my machines to set up. Busy, busy, busy.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2012/01/10/Second-to-last-Day-at-Work/">Second-to-last Day at Work</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-10T00:00:00-06:00" pubdate data-updated="true">Jan 10<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>My second-to-last day at my old job. It&rsquo;s always strange being <em>almost</em> out the door &ndash; people don&rsquo;t really know what to say to you. Everybody&rsquo;s really nice, but I think it&rsquo;s kind of confusing &ndash; they don&rsquo;t know whether to treat you as a colleague or a stranger.</p>
+
+<p>The basement is finished now, so it&rsquo;s time now to begin the process of turning it into an office/server room. I&rsquo;ve got the cabling set up, so next I have to move the cable modem and wireless router down there into the space under the stairs, make sure everything still works on the network, and then start building my office furniture &ndash; one chair, one big-ass table, a small bookcase, put up my whiteboard(s), move my books down, and set up all the machines (once they come in). I have a Mac Mini coming in, and Mike, who is also in this new escapade with me, is sending me the parts for a Linux server which is going to be housed in my new &ldquo;server room&rdquo;.</p>
+
+<p>I&rsquo;m really excited about the change, not just about working from home (which will undoubtedly be a double-edged sword), but also about the work. I&rsquo;ve been putting together a prototype of a RESTful data collection service using JBoss, RESTEasy, and Spring, and it&rsquo;s really coming along nicely. I think a side-effect of all this will be some tools we can leverage for creating RESTful Web Services easily.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/3/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon/">Using a Raspberry Pi as an iBeacon</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/19/more-fun-with-beaglebone-black/">More Fun With BeagleBone Black</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/">btle.js 0.2.0 released</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/25/fun-with-beaglebone-black/">Fun with BeagleBone Black</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/12/node-dot-js-bit-operations/">Node.js Bit Operations</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 124.0%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 112.0%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 124.0%'>beaglebone</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 112.0%'>beaglebone-black</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 124.0%'>beaglebone_black</a>   <a href='/blog/categories/bluetooth' style='font-size: 124.0%'>bluetooth</a>   <a href='/blog/categories/bluetooth-le' style='font-size: 136.0%'>bluetooth_le</a>   <a href='/blog/categories/bluez' style='font-size: 124.0%'>bluez</a>   <a href='/blog/categories/bonescript' style='font-size: 112.0%'>bonescript</a>   <a href='/blog/categories/bonjour' style='font-size: 112.0%'>bonjour</a>   <a href='/blog/categories/btle-js' style='font-size: 112.0%'>btle.js</a>   <a href='/blog/categories/c-' style='font-size: 124.0%'>c++</a>   <a href='/blog/categories/cobertura' style='font-size: 112.0%'>cobertura</a>   <a href='/blog/categories/documents' style='font-size: 112.0%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 148.0%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 112.0%'>eskrima</a>   <a href='/blog/categories/gatt' style='font-size: 124.0%'>gatt</a>   <a href='/blog/categories/git' style='font-size: 124.0%'>git</a>   <a href='/blog/categories/github' style='font-size: 112.0%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 112.0%'>hornetq</a>   <a href='/blog/categories/ibeacon' style='font-size: 112.0%'>iBeacon</a>   <a href='/blog/categories/idea' style='font-size: 112.0%'>idea</a>   <a href='/blog/categories/java' style='font-size: 124.0%'>java</a>   <a href='/blog/categories/jboss' style='font-size: 112.0%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 112.0%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 112.0%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 112.0%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 112.0%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 112.0%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 112.0%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 160.0%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 112.0%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 112.0%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 124.0%'>maven</a>   <a href='/blog/categories/mqtt' style='font-size: 112.0%'>mqtt</a>   <a href='/blog/categories/node-js' style='font-size: 160.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 112.0%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 112.0%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 112.0%'>programming</a>   <a href='/blog/categories/python' style='font-size: 112.0%'>python</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 124.0%'>raspberry-pi</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 112.0%'>raspberry_pi</a>   <a href='/blog/categories/rest' style='font-size: 112.0%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 112.0%'>resteasy</a>   <a href='/blog/categories/sbt' style='font-size: 124.0%'>sbt</a>   <a href='/blog/categories/scala' style='font-size: 124.0%'>scala</a>   <a href='/blog/categories/scalability' style='font-size: 112.0%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 112.0%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 112.0%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 136.0%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 112.0%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 112.0%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 112.0%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 112.0%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 124.0%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 112.0%'>windows</a>   <a href='/blog/categories/zeroconf' style='font-size: 112.0%'>zeroconf</a>   <a href='/blog/categories/zigbee' style='font-size: 112.0%'>zigbee</a>   <a href='/blog/categories/zookeeper' style='font-size: 112.0%'>zookeeper</a>   </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/jacklund">@jacklund</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jacklund',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+<section>
+	<h1>My PGP Key</h1>
+	<ul>
+		<li><a href="http://pgp.mit.edu:11371/pks/lookup?op=vindex&search=0x755E427235B39D61">From the MIT Keyserver</a></li>
+		<li><a href="/about/pgp.txt">Text file</a></li>
+	</ul>
+</section><section>
+  <h1>Other Places To Find Me</h1>
+  <ul>
+    <li><a href="https://geekli.st/jacklund">Geeklist</a></li>
+    <li><a href="http://www.pandora.com/profile/jackl0">Pandora</a></li>
+    <li><a href="http://www.linkedin.com/in/jacklund">LinkedIn</a></li>
+    <li><a href="https://plus.google.com/105150092995925691816/about">Google+</a></li>
+    <li><a href="https://alpha.app.net/jacklund">App.net</a></li>
+    <li><a href="https://www.facebook.com/jack.lund">Facebook</a></li>
+    <li><a href="https://jacklund.trovebox.com/">Trovebox</a></li>
+    <li><a href="http://jacklund.tumblr.com/">Tumblr</a></li>
+    <li><a href="http://pinterest.com/jacklund/">Pinterest</a></li>
+    <li><a href="http://www.scribd.com/jack_lund">Scribd</a></li>
+    <li><a href="http://www.shelfari.com/jacklund">Shelfari</a></li>
+    <li><a href="http://www.librarything.com/home/jacklund">LibraryThing</a></li>
+  </ul>
+</section>
+<section>
+  <h1>Share</h1>
+  <ul>
+    <li><a href="javascript:document.getElementsByTagName('body')[0].appendChild(document.createElement('script')).setAttribute('src','//geekli.st/javascript/bookmarklet/bookmarklet.js')"><img src="//geekli.st/images/assets/GeekIt_wFace.png"></a></li>
+    <li>
+      <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+      <g:plusone annotation="none"></g:plusone>
+    </li>
+  </ul>
+</section>
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Jack Lund -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span> - 
+  <span class="credit">Layout by <a href="https://github.com/amelandri/darkstripes">DarkStripes</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'geekheads';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

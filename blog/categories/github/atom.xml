@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: github | Geekheads]]></title>
+  <link href="http://www.geekheads.net/blog/categories/github/atom.xml" rel="self"/>
+  <link href="http://www.geekheads.net/"/>
+  <updated>2013-11-15T16:38:20-06:00</updated>
+  <id>http://www.geekheads.net/</id>
+  <author>
+    <name><![CDATA[Jack Lund]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Moved to GitHub/Octopress]]></title>
+    <link href="http://www.geekheads.net/blog/2013/06/18/moved-to-github-slash-octopress/"/>
+    <updated>2013-06-18T10:51:00-05:00</updated>
+    <id>http://www.geekheads.net/blog/2013/06/18/moved-to-github-slash-octopress</id>
+    <content type="html"><![CDATA[<p>I finally gave up on <a href="http://www.scriptogr.am">scriptogr.am</a>. I was struggling with their syntax highlighting, even sent a message to their support. The only answer I got back was from another user (who was very helpful, but it didn&rsquo;t really fix my problem). So, I&rsquo;m done.</p>
+
+<p>I&rsquo;m now using <a href="http://pages.github.com/">GitHub Pages</a>, which generates their pages using <a href="https://github.com/mojombo/jekyll">Jekyll</a>. I&rsquo;m also using <a href="http://octopress.org/">Octopress</a> for the layout, which makes it all pretty easy (well, that is, once you go through the somewhat painful ruby setup).</p>
+]]></content>
+  </entry>
+  
+</feed>

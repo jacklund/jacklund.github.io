@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: bonescript | Geekheads]]></title>
+  <link href="http://www.geekheads.net/blog/categories/bonescript/atom.xml" rel="self"/>
+  <link href="http://www.geekheads.net/"/>
+  <updated>2013-11-15T16:38:20-06:00</updated>
+  <id>http://www.geekheads.net/</id>
+  <author>
+    <name><![CDATA[Jack Lund]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Fun with BeagleBone Black]]></title>
+    <link href="http://www.geekheads.net/blog/2013/09/25/fun-with-beaglebone-black/"/>
+    <updated>2013-09-25T11:02:00-05:00</updated>
+    <id>http://www.geekheads.net/blog/2013/09/25/fun-with-beaglebone-black</id>
+    <content type="html"><![CDATA[<p>So, I&rsquo;ve decided to try to play with <a href="http://en.wikipedia.org/wiki/ZigBee">ZigBee</a>, and since I have a couple of BeagleBone Blacks hanging around doing nothing, I thought I&rsquo;d try setting it up on them.</p>
+
+<p>First thing I came across was that the BBB&rsquo;s seem to have issues with <a href="https://groups.google.com/forum/#!topic/beagleboard/4e2T6XH-fNM">accessing their UARTS</a>. Even via bonescript, there seem to <a href="http://stackoverflow.com/questions/17497060/node-js-script-not-setting-beaglebone-black-mux">be issues</a>.</p>
+
+<p>So, first thing I did was to upgrade to the latest firmware, and then do <code>opkg update</code> followed by <code>opkg upgrade</code> to get all the latest stuff. However, when I tried to run a bonescript program (the one from <a href="http://stackoverflow.com/questions/17497060/node-js-script-not-setting-beaglebone-black-mux">here</a>), I got <code>module bonescript not found</code>!!!. WTF?</p>
+
+<p>Since I had seen in the <a href="http://beagleboard.org/Support/BoneScript/pinMode/">bonescript docs</a> that the <code>pinmode</code> call doesn&rsquo;t really work until bonescript 0.2.3, I figured I&rsquo;d be smart and just try to upgrade to the latest npm version of bonescript.</p>
+
+<p>Long story short: bad idea. I had to go through all sorts of hell to make the npm install work (including editing the node-gyp configuration file to avoid a bug in the python version check), I finally got bonescript 0.2.3 working. So, I tried my test program and&hellip;the network connection died. Every time I ran the program, the same thing happened.</p>
+
+<p>Turns out, this is an <a href="https://github.com/jadonk/bonescript/issues/51">issue with the latest bonescript</a>. So, I ended up having to back down to the previous version of bonescript via opkg. Once I investigated the <code>module bonescript not found</code> issue, it turned out that, for some reason, the bonescript module in <code>/usr/lib/node_modules</code> wasn&rsquo;t getting written, so I had to do a <code>opkg remove bonescript</code> followed by <code>opkg install bonescript</code> to make it all work.</p>
+
+<p>All this, and I haven&rsquo;t even tried to get the XBee stuff working yet. Oy.</p>
+]]></content>
+  </entry>
+  
+</feed>

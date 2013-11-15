@@ -1,0 +1,838 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Geekheads</title>
+  <meta name="author" content="Jack Lund">
+
+  
+  <meta name="description" content="I had this idea for doing a Scala project integrating WebSockets with Kafka, so I spent a good bit of today trying out different configurations for &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.geekheads.net/blog/page/2/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Geekheads" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <!--
+  <div id="logo">
+  	<div id="logoLeft">{</div>
+  	<div id="logoText">GH</div>
+  	<div id="logoRight">}</div>
+  	<div class="clear"></div>
+  </div> -->
+  <h1><a href="/">Geekheads</a></h1>
+  
+    <h2>Geeks are people, too. Sort of.</h2>
+  
+  <div class="clear"></div>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.geekheads.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/06/21/Scala-Development-Setup/">Scala Development Setup</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-21T21:56:00-05:00" pubdate data-updated="true">Jun 21<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I had this idea for doing a Scala project integrating WebSockets with <a href="http://kafka.apache.org/">Kafka</a>, so I spent a good bit of today trying out different configurations for doing Scala development. My first pass was to try <a href="http://www.jetbrains.com/idea/features/scala.html">IntellijIDEA</a> from JetBrains. I really liked their <a href="http://www.jetbrains.com/ruby/">RubyMine</a> IDE for Ruby, and people were raving about IDEA for Scala development, so I gave it a go.</p>
+
+<p>It&rsquo;s actually not a bad IDE. I had some trouble navigating, but most of that was because I was so used to Eclipse. However, the big thing that was lacking was good <a href="http://www.scala-sbt.org/">sbt</a> support. Whatever project I was going to use sbt, since that seems to be the builder of choice, and the integration with IDEA seemed to be, well, not really good. You can use sbt to generate the IDEA project, but there didn&rsquo;t seem to be a good way to have IDEA use the dependencies defined in the sbt build file for the code completion, which seemed to me to be a big problem.</p>
+
+<p>So, I tried out using Eclipse (which wasn&rsquo;t a stretch since I use it for my Java work), and <a href="https://github.com/typesafehub/sbteclipse">sbteclipse</a>, which is an sbt plugin for Eclipse. It worked really well! Basically, you install the plugin per the instructions, create a minimal sbt build file for the project, and then type <code>sbt eclipse</code> to generate the Eclipse configuration. The cool thing is, you can do this at any time, so if you add a dependency to the build file, just do <code>sbt eclipse</code> again, then refresh the project in Eclipse, and suddenly it has your dependency. Very nice.</p>
+
+<p>The one thing I needed to do, which I eventually found out how to do, was to have sbt use my local maven repository as one of its repositories. sbt uses <a href="http://ant.apache.org/ivy/">ivy</a> under the covers, so Maven integration is there, it just doesn&rsquo;t know about all the local Maven repositories. to add it, I just had to add the following to my <code>~/.sbt/global.sbt</code> file:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>resolvers += "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and, voila, it worked!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/06/18/eclipse-with-subversion-1-dot-8-on-os-x/">Eclipse With Subversion 1.8 on OS X</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-18T14:14:00-05:00" pubdate data-updated="true">Jun 18<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I wasted a considerable amount of time following the instructions from <a href="http://subclipse.tigris.org/wiki/JavaHL">this page</a> on how to install Subclipse on OS X, trying to get MacPorts to install the right version of Subversion (Why subversion, you may ask? Because a customer is still using it, that&rsquo;s why&hellip;).</p>
+
+<p>It turns out that MacPorts doesn&rsquo;t even have the 1.8 version of Subversion &ndash; it&rsquo;s only got 1.7, which won&rsquo;t work with the version of Subclipse I&rsquo;m using. So, I had to go to <a href="http://www.wandisco.com/subversion/download#osx">WanDisco</a> and download it (after removing the MacPorts versions first), and then everything worked.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/06/18/moved-to-github-slash-octopress/">Moved to GitHub/Octopress</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-18T10:51:00-05:00" pubdate data-updated="true">Jun 18<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I finally gave up on <a href="http://www.scriptogr.am">scriptogr.am</a>. I was struggling with their syntax highlighting, even sent a message to their support. The only answer I got back was from another user (who was very helpful, but it didn&rsquo;t really fix my problem). So, I&rsquo;m done.</p>
+
+<p>I&rsquo;m now using <a href="http://pages.github.com/">GitHub Pages</a>, which generates their pages using <a href="https://github.com/mojombo/jekyll">Jekyll</a>. I&rsquo;m also using <a href="http://octopress.org/">Octopress</a> for the layout, which makes it all pretty easy (well, that is, once you go through the somewhat painful ruby setup).</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/06/13/SELinux-and-SSH/">SELinux and SSH</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-13T13:30:00-05:00" pubdate data-updated="true">Jun 13<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I needed to set up Jenkins so that it could run an agent on another Linux box. To do this the default way, you need to allow Jenkins to access the remote box via SSH. So, I set up the Jenkins user and the SSH keys on the remote machine, but trying to do an ssh from the Jenkins user on one machine to the other still didn&rsquo;t work. After doing <code>sudo journalctl -f</code> on the remote machine, I saw the following:</p>
+
+<pre><code>Jun 13 12:41:50 m2m-linux setroubleshoot[701]: SELinux is preventing /usr/sbin/sshd from read access on the file authorized_keys. For complete SELinux messages. run sealert -l ca7b7aea-64cf-46e5-8bfa-6650ad23f55b
+</code></pre>
+
+<p>Running the suggested <code>sealert -l ca7b7aea-64cf-46e5-8bfa-6650ad23f55b</code> gave me the following (edited for brevity):</p>
+
+<pre><code>SELinux is preventing /usr/sbin/sshd from read access on the file authorized_keys.
+
+*****  Plugin catchall_labels (83.8 confidence) suggests  ****
+
+If you want to allow sshd to have read access on the authorized_keys file
+Then you need to change the label on authorized_keys
+Do
+# semanage fcontext -a -t FILE_TYPE 'authorized_keys'
+where FILE_TYPE is one of the following: NetworkManager_etc_rw_t, NetworkManager_etc_t,...
+Then execute:
+restorecon -v 'authorized_keys'
+
+
+*****  Plugin catchall (17.1 confidence) suggests  *************
+
+If you believe that sshd should be allowed read access on the authorized_keys file by default.
+Then you should report this as a bug.
+You can generate a local policy module to allow this access.
+Do
+allow this access for now by executing:
+# grep sshd /var/log/audit/audit.log | audit2allow -M mypol
+# semodule -i mypol.pp
+</code></pre>
+
+<p>Not really helpful, so I dug around the web and found <a href="http://serverfault.com/questions/50573/selinux-preventing-passwordless-ssh-login">this post on ServerFault</a>. It turns out that the problem is that I created the Jenkins user&rsquo;s home directory by hand (I had to, it was <code>/var/jenkins</code>, which <code>adduser</code> wouldn&rsquo;t create), so SELinux didn&rsquo;t know it was a home directory.</p>
+
+<p>To fix this, I added the following lines to the end of <code>/etc/selinux/targeted/contexts/files/file_contexts.homedirs</code>:</p>
+
+<pre><code>/var/jenkins/.+ unconfined_u:object_r:user_home_t:s0
+/var/jenkins/\.ssh(/.*)?      system_u:object_r:ssh_home_t:s0
+</code></pre>
+
+<p>and then did <code>sudo restorecon -R -v /var/jenkins</code>, and that fixed the problem.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/06/12/Node.js/">Node.js</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-12T16:10:00-05:00" pubdate data-updated="true">Jun 12<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Having my new <a href="/jacklund/post/beaglebone-black">BeagleBone Black</a> has made me look at the default programming environment for it, <a href="http://nodejs.org">Node.js</a>. Companies like <a href="http://www.linkedin.com">LinkedIn</a> are <a href="http://engineering.linkedin.com/nodejs/blazing-fast-nodejs-10-performance-tips-linkedin-mobile">using it</a> on the server side, which sort of surprises me. I can definitely see its uses in devices like the BeagleBone, since it has such a small footprint and minimal use of resources, but I was surprised at how many people are using it on the server side.</p>
+
+<p>It makes sense, though &ndash; as <a href="http://wiki.nginx.org/Main">Nginx</a> demonstrated, an event-driven model can eat a thread-based server&rsquo;s lunch, performance-wise, under certain circumstances. What are those circumstances, though?</p>
+
+<p>To begin with, your application would have to be overwhelmingly I/O-bound; anything that does a lot of CPU operations would gain no real benefit from the event-driven model. So, for example, an application which receives requests and stores data in the database without a lot of processing would work really well here. Why? Because in a thread-based model, you would spawn a thread to handle the request, and that thread would be waiting, doing, basically, nothing while waiting for the database request to return. In the Node.js model, you would handle the incoming request, send off an asynchronous call for the database insert, registering a callback, and then handle the next event.</p>
+
+<p>However, if you were doing a lot of processing of the data, your event handler would be running longer than you would really like, and the other requests might get starved. You could get around this by offloading the processing to another service, so you would send off the request, and go about your business until the response came back, and you could respond to your client.</p>
+
+<p>This is all very interesting, and it would be even more interesting to do some performance comparisons of a &ldquo;traditional&rdquo; app written in something like Java vs. a Node.js app.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black/">Setting Up NTP on BeagleBone Black</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-10T11:50:00-05:00" pubdate data-updated="true">Jun 10<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>For some reason, they didn&rsquo;t seem to see the need to set up the time service on the BeagleBone Blacks by default. I tried using the instructions from <a href="http://derekmolloy.ie/automatically-setting-the-beaglebone-black-time-using-ntp/">this gentleman</a>, but I had to make some modifications.</p>
+
+<ol>
+<li>Install NTP</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>    <span class="nv">$ </span>opkg update <span class="o">&amp;&amp;</span> opkg install ntp
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Edit <code>/etc/ntp.conf</code>, adding <code>pool.ntp.org</code> as the server:</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='apache'><span class='line'>    <span class="c"># This is the most basic ntp configuration file</span>
+</span><span class='line'>    <span class="c"># The driftfile must remain in a place specific to this</span>
+</span><span class='line'>    <span class="c"># machine - it records the machine specific clock error</span>
+</span><span class='line'>    <span class="nb">driftfile</span> <span class="sx">/etc/ntp.drift</span>
+</span><span class='line'>    <span class="c"># This obtains a random server which will be close</span>
+</span><span class='line'>    <span class="c"># (in IP terms) to the machine.  Add other servers</span>
+</span><span class='line'>    <span class="c"># as required, or change this.</span>
+</span><span class='line'>    <span class="nb">server</span> pool.ntp.org
+</span><span class='line'>    <span class="c"># Using local hardware clock as fallback</span>
+</span><span class='line'>    <span class="c"># Disable this when using ntpd -q -g -x as ntpdate or it will sync to itself</span>
+</span><span class='line'>    <span class="nb">server</span> <span class="m">127.127.1.0</span>
+</span><span class='line'>    <span class="nb">fudge</span> <span class="m">127.127.1.0</span> stratum <span class="m">14</span>
+</span><span class='line'>    <span class="c"># Defining a default security setting</span>
+</span><span class='line'>    <span class="nb">restrict</span> default
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Set your local time:</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>    <span class="nv">$ </span><span class="nb">cd</span> /etc
+</span><span class='line'>    <span class="nv">$ </span>rm -f localtime
+</span><span class='line'>    <span class="nv">$ </span>ln -s ../usr/share/zoneinfo/America/Chicago localtime
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Edit <code>/etc/default/ntpdate</code>:</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='apache'><span class='line'>    <span class="c"># Configuration script used by ntpdate-sync script</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="err">NTPSERVERS=&quot;pool</span>.<span class="err">ntp</span>.<span class="err">org&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c"># Set to &quot;yes&quot; to write time to hardware clock on success</span>
+</span><span class='line'>    <span class="err">UPDATE_HWCLOCK=&quot;yes&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Now, reboot and see if the clock gets set correctly</li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/06/09/BeagleBone-Black/">BeagleBone Black</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-09T20:00:00-05:00" pubdate data-updated="true">Jun 9<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Got my two <a href="http://beagleboard.org/Products/BeagleBone%20Black">BeagleBone Blacks</a> from <a href="http://adafruit.com/">AdaFruit</a> on Friday. Really nice. I bought them without enclosures because, well, the enclosures were $20, and the BeagleBones themselves were only $45. The nice thing is, though, that they fit exactly into an Altoids tin, so I turned two into my enclosures. I used tin snips to cut holes for power and Ethernet, and lined them with electrical tape to insulate the board from the box. Here&rsquo;s what they ended up looking like:</p>
+
+<p><img src="https://dl.dropbox.com/s/bpgc7lc5azhazw5/altoids_closed.jpg" title="Closed" alt="" /></p>
+
+<p><img src="https://dl.dropbox.com/s/d87y38ydxqtcv2q/altoids_open.jpg" title="Open" alt="" /></p>
+
+<p><img src="https://dl.dropbox.com/s/7nocbp8nnb65pwn/altoids_working.jpg" title="Running" alt="" /></p>
+
+<p>By default, they run <a href="http://www.angstrom-distribution.org/">Ångström Linux</a>. The default programming environment for them is a variant of Javascript they call <a href="http://beagleboard.org/Support/BoneScript">&ldquo;Bonescript&rdquo;</a>, which runs via <a href="http://nodejs.org/">Node.js</a>. However, a kind soul had put together a Python library called <a href="https://github.com/alexanderhiam/PyBBIO">PyBBIO</a>, which I downloaded and tried to install. I kept getting the following warning, however:</p>
+
+<pre><code>Warning: you seem to have a BeagleBone image which only has drivers for the PWM1 module, PWM2A and PWM2B will not be available in PyBBIO.
+You should consider updating Angstrom!
+</code></pre>
+
+<p>I tried updating the OS using <a href="http://learn.adafruit.com/beaglebone-black-installing-operating-systems/overview">these instructions</a>, however it didn&rsquo;t make the problem go away. That&rsquo;s when I discovered that PyBBIO <a href="https://github.com/alexanderhiam/PyBBIO/issues/18">doesn&rsquo;t support the 3.8 kernel that comes with BB Blacks</a>, so it looks like I&rsquo;m stuck with Javascript for the moment.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/05/30/I-Hate-LaTeX/">I Hate LaTeX</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-30T11:30:00-05:00" pubdate data-updated="true">May 30<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>No, I really do. It&rsquo;s not hyperbole. I hate it.</p>
+
+<p>It&rsquo;s frickin&#8217; 2013, people. We should not have to deal with languages that look like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='latex'><span class='line'><span class="k">\renewcommand</span><span class="nb">{</span><span class="k">\href</span><span class="nb">}</span>[2]<span class="nb">{</span>#2<span class="k">\footnote</span><span class="nb">{</span><span class="k">\url</span><span class="nb">{</span>#1<span class="nb">}}}</span>
+</span><span class='line'><span class="s">$</span><span class="nb">endif</span><span class="s">$</span>
+</span><span class='line'><span class="s">$</span><span class="nb">if</span><span class="o">(</span><span class="nb">strikeout</span><span class="o">)</span><span class="s">$</span>
+</span><span class='line'><span class="k">\usepackage</span><span class="na">[normalem]</span><span class="nb">{</span>ulem<span class="nb">}</span>
+</span><span class='line'><span class="c">% avoid problems with \sout in headers with hyperref:</span>
+</span><span class='line'><span class="k">\pdfstringdefDisableCommands</span><span class="nb">{</span><span class="k">\renewcommand</span><span class="nb">{</span><span class="k">\sout</span><span class="nb">}{}}</span>
+</span><span class='line'><span class="s">$</span><span class="nb">endif</span><span class="s">$</span>
+</span><span class='line'><span class="k">\setlength</span><span class="nb">{</span><span class="k">\parindent</span><span class="nb">}{</span>0pt<span class="nb">}</span>
+</span><span class='line'><span class="k">\setlength</span><span class="nb">{</span><span class="k">\parskip</span><span class="nb">}{</span>6pt plus 2pt minus 1pt<span class="nb">}</span>
+</span><span class='line'><span class="k">\setlength</span><span class="nb">{</span><span class="k">\emergencystretch</span><span class="nb">}{</span>3em<span class="nb">}</span>  <span class="c">% prevent overfull lines</span>
+</span><span class='line'><span class="s">$</span><span class="nb">if</span><span class="o">(</span><span class="nb">numbersections</span><span class="o">)</span><span class="s">$</span>
+</span><span class='line'><span class="k">\setcounter</span><span class="nb">{</span>secnumdepth<span class="nb">}{</span>5<span class="nb">}</span>
+</span><span class='line'><span class="s">$</span><span class="nb">else</span><span class="s">$</span>
+</span><span class='line'><span class="k">\setcounter</span><span class="nb">{</span>secnumdepth<span class="nb">}{</span>0<span class="nb">}</span>
+</span><span class='line'><span class="s">$</span><span class="nb">endif</span><span class="s">$</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and parsers that give errors like this:</p>
+
+<pre><code>paragraph ended before Gin@iii was completed.
+</code></pre>
+
+<p>The reason I&rsquo;m even messing with this is that I want a way to convert <a href="http://daringfireball.net/projects/markdown/">markdown</a> to PDF. Should be easy, right?</p>
+
+<p>Guess again. Just about everything either converts from markdown to HTML, then to PDF, which renders pretty badly, or from markdown to LaTeX to PDF, which renders rather nicely. Except, in order to tweak it (like adding a logo to the title) you have to hack LaTeX. Ugh.</p>
+
+<p>One of the most flexible converters, <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>, which, don&rsquo;t get me wrong, is a very nice package, requires you to tweak a <code>default.latex</code> file to modify the default format, hence my problem: I just spent around an hour and a half just trying to get a frickin&#8217; logo on the cover page where I want it (there&rsquo;s a LaTeX package called &ldquo;titlepic&rdquo; which puts it where <em>it</em> wants, but if you want it elsewhere, you&rsquo;re SOL).</p>
+
+<p>Again, it&rsquo;s 2013 and document creation shouldn&rsquo;t be frickin&#8217; rocket science! The whole point of writing in markdown is that we don&rsquo;t want to have to mess with complex document formats. I should be able to take a markdown document, pass it into a converter, give it some options in a syntax that doesn&rsquo;t look like 80&rsquo;s-era gobbledygook, and get a decent-looking document out the other end.</p>
+
+<p><em>facepalm</em></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/05/20/Creating-RESTEasy-Project-with-Eclipse-and-Maven/">Creating RESTEasy Project With Eclipse and Maven</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-20T00:00:00-05:00" pubdate data-updated="true">May 20<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Handy safety tip: to create a RESTEasy-friendly Maven project in Eclipse, do the following:</p>
+
+<ol>
+<li>Create the project as a simple Maven project</li>
+<li>In the project Properties &ndash;> Project Facets, make the project faceted, and select &ldquo;Dynamic Web Module&rdquo; (you may get a NullPointerException, but it doesn&rsquo;t seem to matter). Under &ldquo;Further Configuration&hellip;&rdquo;, point the WebApp directory to be <code>src/main/webapp</code>, and have it create the <code>web.xml</code> file.</li>
+<li>Under &ldquo;Web Content Settings&rdquo;, set the Context root</li>
+<li>Under &ldquo;Deployment Assembly&rdquo;, select &ldquo;Add&hellip;&rdquo;, select &ldquo;Java Build Path Entries&rdquo;, and select &ldquo;Maven Dependencies&rdquo;. It should put them in <code>WEB-INF/lib</code>.</li>
+<li>Add the code and the dependencies to the <code>pom.xml</code>. Make sure to add the RESTEasy stuff to the <code>web.xml</code> file.</li>
+</ol>
+
+
+<p>You should be able to deploy it from Eclipse into Tomcat without any issues</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/05/12/TI-SensorTag/">TI SensorTag</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-12T19:20:00-05:00" pubdate data-updated="true">May 12<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I got my <a href="http://processors.wiki.ti.com/index.php/Bluetooth_SensorTag">TI Bluetooth SensorTag</a> Friday, and played with it some over the weekend. It&rsquo;s pretty nice. It&rsquo;s basically a small device with a bunch of embedded sensors on it &ndash; accelerometer, gyroscope, ambient temp, IR temp (see below), humidity, barometric pressure, and a couple of buttons on it. It&rsquo;s very small, and communicates over <a href="http://en.wikipedia.org/wiki/Bluetooth_low_energy">Bluetooth 4 LE</a>. You can download an iOS app for viewing the data, so my daughters and I played with it some. Pretty cool. There&rsquo;s a <a href="http://blog.makezine.com/2013/04/18/teardown-of-the-ti-sensortag">teardown of it</a> at MAKE magazine, and even a <a href="http://mike.saunby.net/2013/04/raspberry-pi-and-ti-cc2541-sensortag.html">Raspberry Pi</a> project to interface with it. W00t!!!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/3/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon/">Using a Raspberry Pi as an iBeacon</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/19/more-fun-with-beaglebone-black/">More Fun With BeagleBone Black</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/">btle.js 0.2.0 released</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/25/fun-with-beaglebone-black/">Fun with BeagleBone Black</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/12/node-dot-js-bit-operations/">Node.js Bit Operations</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 124.0%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 112.0%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 124.0%'>beaglebone</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 112.0%'>beaglebone-black</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 124.0%'>beaglebone_black</a>   <a href='/blog/categories/bluetooth' style='font-size: 124.0%'>bluetooth</a>   <a href='/blog/categories/bluetooth-le' style='font-size: 136.0%'>bluetooth_le</a>   <a href='/blog/categories/bluez' style='font-size: 124.0%'>bluez</a>   <a href='/blog/categories/bonescript' style='font-size: 112.0%'>bonescript</a>   <a href='/blog/categories/bonjour' style='font-size: 112.0%'>bonjour</a>   <a href='/blog/categories/btle-js' style='font-size: 112.0%'>btle.js</a>   <a href='/blog/categories/c-' style='font-size: 124.0%'>c++</a>   <a href='/blog/categories/cobertura' style='font-size: 112.0%'>cobertura</a>   <a href='/blog/categories/documents' style='font-size: 112.0%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 148.0%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 112.0%'>eskrima</a>   <a href='/blog/categories/gatt' style='font-size: 124.0%'>gatt</a>   <a href='/blog/categories/git' style='font-size: 124.0%'>git</a>   <a href='/blog/categories/github' style='font-size: 112.0%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 112.0%'>hornetq</a>   <a href='/blog/categories/ibeacon' style='font-size: 112.0%'>iBeacon</a>   <a href='/blog/categories/idea' style='font-size: 112.0%'>idea</a>   <a href='/blog/categories/java' style='font-size: 124.0%'>java</a>   <a href='/blog/categories/jboss' style='font-size: 112.0%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 112.0%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 112.0%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 112.0%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 112.0%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 112.0%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 112.0%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 160.0%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 112.0%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 112.0%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 124.0%'>maven</a>   <a href='/blog/categories/mqtt' style='font-size: 112.0%'>mqtt</a>   <a href='/blog/categories/node-js' style='font-size: 160.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 112.0%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 112.0%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 112.0%'>programming</a>   <a href='/blog/categories/python' style='font-size: 112.0%'>python</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 124.0%'>raspberry-pi</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 112.0%'>raspberry_pi</a>   <a href='/blog/categories/rest' style='font-size: 112.0%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 112.0%'>resteasy</a>   <a href='/blog/categories/sbt' style='font-size: 124.0%'>sbt</a>   <a href='/blog/categories/scala' style='font-size: 124.0%'>scala</a>   <a href='/blog/categories/scalability' style='font-size: 112.0%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 112.0%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 112.0%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 136.0%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 112.0%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 112.0%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 112.0%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 112.0%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 124.0%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 112.0%'>windows</a>   <a href='/blog/categories/zeroconf' style='font-size: 112.0%'>zeroconf</a>   <a href='/blog/categories/zigbee' style='font-size: 112.0%'>zigbee</a>   <a href='/blog/categories/zookeeper' style='font-size: 112.0%'>zookeeper</a>   </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/jacklund">@jacklund</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jacklund',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+<section>
+	<h1>My PGP Key</h1>
+	<ul>
+		<li><a href="http://pgp.mit.edu:11371/pks/lookup?op=vindex&search=0x755E427235B39D61">From the MIT Keyserver</a></li>
+		<li><a href="/about/pgp.txt">Text file</a></li>
+	</ul>
+</section><section>
+  <h1>Other Places To Find Me</h1>
+  <ul>
+    <li><a href="https://geekli.st/jacklund">Geeklist</a></li>
+    <li><a href="http://www.pandora.com/profile/jackl0">Pandora</a></li>
+    <li><a href="http://www.linkedin.com/in/jacklund">LinkedIn</a></li>
+    <li><a href="https://plus.google.com/105150092995925691816/about">Google+</a></li>
+    <li><a href="https://alpha.app.net/jacklund">App.net</a></li>
+    <li><a href="https://www.facebook.com/jack.lund">Facebook</a></li>
+    <li><a href="https://jacklund.trovebox.com/">Trovebox</a></li>
+    <li><a href="http://jacklund.tumblr.com/">Tumblr</a></li>
+    <li><a href="http://pinterest.com/jacklund/">Pinterest</a></li>
+    <li><a href="http://www.scribd.com/jack_lund">Scribd</a></li>
+    <li><a href="http://www.shelfari.com/jacklund">Shelfari</a></li>
+    <li><a href="http://www.librarything.com/home/jacklund">LibraryThing</a></li>
+  </ul>
+</section>
+<section>
+  <h1>Share</h1>
+  <ul>
+    <li><a href="javascript:document.getElementsByTagName('body')[0].appendChild(document.createElement('script')).setAttribute('src','//geekli.st/javascript/bookmarklet/bookmarklet.js')"><img src="//geekli.st/images/assets/GeekIt_wFace.png"></a></li>
+    <li>
+      <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+      <g:plusone annotation="none"></g:plusone>
+    </li>
+  </ul>
+</section>
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Jack Lund -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span> - 
+  <span class="credit">Layout by <a href="https://github.com/amelandri/darkstripes">DarkStripes</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'geekheads';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
