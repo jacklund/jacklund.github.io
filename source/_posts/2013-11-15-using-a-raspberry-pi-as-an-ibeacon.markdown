@@ -10,3 +10,4 @@ There's an excellent [blog post by by James Nebeker and David G. Young](http://d
 
 You'll need to install [BlueZ](http://www.bluez.org/) as well for this to work. Once you get it all installed and working you can use one of the mobile iBeacon apps, such as [iBeacon Locate](https://itunes.apple.com/us/app/ibeacon-locate/id738709014?ls=1&mt=8). Very fun to play with, and a good way to be able to develop mobile apps to access iBeacons without having to wait for them to come out.
 
+Also, it's just fun to play with.
