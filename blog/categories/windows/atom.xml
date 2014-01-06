@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: windows | Geekheads]]></title>
-  <link href="http://www.geekheads.net/blog/categories/windows/atom.xml" rel="self"/>
-  <link href="http://www.geekheads.net/"/>
-  <updated>2013-11-15T16:38:20-06:00</updated>
-  <id>http://www.geekheads.net/</id>
+  <link href="http://jacklund.github.io/blog/categories/windows/atom.xml" rel="self"/>
+  <link href="http://jacklund.github.io/"/>
+  <updated>2014-01-05T21:46:56-06:00</updated>
+  <id>http://jacklund.github.io/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Getting Jenkins on Windows Working with Git]]></title>
-    <link href="http://www.geekheads.net/blog/2013/05/06/Getting-Jenkins-on-Windows-Working-with-Git/"/>
+    <link href="http://jacklund.github.io/blog/2013/05/06/Getting-Jenkins-on-Windows-Working-with-Git/"/>
     <updated>2013-05-06T20:46:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/05/06/Getting-Jenkins-on-Windows-Working-with-Git</id>
+    <id>http://jacklund.github.io/blog/2013/05/06/Getting-Jenkins-on-Windows-Working-with-Git</id>
     <content type="html"><![CDATA[<p>We&rsquo;re transitioning, as a company, from Subversion to Git, which is a Good Thing, but has its complications. One of them was getting <a href="http://jenkins-ci.org/">Jenkins</a>, which we use for <a href="http://en.wikipedia.org/wiki/Continuous_integration">continuous integration</a>, to work with our Git repositories.</p>
 
 <p>I had started out by thinking that I would have to create a user in our repository provider (we&rsquo;re using <a href="http://bitbucket.org">BitBucket</a>) which would have read permisisons to our repositories, a &ldquo;jenkins&rdquo; user. Turns out its not the case. All you need to do for read-only access is to generate SSH keys that you register with the repository, and which Jenkins uses to clone the repository.</p>

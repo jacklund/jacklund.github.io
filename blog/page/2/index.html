@@ -9,7 +9,7 @@
   <meta name="author" content="Jack Lund">
 
   
-  <meta name="description" content="I had this idea for doing a Scala project integrating WebSockets with Kafka, so I spent a good bit of today trying out different configurations for &hellip;">
+  <meta name="description" content="So, I&rsquo;ve been playing around with Scala, and, while I&rsquo;m quite impressed with the language syntax, it&rsquo;s a real pain-in-the-ass to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.geekheads.net/blog/page/2/">
+  <link rel="canonical" href="http://jacklund.github.io/blog/page/2/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -58,7 +58,7 @@
   
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:www.geekheads.net" />
+    <input type="hidden" name="q" value="site:jacklund.github.io" />
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -74,6 +74,56 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/06/25/Scala-Is-Disappointing/">Scala Is Disappointing</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-25T00:15:00-05:00" pubdate data-updated="true">Jun 25<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So, I&rsquo;ve been playing around with Scala, and, while I&rsquo;m quite impressed with the language syntax, it&rsquo;s a real pain-in-the-ass to deal with. To begin with, the various versions (2.7, 2.8, 2.9., 2.10) are <a href="http://lift.la/scalas-version-fragility-make-the-enterprise">binary incompatible</a>, which is really annoying. I understand that the language is still in development, but you would think they&rsquo;d have the core of the language all worked out by now.</p>
+
+<p>I understand the <a href="http://suereth.blogspot.com/2011/12/scala-fresh-is-alive.html">reasons behind it</a>: they&rsquo;re still making changes to the base traits which causes all the objects to change. But, really, this is one of those things that every language (well, every language with a base class or interface) goes through. These are the things you go through, however, when you&rsquo;re doing the pre-1.0 releases of the language, not 2.x; at most, you make these changes when you transition between major revisions &ndash; from 2.x to 3.0, for instance &ndash; <em>not</em> between minor revisions.</p>
+
+<p>What concerns me with this, besides the PIA factor, is that a) the language developers don&rsquo;t seem to think this is a problem, and b) that it indicates a tendency to want to &ldquo;fiddle&rdquo; with the language. I understand the desire to &ldquo;fiddle&rdquo;, it&rsquo;s one of those things that every software developer goes through, the desire to &ldquo;tweak it just a little bit more&rdquo; after it&rsquo;s released. It&rsquo;s also one of those things that mature software developers grow out of. &ldquo;The perfect is the enemy of the good&rdquo;.</p>
+
+<p>They don&rsquo;t seem to realize that this is going to make it <em>really</em> hard for it to be taken seriously as a general-purpose language. When you&rsquo;re trying to make a business case for using a new language, one of the things that you have to demonstrate is that the language is mature enough to not change out from under you. Scala is changing constantly, and the Scala developers seem to think this is a virtue, rather than a problem.</p>
+
+<p>Why is this a problem? Well, the fact that you have Scala libraries having to label themselves with the version of Scala they&rsquo;re compiled against is an immediate indication. If I&rsquo;m trying to do a project that&rsquo;s dependent on libraries, I now have to make absolutely sure that there is some version of Scala that they&rsquo;re all compatible with, and then use that version for my project, rather than using the version based on the feature set I need. What&rsquo;s more, if there is no overlap &ndash; if one of my dependencies is only compatible with, say, 2.9, and another only builds on 2.7, then I&rsquo;m hosed. I either have to try to build one or the other on a different version of the compiler, which may or may not work, or use different libraries.</p>
+
+<p>The other bit of craziness is the Eclipse Scala plugin can&rsquo;t change versions, and, you can&rsquo;t have more than one version running at a time. Even more fun: the only Scala plugins for Eclipse Juno are for 2.9 and 2.10 &ndash; if you have to use 2.8, you&rsquo;re either going to have to use Indigo, or cross-compile to a newer version of Scala.</p>
+
+<p>All in all, I&rsquo;d have to say that, as much as I like the idea of Scala, I can&rsquo;t see using it for anything significant until it becomes more stable.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -640,44 +690,6 @@ You should consider updating Angstrom!
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/05/12/TI-SensorTag/">TI SensorTag</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-12T19:20:00-05:00" pubdate data-updated="true">May 12<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I got my <a href="http://processors.wiki.ti.com/index.php/Bluetooth_SensorTag">TI Bluetooth SensorTag</a> Friday, and played with it some over the weekend. It&rsquo;s pretty nice. It&rsquo;s basically a small device with a bunch of embedded sensors on it &ndash; accelerometer, gyroscope, ambient temp, IR temp (see below), humidity, barometric pressure, and a couple of buttons on it. It&rsquo;s very small, and communicates over <a href="http://en.wikipedia.org/wiki/Bluetooth_low_energy">Bluetooth 4 LE</a>. You can download an iOS app for viewing the data, so my daughters and I played with it some. Pretty cool. There&rsquo;s a <a href="http://blog.makezine.com/2013/04/18/teardown-of-the-ti-sensortag">teardown of it</a> at MAKE magazine, and even a <a href="http://mike.saunby.net/2013/04/raspberry-pi-and-ti-cc2541-sensortag.html">Raspberry Pi</a> project to interface with it. W00t!!!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -695,6 +707,10 @@ You should consider updating Angstrom!
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/01/05/inheritance-in-functional-languages/">Inheritance in Functional Languages</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon/">Using a Raspberry Pi as an iBeacon</a>
       </li>
     
@@ -710,15 +726,11 @@ You should consider updating Angstrom!
         <a href="/blog/2013/09/25/fun-with-beaglebone-black/">Fun with BeagleBone Black</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2013/09/12/node-dot-js-bit-operations/">Node.js Bit Operations</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 124.0%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 112.0%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 124.0%'>beaglebone</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 112.0%'>beaglebone-black</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 124.0%'>beaglebone_black</a>   <a href='/blog/categories/bluetooth' style='font-size: 124.0%'>bluetooth</a>   <a href='/blog/categories/bluetooth-le' style='font-size: 136.0%'>bluetooth_le</a>   <a href='/blog/categories/bluez' style='font-size: 124.0%'>bluez</a>   <a href='/blog/categories/bonescript' style='font-size: 112.0%'>bonescript</a>   <a href='/blog/categories/bonjour' style='font-size: 112.0%'>bonjour</a>   <a href='/blog/categories/btle-js' style='font-size: 112.0%'>btle.js</a>   <a href='/blog/categories/c-' style='font-size: 124.0%'>c++</a>   <a href='/blog/categories/cobertura' style='font-size: 112.0%'>cobertura</a>   <a href='/blog/categories/documents' style='font-size: 112.0%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 148.0%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 112.0%'>eskrima</a>   <a href='/blog/categories/gatt' style='font-size: 124.0%'>gatt</a>   <a href='/blog/categories/git' style='font-size: 124.0%'>git</a>   <a href='/blog/categories/github' style='font-size: 112.0%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 112.0%'>hornetq</a>   <a href='/blog/categories/ibeacon' style='font-size: 112.0%'>iBeacon</a>   <a href='/blog/categories/idea' style='font-size: 112.0%'>idea</a>   <a href='/blog/categories/java' style='font-size: 124.0%'>java</a>   <a href='/blog/categories/jboss' style='font-size: 112.0%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 112.0%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 112.0%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 112.0%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 112.0%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 112.0%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 112.0%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 160.0%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 112.0%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 112.0%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 124.0%'>maven</a>   <a href='/blog/categories/mqtt' style='font-size: 112.0%'>mqtt</a>   <a href='/blog/categories/node-js' style='font-size: 160.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 112.0%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 112.0%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 112.0%'>programming</a>   <a href='/blog/categories/python' style='font-size: 112.0%'>python</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 124.0%'>raspberry-pi</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 112.0%'>raspberry_pi</a>   <a href='/blog/categories/rest' style='font-size: 112.0%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 112.0%'>resteasy</a>   <a href='/blog/categories/sbt' style='font-size: 124.0%'>sbt</a>   <a href='/blog/categories/scala' style='font-size: 124.0%'>scala</a>   <a href='/blog/categories/scalability' style='font-size: 112.0%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 112.0%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 112.0%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 136.0%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 112.0%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 112.0%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 112.0%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 112.0%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 124.0%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 112.0%'>windows</a>   <a href='/blog/categories/zeroconf' style='font-size: 112.0%'>zeroconf</a>   <a href='/blog/categories/zigbee' style='font-size: 112.0%'>zigbee</a>   <a href='/blog/categories/zookeeper' style='font-size: 112.0%'>zookeeper</a>   </ul>
+    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 120.0%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 110.0%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 120.0%'>beaglebone</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 110.0%'>beaglebone-black</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 120.0%'>beaglebone_black</a>   <a href='/blog/categories/bluetooth' style='font-size: 120.0%'>bluetooth</a>   <a href='/blog/categories/bluetooth-le' style='font-size: 130.0%'>bluetooth_le</a>   <a href='/blog/categories/bluez' style='font-size: 120.0%'>bluez</a>   <a href='/blog/categories/bonescript' style='font-size: 110.0%'>bonescript</a>   <a href='/blog/categories/bonjour' style='font-size: 110.0%'>bonjour</a>   <a href='/blog/categories/btle-js' style='font-size: 110.0%'>btle.js</a>   <a href='/blog/categories/c-' style='font-size: 120.0%'>c++</a>   <a href='/blog/categories/cobertura' style='font-size: 110.0%'>cobertura</a>   <a href='/blog/categories/documents' style='font-size: 110.0%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 140.0%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 110.0%'>eskrima</a>   <a href='/blog/categories/functional' style='font-size: 110.0%'>functional</a>   <a href='/blog/categories/gatt' style='font-size: 120.0%'>gatt</a>   <a href='/blog/categories/git' style='font-size: 120.0%'>git</a>   <a href='/blog/categories/github' style='font-size: 110.0%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 110.0%'>hornetq</a>   <a href='/blog/categories/ibeacon' style='font-size: 110.0%'>iBeacon</a>   <a href='/blog/categories/idea' style='font-size: 110.0%'>idea</a>   <a href='/blog/categories/inheritance' style='font-size: 110.0%'>inheritance</a>   <a href='/blog/categories/java' style='font-size: 120.0%'>java</a>   <a href='/blog/categories/javascript' style='font-size: 110.0%'>javascript</a>   <a href='/blog/categories/jboss' style='font-size: 110.0%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 110.0%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 110.0%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 110.0%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 110.0%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 110.0%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 110.0%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 150.0%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 110.0%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 110.0%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 120.0%'>maven</a>   <a href='/blog/categories/mqtt' style='font-size: 110.0%'>mqtt</a>   <a href='/blog/categories/node-js' style='font-size: 160.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 110.0%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 110.0%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 110.0%'>programming</a>   <a href='/blog/categories/python' style='font-size: 110.0%'>python</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 120.0%'>raspberry-pi</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 110.0%'>raspberry_pi</a>   <a href='/blog/categories/rest' style='font-size: 110.0%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 110.0%'>resteasy</a>   <a href='/blog/categories/sbt' style='font-size: 120.0%'>sbt</a>   <a href='/blog/categories/scala' style='font-size: 120.0%'>scala</a>   <a href='/blog/categories/scalability' style='font-size: 110.0%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 110.0%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 110.0%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 130.0%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 110.0%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 110.0%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 110.0%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 110.0%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 120.0%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 110.0%'>windows</a>   <a href='/blog/categories/zeroconf' style='font-size: 110.0%'>zeroconf</a>   <a href='/blog/categories/zigbee' style='font-size: 110.0%'>zigbee</a>   <a href='/blog/categories/zookeeper' style='font-size: 110.0%'>zookeeper</a>   </ul>
 </section>
 
 <section>
@@ -793,7 +805,7 @@ You should consider updating Angstrom!
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Jack Lund -
+  Copyright &copy; 2014 - Jack Lund -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span> - 
   <span class="credit">Layout by <a href="https://github.com/amelandri/darkstripes">DarkStripes</a></span>
 </p>

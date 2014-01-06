@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: idea | Geekheads]]></title>
-  <link href="http://www.geekheads.net/blog/categories/idea/atom.xml" rel="self"/>
-  <link href="http://www.geekheads.net/"/>
-  <updated>2013-11-15T16:38:20-06:00</updated>
-  <id>http://www.geekheads.net/</id>
+  <link href="http://jacklund.github.io/blog/categories/idea/atom.xml" rel="self"/>
+  <link href="http://jacklund.github.io/"/>
+  <updated>2014-01-05T21:46:56-06:00</updated>
+  <id>http://jacklund.github.io/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Scala Development Setup]]></title>
-    <link href="http://www.geekheads.net/blog/2013/06/21/Scala-Development-Setup/"/>
+    <link href="http://jacklund.github.io/blog/2013/06/21/Scala-Development-Setup/"/>
     <updated>2013-06-21T21:56:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/06/21/Scala-Development-Setup</id>
+    <id>http://jacklund.github.io/blog/2013/06/21/Scala-Development-Setup</id>
     <content type="html"><![CDATA[<p>I had this idea for doing a Scala project integrating WebSockets with <a href="http://kafka.apache.org/">Kafka</a>, so I spent a good bit of today trying out different configurations for doing Scala development. My first pass was to try <a href="http://www.jetbrains.com/idea/features/scala.html">IntellijIDEA</a> from JetBrains. I really liked their <a href="http://www.jetbrains.com/ruby/">RubyMine</a> IDE for Ruby, and people were raving about IDEA for Scala development, so I gave it a go.</p>
 
 <p>It&rsquo;s actually not a bad IDE. I had some trouble navigating, but most of that was because I was so used to Eclipse. However, the big thing that was lacking was good <a href="http://www.scala-sbt.org/">sbt</a> support. Whatever project I was going to use sbt, since that seems to be the builder of choice, and the integration with IDEA seemed to be, well, not really good. You can use sbt to generate the IDEA project, but there didn&rsquo;t seem to be a good way to have IDEA use the dependencies defined in the sbt build file for the code completion, which seemed to me to be a big problem.</p>

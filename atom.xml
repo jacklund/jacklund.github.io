@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Geekheads]]></title>
-  <link href="http://www.geekheads.net/atom.xml" rel="self"/>
-  <link href="http://www.geekheads.net/"/>
-  <updated>2013-11-15T16:38:20-06:00</updated>
-  <id>http://www.geekheads.net/</id>
+  <link href="http://jacklund.github.io/atom.xml" rel="self"/>
+  <link href="http://jacklund.github.io/"/>
+  <updated>2014-01-05T21:46:56-06:00</updated>
+  <id>http://jacklund.github.io/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
     
@@ -14,10 +14,79 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Inheritance in Functional Languages]]></title>
+    <link href="http://jacklund.github.io/blog/2014/01/05/inheritance-in-functional-languages/"/>
+    <updated>2014-01-05T11:31:00-06:00</updated>
+    <id>http://jacklund.github.io/blog/2014/01/05/inheritance-in-functional-languages</id>
+    <content type="html"><![CDATA[<p>There&rsquo;s a tendency amongst proponents of <a href="http://en.wikipedia.org/wiki/Functional_programming">functional</a> languages, like Javascript, to consider inheritance an anachronism of older (and, by implication, worse) OO languages and OO design. One example is this <a href="http://book.mixu.net/node/ch6.html">discussion</a> by <a href="http://mixu.net">Mikito Takada</a>. This is what he says:</p>
+
+<blockquote><p>I think classical inheritance is in most cases an antipattern in Javascript. Why?</p>
+
+<p>There are two reasons to have inheritance:</p>
+
+<ol>
+<li>to support polymorphism in languages that do not have dynamic typing, like C++. The class acts as an interface specification for a type. This provides the benefit of being able to replace one class with another (such as a function that operates on a Shape that can accept subclasses like Circle). However, Javascript doesn&rsquo;t require you to do this: the only thing that matters is that a method or property can be looked up when called/accessed.</li>
+<li>to reuse code. Here the theory is that you can reuse code by having a hierarchy of items that go from an abstract implementation to a more specific one, and you can thus define multiple subclasses in terms of a parent class. This is sometimes useful, but not that often.</li>
+</ol>
+
+
+<p>The disadvantages of inheritance are:</p>
+
+<ol>
+<li>Nonstandard, hidden implementations of classical inheritance. Javascript doesn&rsquo;t have a builtin way to define class inheritance, so people invent their own ones. These implementations are similar to each other, but differ in subtle ways.</li>
+<li>Deep inheritance trees. Subclasses are aware of the implementation details of their superclasses, which means that you need to understand both. What you see in the code is not what you get: instead, parts of an implementation are defined in the subclass and the rest are defined piecemeal in the inheritance tree. The implementation is thus sprinkled over multiple files, and you have to mentally recombine those to understand the actual behavior.</li>
+</ol>
+
+
+<p>I favor composition over inheritance:</p>
+
+<ul>
+<li>Composition &ndash; Functionality of an object is made up of an aggregate of different classes by containing instances of other objects.</li>
+<li>Inheritance &ndash; Functionality of an object is made up of it&rsquo;s own functionality plus functionality from its parent classes.</li>
+</ul>
+</blockquote>
+
+<p>Now, I don&rsquo;t disagree with him in principle here &ndash; inheritance <em>can</em> be an anti-pattern when overused, which it is, even in the world of OO languages (I&rsquo;ve even seen it implemented, and then overused, in C, which, well, you&rsquo;ve really got to see to believe). However, that being said, I think what concerns me about this quote in particular, and the corresponding attitude amongst those in the function-programming community in general, concerns a basic misunderstanding of what inheritance (&ldquo;classical&rdquo; or prototypical) is, and a further misunderstanding of one of the fundamental ideas behind software design.</p>
+
+<h2>What is Inheritance For?</h2>
+
+<p>To begin with, we need to distinguish clearly between interface inheritance and implementation inheritance, because they are very different things. Interface inheritance is about defining a contract for an interface &ndash; no sharing of implementation is involved at all. It&rsquo;s basically how you achieve both polymorphism and a well-defined interface in statically-typed languages. Since it doesn&rsquo;t share any code, talking about &ldquo;composition vs. inheritance&rdquo; or &ldquo;code reuse&rdquo; really has nothing to do with it. What most such discussions are really talking about is implementation inheritance.</p>
+
+<p>The question then becomes: what is implementation-type inheritance for? After all, it&rsquo;s fairly trivial to see that you can achieve the same thing with composition or, in languages that support it, mixins. Why have it at all? The answer has to do with one of the fundamental ideas behind the design of anything: communication.</p>
+
+<h2>Design is Communication</h2>
+
+<p>In his book <a href="http://en.wikipedia.org/wiki/The_Design_of_Everyday_Things"><em>The Design of Everyday Things</em></a> (which, IMHO, should be required reading for any software developer), Donald Norman gives an example of the design of a door, and what it communicates to those who want to use the door. If the door swings only one way, then placing a pull handle on the side that opens in and a push plate on the side that opens out communicates, almost at a subconscious level, what the person approaching the door needs to do in order to open the door.</p>
+
+<p>Similarly, the software we write should be communicating something about its use to the next developer who reads it. That developer, if we do our job right, should have an almost intuitive understanding of how to use or modify the code with very little effort. What does this have to do with inheritance? Glad you asked.</p>
+
+<p>On a superficial level, what inheritance does is communicate what classes belong to a particular group (the classical &ldquo;is-a&rdquo; test for inheritance). But, what inheritance <em>really</em> communicates, and what differentiates it from composition, is that it tells you what behavior is <em>required</em> for a class to be a particular thing. In other words, <em>inheritance communicates the required behavior for a class, whereas composition communicates optional behavior</em>.</p>
+
+<p>To see this, imagine that you have to write a custom implementation for some third-party framework which you&rsquo;ve never seen the code for before. It already has classes that have other implementations for the same sort of thing you&rsquo;re trying to accomplish, so you crack one of them open to see how they did it. You immediately notice that, in this one implementation, they&rsquo;re passing in a reference to another class and using it in their implementation. Would your immediate conclusion (before looking at anything else) be that you would need to also use that same class in your implementation, or would you think that it&rsquo;s probably just being used by this particular implementation? In other words, would you think this was required behavior for any class trying to implement this type of class, or would you think it was optional? What if you saw that it was being inherited instead of being composed?</p>
+
+<p>As another example (and, really, the one that brought this to my attention in the first place), I&rsquo;m attempting to write a <a href="">DAO</a> framework in Node.js for a set of applications my company is building. This framework would have different implementations depending on what underlying data store was being used. However, one of the things I wanted it to be able to do is to read from an in-memory cache, if one is provided, before going to the data store. This is behavior I wanted to be part of the framework and any DAO class within it. The question becomes, should I use inheritance or composition? In my opinion, using composition would be a mistake, because it would communicate that this is optional behavior that might not be used by some implementations, whereas I want it to be used by all. Hence, I would use inheritance.</p>
+
+<p>This sort of thing, this ability to communicate the functionality of code intuitively, is the difference, IMHO, between well-designed code (i.e., code that takes little or no effort to modify or augment) and badly-designed code (i.e. code that is a pain to modify, and that you have to read through extensively to use).</p>
+
+<h2>When Not To Use Inheritance</h2>
+
+<p>Mixu is very much right when he talks about the misuse of inheritance &ndash; people have been using it inappropriately for pretty much the entire time it&rsquo;s been available. One anti-pattern for inheritance is, of course, using it for code reuse between classes which have no real connection to each other. Another is to use it as a dumping ground for common behavior &ndash; this is typically seen when you have a base class that exists for valid reasons, but then lazy programmers use it to add common functionality which should be extracted into a composed or utility class. Those are all valid anti-patterns of inheritance use.</p>
+
+<p>However, the reverse case is also true &ndash; it is an anti-pattern to use composition where inheritance is called for. The &ldquo;code smell&rdquo; for inappropriate composition is when you see the same boilerplate code around the use of a particular composed class in a bunch of classes doing the same thing &ndash; a sure sign of using composition where inheritance is required.</p>
+
+<p>I am also concerned where he says that he uses inheritance, &ldquo;but not that often&rdquo;. That would imply, to me, that either he almost never writes polymorphic code, or if he does, the code almost never shares behavior. In my experience, polymorphic classes often <em>do</em> share behavior, at least at some level, and so for a developer to say he doesn&rsquo;t use inheritance very often implies to me that he might be either unconsciously writing a lot of boilerplate code, or making his code bend over backwards in order to avoid using the dreaded inheritance. Either way, I&rsquo;m sceptical.</p>
+
+<h2>Inheritance in Javascript</h2>
+
+<p>That being said, I think Mixu has a very good point about the design of Javascript inheritance &ndash; it sucks. It&rsquo;s shoddy, it invites, as he says, nonstandard implementations, and is error-prone. Even Node.js&#8217; solution &ndash; <code>util.inherits()</code> &ndash; is kludgey at best. It should have been made a keyword in the language so that, again, it&rsquo;s clear what&rsquo;s going on, rather than having to hunt around for certain coding structures which imply it. However, that&rsquo;s a problem with Javascript, not inheritance.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Using a Raspberry Pi as an iBeacon]]></title>
-    <link href="http://www.geekheads.net/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon/"/>
+    <link href="http://jacklund.github.io/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon/"/>
     <updated>2013-11-15T16:00:00-06:00</updated>
-    <id>http://www.geekheads.net/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon</id>
+    <id>http://jacklund.github.io/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon</id>
     <content type="html"><![CDATA[<p>There&rsquo;s an excellent <a href="http://developer.radiusnetworks.com/2013/10/09/how-to-make-an-ibeacon-out-of-a-raspberry-pi.html">blog post by by James Nebeker and David G. Young</a> about simulating an <a href="http://en.wikipedia.org/wiki/IBeacon">iBeacon</a> using a Raspberry Pi and a bluetooth dongle. Since I already had both, I thought I&rsquo;d give it a try. It worked really well, and I&rsquo;ve even put together the files necessary to do it <a href="https://github.com/jacklund/piBeacon">in my GitHub repository</a>.</p>
 
 <p>You&rsquo;ll need to install <a href="http://www.bluez.org/">BlueZ</a> as well for this to work. Once you get it all installed and working you can use one of the mobile iBeacon apps, such as <a href="https://itunes.apple.com/us/app/ibeacon-locate/id738709014?ls=1&amp;mt=8">iBeacon Locate</a>. Very fun to play with, and a good way to be able to develop mobile apps to access iBeacons without having to wait for them to come out.</p>
@@ -28,9 +97,9 @@
   
   <entry>
     <title type="html"><![CDATA[More Fun With BeagleBone Black]]></title>
-    <link href="http://www.geekheads.net/blog/2013/10/19/more-fun-with-beaglebone-black/"/>
+    <link href="http://jacklund.github.io/blog/2013/10/19/more-fun-with-beaglebone-black/"/>
     <updated>2013-10-19T21:10:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/10/19/more-fun-with-beaglebone-black</id>
+    <id>http://jacklund.github.io/blog/2013/10/19/more-fun-with-beaglebone-black</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve discovered that owning a BeagleBone Black (or, in my case, two) is kind of like owning one of those really, really nice
 cars that you buy but you can almost never drive because it spends so much time in the shop. It&rsquo;s a lovely piece of hardware, it
 really is, but the people who created it seem to have gone to great lengths to make sure that all you can do is sit back and admire
@@ -165,9 +234,9 @@ repeatedly, saying &ldquo;Bad Programmer! Bad!&rdquo; over and over, because it&
   
   <entry>
     <title type="html"><![CDATA[btle.js 0.2.0 released]]></title>
-    <link href="http://www.geekheads.net/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/"/>
+    <link href="http://jacklund.github.io/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/"/>
     <updated>2013-10-18T23:08:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/10/18/btle-dot-js-0-dot-2-0-released</id>
+    <id>http://jacklund.github.io/blog/2013/10/18/btle-dot-js-0-dot-2-0-released</id>
     <content type="html"><![CDATA[<p>I just (okay, a few days ago) released version 0.2.0 of <a href="https://github.com/jacklund/btle.js">btle.js</a> to
 <a href="https://npmjs.org/package/btle.js">npm</a>. This has a bunch of API changes &ndash; the <code>connect</code> method now gives you a
 <code>Device</code> object, instead of a <code>Connection</code>. All the ATT methods are now on the <code>Device</code> object, but, in addition, you can
@@ -180,9 +249,9 @@ characteristics, which return <code>Characteristics</code> objects.</p>
   
   <entry>
     <title type="html"><![CDATA[Fun with BeagleBone Black]]></title>
-    <link href="http://www.geekheads.net/blog/2013/09/25/fun-with-beaglebone-black/"/>
+    <link href="http://jacklund.github.io/blog/2013/09/25/fun-with-beaglebone-black/"/>
     <updated>2013-09-25T11:02:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/09/25/fun-with-beaglebone-black</id>
+    <id>http://jacklund.github.io/blog/2013/09/25/fun-with-beaglebone-black</id>
     <content type="html"><![CDATA[<p>So, I&rsquo;ve decided to try to play with <a href="http://en.wikipedia.org/wiki/ZigBee">ZigBee</a>, and since I have a couple of BeagleBone Blacks hanging around doing nothing, I thought I&rsquo;d try setting it up on them.</p>
 
 <p>First thing I came across was that the BBB&rsquo;s seem to have issues with <a href="https://groups.google.com/forum/#!topic/beagleboard/4e2T6XH-fNM">accessing their UARTS</a>. Even via bonescript, there seem to <a href="http://stackoverflow.com/questions/17497060/node-js-script-not-setting-beaglebone-black-mux">be issues</a>.</p>
@@ -201,9 +270,9 @@ characteristics, which return <code>Characteristics</code> objects.</p>
   
   <entry>
     <title type="html"><![CDATA[Node.js Bit Operations]]></title>
-    <link href="http://www.geekheads.net/blog/2013/09/12/node-dot-js-bit-operations/"/>
+    <link href="http://jacklund.github.io/blog/2013/09/12/node-dot-js-bit-operations/"/>
     <updated>2013-09-12T09:07:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/09/12/node-dot-js-bit-operations</id>
+    <id>http://jacklund.github.io/blog/2013/09/12/node-dot-js-bit-operations</id>
     <content type="html"><![CDATA[<p>I was working on trying to get the barometer readings from my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?DCMP=sensortag&amp;HQS=sensortag-bn">TI SensorTag</a> using Node.js when I came across this problem. See, the <a href="http://processors.wiki.ti.com/index.php/SensorTag_User_Guide#Barometric_Pressure_Sensor_2">user&rsquo;s guide</a> has two code examples for the algorithm for the pressure &ndash; one in C, and one in Java. The one in C uses primarily bit shift operations, whereas the one in Java uses <code>Math.pow()</code> to do the same thing. Naturally, I tended towards the bit shift operations since it makes the code a bit clearer as to what it&rsquo;s doing (ultimately, from a performance perspective, it doesn&rsquo;t matter since <code>Math.pow(2, x)</code> probably ultimately resolves to bit shifts anyway).</p>
 
 <p>However, when I did this, I kept on getting pressure values that were all over the place. When I broke it down, it looked like the &ldquo;offset&rdquo; and &ldquo;scale&rdquo; factors, which rely heavily on bit shifts, were bouncing all over the place.</p>
@@ -232,9 +301,9 @@ characteristics, which return <code>Characteristics</code> objects.</p>
   
   <entry>
     <title type="html"><![CDATA[Published Bluetooth LE Module]]></title>
-    <link href="http://www.geekheads.net/blog/2013/09/10/published-bluetooth-le-module/"/>
+    <link href="http://jacklund.github.io/blog/2013/09/10/published-bluetooth-le-module/"/>
     <updated>2013-09-10T22:31:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/09/10/published-bluetooth-le-module</id>
+    <id>http://jacklund.github.io/blog/2013/09/10/published-bluetooth-le-module</id>
     <content type="html"><![CDATA[<p>Well, I published my Node.js module for Bluetooth LE, <a href="https://github.com/jacklund/btle.js">btle.js</a> (pronounced &ldquo;Beetle Juice&rdquo;) to <a href="https://npmjs.org/package/btle.js">npm</a>. Even though it&rsquo;s labeled version 0.1.0, it&rsquo;s got most of the functionality that&rsquo;s necessary for Bluetooth LE &ndash; reading attributes, writing commands and requests, and listening for notifications. I&rsquo;m hoping to add more functionality over the next few weeks/months.</p>
 
 <p>The main reason I was doing this was to get my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?DCMP=sensortag&amp;HQS=sensortag-bn">TI SensorTag</a> working with my Raspberry Pi and Bluetooth LE dongle, which it now does. I&rsquo;ve even got the beginnings of a Node.js module for the sensortag, <a href="https://github.com/jacklund/sensortag.js">sensortag.js</a>, which is built on top of btle.js. I&rsquo;ve got everything working except the Barometric Pressure sensor readings and the Gyroscope readings.</p>
@@ -247,9 +316,9 @@ characteristics, which return <code>Characteristics</code> objects.</p>
   
   <entry>
     <title type="html"><![CDATA[What to do?]]></title>
-    <link href="http://www.geekheads.net/blog/2013/08/30/what-to-do/"/>
+    <link href="http://jacklund.github.io/blog/2013/08/30/what-to-do/"/>
     <updated>2013-08-30T22:38:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/08/30/what-to-do</id>
+    <id>http://jacklund.github.io/blog/2013/08/30/what-to-do</id>
     <content type="html"><![CDATA[<p>So, I haven&rsquo;t posted in almost 2 months. Part of that is the fact that the last two months have been very busy &ndash; work is crazy busy trying to do all the work and get more, and I&rsquo;ve been busy with the family doing end-of-summer stuff. However, part of the problem is, basically, organization.</p>
 
 <p>I&rsquo;m, basically, a fairly organized guy, in that I manage to prioritize things and get the high-priority things done. However, I&rsquo;m also not particularly big on multi-tasking, so that, quite often, my high-priority tasks get all the attention, and all the little, lower-priority things (like this blog) get very little.</p>
@@ -279,9 +348,9 @@ characteristics, which return <code>Characteristics</code> objects.</p>
   
   <entry>
     <title type="html"><![CDATA[Got Them Bluetooth LE Bluez]]></title>
-    <link href="http://www.geekheads.net/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez/"/>
+    <link href="http://jacklund.github.io/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez/"/>
     <updated>2013-07-01T17:15:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez</id>
+    <id>http://jacklund.github.io/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez</id>
     <content type="html"><![CDATA[<p>I&rsquo;m trying to get my Raspberry Pi to talk to my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?INTC=SensorTag&amp;HQS=sensortag">TI Sensortag</a> over Bluetooth LE, using an <a href="http://www.iogear.com/product/GBU521/">IOGear Bluetooth 4.0 USB adapter</a>. I chose that adapter because it is supported by Linux, and so far it works quite nicely with the Pi.</p>
 
 <p>To start with, I&rsquo;d like to write something to pull the sensor data &ndash; temperature, humidity, pressure, etc &ndash; from the SensorTag and publish it over <a href="http://mqtt.org/">MQTT</a>. However, reading the data seems to be problematic.</p>
@@ -312,9 +381,9 @@ characteristics, which return <code>Characteristics</code> objects.</p>
   
   <entry>
     <title type="html"><![CDATA[Zeroconf Rocks!]]></title>
-    <link href="http://www.geekheads.net/blog/2013/06/27/Zeroconf-Rocks/"/>
+    <link href="http://jacklund.github.io/blog/2013/06/27/Zeroconf-Rocks/"/>
     <updated>2013-06-27T22:27:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/06/27/Zeroconf-Rocks</id>
+    <id>http://jacklund.github.io/blog/2013/06/27/Zeroconf-Rocks</id>
     <content type="html"><![CDATA[<p>I have a lot of computers on my network now &ndash; my laptop and desktop, my wife&rsquo;s 3(!) computers, her iPad, two Linux servers and miscellaneous other devices, along with my Raspberry Pi and two BeagleBone Blacks, so managing all these was starting to be a pain. So, just on a hunch, I wanted to see if <a href="http://en.wikipedia.org/wiki/Zero-configuration_networking">Bonjour/Zeroconf/Avahi</a> could help. I did some investigation, and it turns out that you can access any machines that advertise on Zeroconf by <em>name</em>.local. Since I work predominantly on Macs, I was already pretty comfortable with the idea of dynamically finding service. When I brought up my Bonjour Browser application, however, I was surprised: My two BeagleBone Blacks were already advertising (the wrong IP address for my network, but still)!</p>
 
 <p>So, first step: set up the Raspberry Pi to do the same. Fortunately, the Internet came to the rescue, in the form of <a href="http://elinux.org/RPi_Advanced_Setup">this page</a> about setting up Zeroconf on the Pi. I just followed the instructions, and it worked.</p>
@@ -347,9 +416,9 @@ option subnet 255.255.255.0
   
   <entry>
     <title type="html"><![CDATA[Scala Is Disappointing]]></title>
-    <link href="http://www.geekheads.net/blog/2013/06/25/Scala-Is-Disappointing/"/>
+    <link href="http://jacklund.github.io/blog/2013/06/25/Scala-Is-Disappointing/"/>
     <updated>2013-06-25T00:15:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/06/25/Scala-Is-Disappointing</id>
+    <id>http://jacklund.github.io/blog/2013/06/25/Scala-Is-Disappointing</id>
     <content type="html"><![CDATA[<p>So, I&rsquo;ve been playing around with Scala, and, while I&rsquo;m quite impressed with the language syntax, it&rsquo;s a real pain-in-the-ass to deal with. To begin with, the various versions (2.7, 2.8, 2.9., 2.10) are <a href="http://lift.la/scalas-version-fragility-make-the-enterprise">binary incompatible</a>, which is really annoying. I understand that the language is still in development, but you would think they&rsquo;d have the core of the language all worked out by now.</p>
 
 <p>I understand the <a href="http://suereth.blogspot.com/2011/12/scala-fresh-is-alive.html">reasons behind it</a>: they&rsquo;re still making changes to the base traits which causes all the objects to change. But, really, this is one of those things that every language (well, every language with a base class or interface) goes through. These are the things you go through, however, when you&rsquo;re doing the pre-1.0 releases of the language, not 2.x; at most, you make these changes when you transition between major revisions &ndash; from 2.x to 3.0, for instance &ndash; <em>not</em> between minor revisions.</p>
@@ -368,9 +437,9 @@ option subnet 255.255.255.0
   
   <entry>
     <title type="html"><![CDATA[Scala Development Setup]]></title>
-    <link href="http://www.geekheads.net/blog/2013/06/21/Scala-Development-Setup/"/>
+    <link href="http://jacklund.github.io/blog/2013/06/21/Scala-Development-Setup/"/>
     <updated>2013-06-21T21:56:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/06/21/Scala-Development-Setup</id>
+    <id>http://jacklund.github.io/blog/2013/06/21/Scala-Development-Setup</id>
     <content type="html"><![CDATA[<p>I had this idea for doing a Scala project integrating WebSockets with <a href="http://kafka.apache.org/">Kafka</a>, so I spent a good bit of today trying out different configurations for doing Scala development. My first pass was to try <a href="http://www.jetbrains.com/idea/features/scala.html">IntellijIDEA</a> from JetBrains. I really liked their <a href="http://www.jetbrains.com/ruby/">RubyMine</a> IDE for Ruby, and people were raving about IDEA for Scala development, so I gave it a go.</p>
 
 <p>It&rsquo;s actually not a bad IDE. I had some trouble navigating, but most of that was because I was so used to Eclipse. However, the big thing that was lacking was good <a href="http://www.scala-sbt.org/">sbt</a> support. Whatever project I was going to use sbt, since that seems to be the builder of choice, and the integration with IDEA seemed to be, well, not really good. You can use sbt to generate the IDEA project, but there didn&rsquo;t seem to be a good way to have IDEA use the dependencies defined in the sbt build file for the code completion, which seemed to me to be a big problem.</p>
@@ -389,9 +458,9 @@ option subnet 255.255.255.0
   
   <entry>
     <title type="html"><![CDATA[Eclipse with Subversion 1.8 on OS X]]></title>
-    <link href="http://www.geekheads.net/blog/2013/06/18/eclipse-with-subversion-1-dot-8-on-os-x/"/>
+    <link href="http://jacklund.github.io/blog/2013/06/18/eclipse-with-subversion-1-dot-8-on-os-x/"/>
     <updated>2013-06-18T14:14:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/06/18/eclipse-with-subversion-1-dot-8-on-os-x</id>
+    <id>http://jacklund.github.io/blog/2013/06/18/eclipse-with-subversion-1-dot-8-on-os-x</id>
     <content type="html"><![CDATA[<p>I wasted a considerable amount of time following the instructions from <a href="http://subclipse.tigris.org/wiki/JavaHL">this page</a> on how to install Subclipse on OS X, trying to get MacPorts to install the right version of Subversion (Why subversion, you may ask? Because a customer is still using it, that&rsquo;s why&hellip;).</p>
 
 <p>It turns out that MacPorts doesn&rsquo;t even have the 1.8 version of Subversion &ndash; it&rsquo;s only got 1.7, which won&rsquo;t work with the version of Subclipse I&rsquo;m using. So, I had to go to <a href="http://www.wandisco.com/subversion/download#osx">WanDisco</a> and download it (after removing the MacPorts versions first), and then everything worked.</p>
@@ -400,9 +469,9 @@ option subnet 255.255.255.0
   
   <entry>
     <title type="html"><![CDATA[Moved to GitHub/Octopress]]></title>
-    <link href="http://www.geekheads.net/blog/2013/06/18/moved-to-github-slash-octopress/"/>
+    <link href="http://jacklund.github.io/blog/2013/06/18/moved-to-github-slash-octopress/"/>
     <updated>2013-06-18T10:51:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/06/18/moved-to-github-slash-octopress</id>
+    <id>http://jacklund.github.io/blog/2013/06/18/moved-to-github-slash-octopress</id>
     <content type="html"><![CDATA[<p>I finally gave up on <a href="http://www.scriptogr.am">scriptogr.am</a>. I was struggling with their syntax highlighting, even sent a message to their support. The only answer I got back was from another user (who was very helpful, but it didn&rsquo;t really fix my problem). So, I&rsquo;m done.</p>
 
 <p>I&rsquo;m now using <a href="http://pages.github.com/">GitHub Pages</a>, which generates their pages using <a href="https://github.com/mojombo/jekyll">Jekyll</a>. I&rsquo;m also using <a href="http://octopress.org/">Octopress</a> for the layout, which makes it all pretty easy (well, that is, once you go through the somewhat painful ruby setup).</p>
@@ -411,9 +480,9 @@ option subnet 255.255.255.0
   
   <entry>
     <title type="html"><![CDATA[SELinux and SSH]]></title>
-    <link href="http://www.geekheads.net/blog/2013/06/13/SELinux-and-SSH/"/>
+    <link href="http://jacklund.github.io/blog/2013/06/13/SELinux-and-SSH/"/>
     <updated>2013-06-13T13:30:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/06/13/SELinux-and-SSH</id>
+    <id>http://jacklund.github.io/blog/2013/06/13/SELinux-and-SSH</id>
     <content type="html"><![CDATA[<p>I needed to set up Jenkins so that it could run an agent on another Linux box. To do this the default way, you need to allow Jenkins to access the remote box via SSH. So, I set up the Jenkins user and the SSH keys on the remote machine, but trying to do an ssh from the Jenkins user on one machine to the other still didn&rsquo;t work. After doing <code>sudo journalctl -f</code> on the remote machine, I saw the following:</p>
 
 <pre><code>Jun 13 12:41:50 m2m-linux setroubleshoot[701]: SELinux is preventing /usr/sbin/sshd from read access on the file authorized_keys. For complete SELinux messages. run sealert -l ca7b7aea-64cf-46e5-8bfa-6650ad23f55b
@@ -459,10 +528,10 @@ allow this access for now by executing:
   
   <entry>
     <title type="html"><![CDATA[Node.js]]></title>
-    <link href="http://www.geekheads.net/blog/2013/06/12/Node.js/"/>
+    <link href="http://jacklund.github.io/blog/2013/06/12/Node.js/"/>
     <updated>2013-06-12T16:10:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/06/12/Node.js</id>
-    <content type="html"><![CDATA[<p>Having my new <a href="http://www.geekheads.net/jacklund/post/beaglebone-black">BeagleBone Black</a> has made me look at the default programming environment for it, <a href="http://nodejs.org">Node.js</a>. Companies like <a href="http://www.linkedin.com">LinkedIn</a> are <a href="http://engineering.linkedin.com/nodejs/blazing-fast-nodejs-10-performance-tips-linkedin-mobile">using it</a> on the server side, which sort of surprises me. I can definitely see its uses in devices like the BeagleBone, since it has such a small footprint and minimal use of resources, but I was surprised at how many people are using it on the server side.</p>
+    <id>http://jacklund.github.io/blog/2013/06/12/Node.js</id>
+    <content type="html"><![CDATA[<p>Having my new <a href="http://jacklund.github.io/jacklund/post/beaglebone-black">BeagleBone Black</a> has made me look at the default programming environment for it, <a href="http://nodejs.org">Node.js</a>. Companies like <a href="http://www.linkedin.com">LinkedIn</a> are <a href="http://engineering.linkedin.com/nodejs/blazing-fast-nodejs-10-performance-tips-linkedin-mobile">using it</a> on the server side, which sort of surprises me. I can definitely see its uses in devices like the BeagleBone, since it has such a small footprint and minimal use of resources, but I was surprised at how many people are using it on the server side.</p>
 
 <p>It makes sense, though &ndash; as <a href="http://wiki.nginx.org/Main">Nginx</a> demonstrated, an event-driven model can eat a thread-based server&rsquo;s lunch, performance-wise, under certain circumstances. What are those circumstances, though?</p>
 
@@ -476,9 +545,9 @@ allow this access for now by executing:
   
   <entry>
     <title type="html"><![CDATA[Setting up NTP on BeagleBone Black]]></title>
-    <link href="http://www.geekheads.net/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black/"/>
+    <link href="http://jacklund.github.io/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black/"/>
     <updated>2013-06-10T11:50:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black</id>
+    <id>http://jacklund.github.io/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black</id>
     <content type="html"><![CDATA[<p>For some reason, they didn&rsquo;t seem to see the need to set up the time service on the BeagleBone Blacks by default. I tried using the instructions from <a href="http://derekmolloy.ie/automatically-setting-the-beaglebone-black-time-using-ntp/">this gentleman</a>, but I had to make some modifications.</p>
 
 <ol>
@@ -570,9 +639,9 @@ allow this access for now by executing:
   
   <entry>
     <title type="html"><![CDATA[BeagleBone Black]]></title>
-    <link href="http://www.geekheads.net/blog/2013/06/09/BeagleBone-Black/"/>
+    <link href="http://jacklund.github.io/blog/2013/06/09/BeagleBone-Black/"/>
     <updated>2013-06-09T20:00:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/06/09/BeagleBone-Black</id>
+    <id>http://jacklund.github.io/blog/2013/06/09/BeagleBone-Black</id>
     <content type="html"><![CDATA[<p>Got my two <a href="http://beagleboard.org/Products/BeagleBone%20Black">BeagleBone Blacks</a> from <a href="http://adafruit.com/">AdaFruit</a> on Friday. Really nice. I bought them without enclosures because, well, the enclosures were $20, and the BeagleBones themselves were only $45. The nice thing is, though, that they fit exactly into an Altoids tin, so I turned two into my enclosures. I used tin snips to cut holes for power and Ethernet, and lined them with electrical tape to insulate the board from the box. Here&rsquo;s what they ended up looking like:</p>
 
 <p><img src="https://dl.dropbox.com/s/bpgc7lc5azhazw5/altoids_closed.jpg" title="Closed" alt="" /></p>
@@ -593,9 +662,9 @@ You should consider updating Angstrom!
   
   <entry>
     <title type="html"><![CDATA[I Hate LaTeX]]></title>
-    <link href="http://www.geekheads.net/blog/2013/05/30/I-Hate-LaTeX/"/>
+    <link href="http://jacklund.github.io/blog/2013/05/30/I-Hate-LaTeX/"/>
     <updated>2013-05-30T11:30:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/05/30/I-Hate-LaTeX</id>
+    <id>http://jacklund.github.io/blog/2013/05/30/I-Hate-LaTeX</id>
     <content type="html"><![CDATA[<p>No, I really do. It&rsquo;s not hyperbole. I hate it.</p>
 
 <p>It&rsquo;s frickin&#8217; 2013, people. We should not have to deal with languages that look like this:</p>
@@ -652,9 +721,9 @@ You should consider updating Angstrom!
   
   <entry>
     <title type="html"><![CDATA[Creating RESTEasy Project with Eclipse and Maven]]></title>
-    <link href="http://www.geekheads.net/blog/2013/05/20/Creating-RESTEasy-Project-with-Eclipse-and-Maven/"/>
+    <link href="http://jacklund.github.io/blog/2013/05/20/Creating-RESTEasy-Project-with-Eclipse-and-Maven/"/>
     <updated>2013-05-20T00:00:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/05/20/Creating-RESTEasy-Project-with-Eclipse-and-Maven</id>
+    <id>http://jacklund.github.io/blog/2013/05/20/Creating-RESTEasy-Project-with-Eclipse-and-Maven</id>
     <content type="html"><![CDATA[<p>Handy safety tip: to create a RESTEasy-friendly Maven project in Eclipse, do the following:</p>
 
 <ol>
@@ -667,15 +736,6 @@ You should consider updating Angstrom!
 
 
 <p>You should be able to deploy it from Eclipse into Tomcat without any issues</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[TI SensorTag]]></title>
-    <link href="http://www.geekheads.net/blog/2013/05/12/TI-SensorTag/"/>
-    <updated>2013-05-12T19:20:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/05/12/TI-SensorTag</id>
-    <content type="html"><![CDATA[<p>I got my <a href="http://processors.wiki.ti.com/index.php/Bluetooth_SensorTag">TI Bluetooth SensorTag</a> Friday, and played with it some over the weekend. It&rsquo;s pretty nice. It&rsquo;s basically a small device with a bunch of embedded sensors on it &ndash; accelerometer, gyroscope, ambient temp, IR temp (see below), humidity, barometric pressure, and a couple of buttons on it. It&rsquo;s very small, and communicates over <a href="http://en.wikipedia.org/wiki/Bluetooth_low_energy">Bluetooth 4 LE</a>. You can download an iOS app for viewing the data, so my daughters and I played with it some. Pretty cool. There&rsquo;s a <a href="http://blog.makezine.com/2013/04/18/teardown-of-the-ti-sensortag">teardown of it</a> at MAKE magazine, and even a <a href="http://mike.saunby.net/2013/04/raspberry-pi-and-ti-cc2541-sensortag.html">Raspberry Pi</a> project to interface with it. W00t!!!</p>
 ]]></content>
   </entry>
   

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: bonjour | Geekheads]]></title>
-  <link href="http://www.geekheads.net/blog/categories/bonjour/atom.xml" rel="self"/>
-  <link href="http://www.geekheads.net/"/>
-  <updated>2013-11-15T16:38:20-06:00</updated>
-  <id>http://www.geekheads.net/</id>
+  <link href="http://jacklund.github.io/blog/categories/bonjour/atom.xml" rel="self"/>
+  <link href="http://jacklund.github.io/"/>
+  <updated>2014-01-05T21:46:56-06:00</updated>
+  <id>http://jacklund.github.io/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Zeroconf Rocks!]]></title>
-    <link href="http://www.geekheads.net/blog/2013/06/27/Zeroconf-Rocks/"/>
+    <link href="http://jacklund.github.io/blog/2013/06/27/Zeroconf-Rocks/"/>
     <updated>2013-06-27T22:27:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/06/27/Zeroconf-Rocks</id>
+    <id>http://jacklund.github.io/blog/2013/06/27/Zeroconf-Rocks</id>
     <content type="html"><![CDATA[<p>I have a lot of computers on my network now &ndash; my laptop and desktop, my wife&rsquo;s 3(!) computers, her iPad, two Linux servers and miscellaneous other devices, along with my Raspberry Pi and two BeagleBone Blacks, so managing all these was starting to be a pain. So, just on a hunch, I wanted to see if <a href="http://en.wikipedia.org/wiki/Zero-configuration_networking">Bonjour/Zeroconf/Avahi</a> could help. I did some investigation, and it turns out that you can access any machines that advertise on Zeroconf by <em>name</em>.local. Since I work predominantly on Macs, I was already pretty comfortable with the idea of dynamically finding service. When I brought up my Bonjour Browser application, however, I was surprised: My two BeagleBone Blacks were already advertising (the wrong IP address for my network, but still)!</p>
 
 <p>So, first step: set up the Raspberry Pi to do the same. Fortunately, the Internet came to the rescue, in the form of <a href="http://elinux.org/RPi_Advanced_Setup">this page</a> about setting up Zeroconf on the Pi. I just followed the instructions, and it worked.</p>

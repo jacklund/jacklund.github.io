@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: linux | Geekheads]]></title>
-  <link href="http://www.geekheads.net/blog/categories/linux/atom.xml" rel="self"/>
-  <link href="http://www.geekheads.net/"/>
-  <updated>2013-11-15T16:38:20-06:00</updated>
-  <id>http://www.geekheads.net/</id>
+  <link href="http://jacklund.github.io/blog/categories/linux/atom.xml" rel="self"/>
+  <link href="http://jacklund.github.io/"/>
+  <updated>2014-01-05T21:46:56-06:00</updated>
+  <id>http://jacklund.github.io/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Using a Raspberry Pi as an iBeacon]]></title>
-    <link href="http://www.geekheads.net/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon/"/>
+    <link href="http://jacklund.github.io/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon/"/>
     <updated>2013-11-15T16:00:00-06:00</updated>
-    <id>http://www.geekheads.net/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon</id>
+    <id>http://jacklund.github.io/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon</id>
     <content type="html"><![CDATA[<p>There&rsquo;s an excellent <a href="http://developer.radiusnetworks.com/2013/10/09/how-to-make-an-ibeacon-out-of-a-raspberry-pi.html">blog post by by James Nebeker and David G. Young</a> about simulating an <a href="http://en.wikipedia.org/wiki/IBeacon">iBeacon</a> using a Raspberry Pi and a bluetooth dongle. Since I already had both, I thought I&rsquo;d give it a try. It worked really well, and I&rsquo;ve even put together the files necessary to do it <a href="https://github.com/jacklund/piBeacon">in my GitHub repository</a>.</p>
 
 <p>You&rsquo;ll need to install <a href="http://www.bluez.org/">BlueZ</a> as well for this to work. Once you get it all installed and working you can use one of the mobile iBeacon apps, such as <a href="https://itunes.apple.com/us/app/ibeacon-locate/id738709014?ls=1&amp;mt=8">iBeacon Locate</a>. Very fun to play with, and a good way to be able to develop mobile apps to access iBeacons without having to wait for them to come out.</p>
@@ -28,9 +28,9 @@
   
   <entry>
     <title type="html"><![CDATA[More Fun With BeagleBone Black]]></title>
-    <link href="http://www.geekheads.net/blog/2013/10/19/more-fun-with-beaglebone-black/"/>
+    <link href="http://jacklund.github.io/blog/2013/10/19/more-fun-with-beaglebone-black/"/>
     <updated>2013-10-19T21:10:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/10/19/more-fun-with-beaglebone-black</id>
+    <id>http://jacklund.github.io/blog/2013/10/19/more-fun-with-beaglebone-black</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve discovered that owning a BeagleBone Black (or, in my case, two) is kind of like owning one of those really, really nice
 cars that you buy but you can almost never drive because it spends so much time in the shop. It&rsquo;s a lovely piece of hardware, it
 really is, but the people who created it seem to have gone to great lengths to make sure that all you can do is sit back and admire
@@ -165,9 +165,9 @@ repeatedly, saying &ldquo;Bad Programmer! Bad!&rdquo; over and over, because it&
   
   <entry>
     <title type="html"><![CDATA[Zeroconf Rocks!]]></title>
-    <link href="http://www.geekheads.net/blog/2013/06/27/Zeroconf-Rocks/"/>
+    <link href="http://jacklund.github.io/blog/2013/06/27/Zeroconf-Rocks/"/>
     <updated>2013-06-27T22:27:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/06/27/Zeroconf-Rocks</id>
+    <id>http://jacklund.github.io/blog/2013/06/27/Zeroconf-Rocks</id>
     <content type="html"><![CDATA[<p>I have a lot of computers on my network now &ndash; my laptop and desktop, my wife&rsquo;s 3(!) computers, her iPad, two Linux servers and miscellaneous other devices, along with my Raspberry Pi and two BeagleBone Blacks, so managing all these was starting to be a pain. So, just on a hunch, I wanted to see if <a href="http://en.wikipedia.org/wiki/Zero-configuration_networking">Bonjour/Zeroconf/Avahi</a> could help. I did some investigation, and it turns out that you can access any machines that advertise on Zeroconf by <em>name</em>.local. Since I work predominantly on Macs, I was already pretty comfortable with the idea of dynamically finding service. When I brought up my Bonjour Browser application, however, I was surprised: My two BeagleBone Blacks were already advertising (the wrong IP address for my network, but still)!</p>
 
 <p>So, first step: set up the Raspberry Pi to do the same. Fortunately, the Internet came to the rescue, in the form of <a href="http://elinux.org/RPi_Advanced_Setup">this page</a> about setting up Zeroconf on the Pi. I just followed the instructions, and it worked.</p>
@@ -200,9 +200,9 @@ option subnet 255.255.255.0
   
   <entry>
     <title type="html"><![CDATA[Setting up NTP on BeagleBone Black]]></title>
-    <link href="http://www.geekheads.net/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black/"/>
+    <link href="http://jacklund.github.io/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black/"/>
     <updated>2013-06-10T11:50:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black</id>
+    <id>http://jacklund.github.io/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black</id>
     <content type="html"><![CDATA[<p>For some reason, they didn&rsquo;t seem to see the need to set up the time service on the BeagleBone Blacks by default. I tried using the instructions from <a href="http://derekmolloy.ie/automatically-setting-the-beaglebone-black-time-using-ntp/">this gentleman</a>, but I had to make some modifications.</p>
 
 <ol>
@@ -282,9 +282,9 @@ option subnet 255.255.255.0
   
   <entry>
     <title type="html"><![CDATA[BeagleBone Black]]></title>
-    <link href="http://www.geekheads.net/blog/2013/06/09/BeagleBone-Black/"/>
+    <link href="http://jacklund.github.io/blog/2013/06/09/BeagleBone-Black/"/>
     <updated>2013-06-09T20:00:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/06/09/BeagleBone-Black</id>
+    <id>http://jacklund.github.io/blog/2013/06/09/BeagleBone-Black</id>
     <content type="html"><![CDATA[<p>Got my two <a href="http://beagleboard.org/Products/BeagleBone%20Black">BeagleBone Blacks</a> from <a href="http://adafruit.com/">AdaFruit</a> on Friday. Really nice. I bought them without enclosures because, well, the enclosures were $20, and the BeagleBones themselves were only $45. The nice thing is, though, that they fit exactly into an Altoids tin, so I turned two into my enclosures. I used tin snips to cut holes for power and Ethernet, and lined them with electrical tape to insulate the board from the box. Here&rsquo;s what they ended up looking like:</p>
 
 <p><img src="https://dl.dropbox.com/s/bpgc7lc5azhazw5/altoids_closed.jpg" title="Closed" alt="" /></p>

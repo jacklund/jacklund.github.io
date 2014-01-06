@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 
-Sitemap: http://www.geekheads.net/sitemap.xml 
+Sitemap: http://jacklund.github.io/sitemap.xml 

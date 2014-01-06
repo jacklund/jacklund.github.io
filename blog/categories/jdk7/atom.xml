@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: jdk7 | Geekheads]]></title>
-  <link href="http://www.geekheads.net/blog/categories/jdk7/atom.xml" rel="self"/>
-  <link href="http://www.geekheads.net/"/>
-  <updated>2013-11-15T16:38:20-06:00</updated>
-  <id>http://www.geekheads.net/</id>
+  <link href="http://jacklund.github.io/blog/categories/jdk7/atom.xml" rel="self"/>
+  <link href="http://jacklund.github.io/"/>
+  <updated>2014-01-05T21:46:56-06:00</updated>
+  <id>http://jacklund.github.io/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[VerifyError with JDK 7]]></title>
-    <link href="http://www.geekheads.net/blog/2013/05/06/VerifyError-with-JDK-7/"/>
+    <link href="http://jacklund.github.io/blog/2013/05/06/VerifyError-with-JDK-7/"/>
     <updated>2013-05-06T21:43:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/05/06/VerifyError-with-JDK-7</id>
+    <id>http://jacklund.github.io/blog/2013/05/06/VerifyError-with-JDK-7</id>
     <content type="html"><![CDATA[<p>We had been using nothing higher than JDK 6 with our project up until now, but when I built a new build machine using Fedora 18, JDK 7 was our only real option (okay, that and JDK 5). However, once I got things building using ant, I got the following cryptic error in the unit tests:</p>
 
 <pre><code>java.lang.VerifyError: Expecting a stackmap frame at branch target 41 in method com.m2mci.correlation.CorrelationId.equals(Ljava/lang/Object;)Z at offset 24
