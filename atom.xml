@@ -4,7 +4,7 @@
   <title><![CDATA[Geekheads]]></title>
   <link href="http://www.geekheads.net/atom.xml" rel="self"/>
   <link href="http://www.geekheads.net/"/>
-  <updated>2013-10-18T23:18:18-05:00</updated>
+  <updated>2013-11-15T16:38:20-06:00</updated>
   <id>http://www.geekheads.net/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
@@ -12,6 +12,156 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Using a Raspberry Pi as an iBeacon]]></title>
+    <link href="http://www.geekheads.net/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon/"/>
+    <updated>2013-11-15T16:00:00-06:00</updated>
+    <id>http://www.geekheads.net/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon</id>
+    <content type="html"><![CDATA[<p>There&rsquo;s an excellent <a href="http://developer.radiusnetworks.com/2013/10/09/how-to-make-an-ibeacon-out-of-a-raspberry-pi.html">blog post by by James Nebeker and David G. Young</a> about simulating an <a href="http://en.wikipedia.org/wiki/IBeacon">iBeacon</a> using a Raspberry Pi and a bluetooth dongle. Since I already had both, I thought I&rsquo;d give it a try. It worked really well, and I&rsquo;ve even put together the files necessary to do it <a href="https://github.com/jacklund/piBeacon">in my GitHub repository</a>.</p>
+
+<p>You&rsquo;ll need to install <a href="http://www.bluez.org/">BlueZ</a> as well for this to work. Once you get it all installed and working you can use one of the mobile iBeacon apps, such as <a href="https://itunes.apple.com/us/app/ibeacon-locate/id738709014?ls=1&amp;mt=8">iBeacon Locate</a>. Very fun to play with, and a good way to be able to develop mobile apps to access iBeacons without having to wait for them to come out.</p>
+
+<p>Also, it&rsquo;s just fun to play with.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[More Fun With BeagleBone Black]]></title>
+    <link href="http://www.geekheads.net/blog/2013/10/19/more-fun-with-beaglebone-black/"/>
+    <updated>2013-10-19T21:10:00-05:00</updated>
+    <id>http://www.geekheads.net/blog/2013/10/19/more-fun-with-beaglebone-black</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve discovered that owning a BeagleBone Black (or, in my case, two) is kind of like owning one of those really, really nice
+cars that you buy but you can almost never drive because it spends so much time in the shop. It&rsquo;s a lovely piece of hardware, it
+really is, but the people who created it seem to have gone to great lengths to make sure that all you can do is sit back and admire
+it, because you certainly won&rsquo;t be able to do anything useful with it.</p>
+
+<p>My next foray into BBB craziness was attempting to get a wifi dongle to work with it, so I don&rsquo;t have to constantly hook it up
+to my wireless adapter. Should be easy, right? Of course not, this is the BeagleBone Black we&rsquo;re talking about. <em>Nothing</em> is easy.</p>
+
+<p>I bought the <a href="http://www.edimax.com/en/produce_detail.php?pd_id=347&amp;pl1_id=1">Edimax EW-7811-UN</a>, which is recommended for BeagleBones,
+Raspberry Pi&rsquo;s, and the BBB. Unfortunately, what I didn&rsquo;t realize is that, while it <em>used</em> to work with the BBB, some OS changes were
+made to it so that it takes a lot of wrangling to get it to work, if you can get it to work at all (I couldn&rsquo;t).</p>
+
+<p>First of all, it seems that, at some point, the drivers weren&rsquo;t really available, so you would have to build them yourselves. I think
+the drivers are available now, but I went ahead and compiled the drivers per
+<a href="http://www.codealpha.net/864/how-to-set-up-a-rtl8192cu-on-the-beaglebone-black-bbb/">these instructions</a>.
+The next hurdle was getting it to work with <a href="https://connman.net/">connman</a>, the connection manager, which is, basically,
+almost completely undocumented &ndash; Fun! (<strong><em>Note to developers everywhere:</em></strong> in the words of an former boss &ndash; &ldquo;if it ain&rsquo;t documented,
+it doesn&rsquo;t exist&rdquo;).</p>
+
+<p>However, from what I can gather, <code>connman</code> uses <a href="http://hostap.epitest.fi/wpa_supplicant/">wpa_supplicant</a> for the WPA transactions
+(if you&rsquo;re using WPA, which, um, you should be). So, after fiddling around for a while, here&rsquo;s what my <code>/var/lib/connman/settings</code>
+file looks like:</p>
+
+<pre><code>[global]
+OfflineMode=false
+
+[Wired]
+Enable=true
+
+[WiFi]
+Enable=true
+</code></pre>
+
+<p>And here&rsquo;s my <code>/var/lib/connman/wifi.config</code> file:</p>
+
+<pre><code>[service_home]
+Type=wifi
+Name=my_ssid
+Security = wpa2-psk
+Passphrase=my_encrypted_passphrase
+</code></pre>
+
+<p>where <code>my_ssid</code> is my SSID name, and <code>my_encrypted_passphrase</code> is the result of running <code>wpa_passphrase &lt;ssid&gt; &lt;password&gt;</code>.</p>
+
+<p>Finally, my <code>/etc/wpa_supplicant.conf</code> &ndash; I&rsquo;m running WPA2-Personal on my wireless router, so this is, as far as I can tell, the
+way you set up <code>wpa_supplicant</code>:</p>
+
+<pre><code>ctrl_interface=/var/run/wpa_supplicant
+ctrl_interface_group=0
+update_config=1
+
+network={
+        ssid="my_ssid"
+        #psk=my_encrypted_passphrase
+        psk="my_unencrypted_passphrase"
+        key_mgmt=WPA-PSK
+        proto=RSN
+        pairwise=CCMP TKIP
+        group=CCMP TKIP
+}
+</code></pre>
+
+<p>Now, just getting to this point took a lot of tweaking and messing around with various settings. However, it&rsquo;s still not connecting.
+It&rsquo;s finding the access point, and even getting its MAC address, but it&rsquo;s unable to authenticate. Here&rsquo;s what happens when I run
+<code>wpa_supplicant</code> manually in debug mode:</p>
+
+<pre><code># wpa_supplicant -iwlan0 -c/etc/wpa_supplicant.conf -d
+  (irrelevant parts omitted)
+wlan0: New scan results available
+wlan0: Selecting BSS from priority group 0
+wlan0: 0: 5c:96:xx:xx:xx:83 ssid='my_ssid' wpa_ie_len=0 rsn_ie_len=20 caps=0x11 level=87
+wlan0:    selected based on RSN IE
+wlan0:    selected BSS 5c:96:xx:xx:xx:83 ssid='my_ssid'
+wlan0: Request association: reassociate: 0  selected: 5c:96:xx:xx:xx:83  bssid: 00:00:00:00:00:00  pending: 00:00:00:00:00:00  wpa_state: SCANNING
+wlan0: Trying to associate with 5c:96:xx:xx:xx:83 (SSID='my_ssid' freq=2462 MHz)
+wlan0: Cancelling scan request
+wlan0: WPA: clearing own WPA/RSN IE
+wlan0: Automatic auth_alg selection: 0x1
+RSN: PMKSA cache search - network_ctx=(nil) try_opportunistic=0
+RSN: Search for BSSID 5c:96:xx:xx:xx:83
+RSN: No PMKSA cache entry found
+wlan0: RSN: using IEEE 802.11i/D9.0
+wlan0: WPA: Selected cipher suites: group 16 pairwise 16 key_mgmt 2 proto 2
+wlan0: WPA: clearing AP WPA IE
+WPA: set AP RSN IE - hexdump(len=22): 30 14 01 00 00 0f ac 04 01 00 00 0f ac 04 01 00 00 0f ac 02 00 00
+wlan0: WPA: using GTK CCMP
+wlan0: WPA: using PTK CCMP
+wlan0: WPA: using KEY_MGMT WPA-PSK
+WPA: Set own WPA IE default - hexdump(len=22): 30 14 01 00 00 0f ac 04 01 00 00 0f ac 04 01 00 00 0f ac 02 00 00
+wlan0: No keys have been configured - skip key clearing
+wlan0: State: SCANNING -&gt; ASSOCIATING
+wpa_driver_wext_set_operstate: operstate 0-&gt;0 (DORMANT)
+netlink: Operstate: linkmode=-1, operstate=5
+Limit connection to BSSID 5c:96:xx:xx:xx:83 freq=2462 MHz based on scan results (bssid_set=0)
+wpa_driver_wext_associate
+wpa_driver_wext_set_drop_unencrypted
+wpa_driver_wext_set_psk
+wlan0: Setting authentication timeout: 10 sec 0 usec
+EAPOL: External notification - EAP success=0
+EAPOL: Supplicant port status: Unauthorized
+EAPOL: External notification - EAP fail=0
+EAPOL: Supplicant port status: Unauthorized
+EAPOL: External notification - portControl=Auto
+EAPOL: Supplicant port status: Unauthorized
+RSN: Ignored PMKID candidate without preauth flag
+</code></pre>
+
+<p>and basically it cycles through this over and over. Now, I&rsquo;m sure this all means something to whoever wrote this code, but to me
+there&rsquo;s absoutely nothing helpful here. it&rsquo;s written for someone to try to debug the program, not to help someone troubleshoot
+a problem with their setup. And, yet, this is, as far as I can tell, the only troubleshooting tool these fine folks have seen
+fit to provide. Nice.</p>
+
+<p>So, after wading through all this garbage, and trying a bunch of different things, I finally gleaned (with absolutely no help
+from whoever wrote this crappy software, thank you very much!) that it&rsquo;s failing authentication. Why? Who knows. Really, there&rsquo;s
+a special circle of hell for people who write error messages like this for their users to have to decode. When you get there,
+you spend eternity debugging Windows NT BSOD error messages.</p>
+
+<p>So, I tried looking up the incredibly clear message <code>EAPOL: Supplicant port status: Unauthorized</code>. Now, there are a number of posts that
+imply that you need to have <code>eth0</code> disconnected in order for this to work (which makes absolutely no sense to me whatsover &ndash;
+since when are you only able to connect to one network interface at a time?), but doing that seems to make no difference. I&rsquo;ve also
+seen a lot of descriptions of procedures people use to get this to work that are the technological equivalent of holding a dead
+chicken over the machine and praying. This didn&rsquo;t work for me either (well, okay, I didn&rsquo;t try the chicken&hellip;yet).</p>
+
+<p>Which brings up my gripe: why is this so $@%^!&amp;@ hard? Why do you have to go through this hell to just connect to a wireless access
+point &ndash; something that they do in the Mac and Windows worlds all the time? Would it be so bleeping hard to just spit out some relatively
+helpful messages &ndash; something along the lines of &ldquo;authentication failed&rdquo;, or even &ldquo;bad passphrase&rdquo;? Something.</p>
+
+<p>If you are guilty of writing software like this, do me a favor: go to the mirror, grab yourself by the collar and slap yourself
+repeatedly, saying &ldquo;Bad Programmer! Bad!&rdquo; over and over, because it&rsquo;s exactly what I&rsquo;d be doing if I were there with you.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[btle.js 0.2.0 released]]></title>
@@ -526,89 +676,6 @@ You should consider updating Angstrom!
     <updated>2013-05-12T19:20:00-05:00</updated>
     <id>http://www.geekheads.net/blog/2013/05/12/TI-SensorTag</id>
     <content type="html"><![CDATA[<p>I got my <a href="http://processors.wiki.ti.com/index.php/Bluetooth_SensorTag">TI Bluetooth SensorTag</a> Friday, and played with it some over the weekend. It&rsquo;s pretty nice. It&rsquo;s basically a small device with a bunch of embedded sensors on it &ndash; accelerometer, gyroscope, ambient temp, IR temp (see below), humidity, barometric pressure, and a couple of buttons on it. It&rsquo;s very small, and communicates over <a href="http://en.wikipedia.org/wiki/Bluetooth_low_energy">Bluetooth 4 LE</a>. You can download an iOS app for viewing the data, so my daughters and I played with it some. Pretty cool. There&rsquo;s a <a href="http://blog.makezine.com/2013/04/18/teardown-of-the-ti-sensortag">teardown of it</a> at MAKE magazine, and even a <a href="http://mike.saunby.net/2013/04/raspberry-pi-and-ti-cc2541-sensortag.html">Raspberry Pi</a> project to interface with it. W00t!!!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Falling in Love with Git]]></title>
-    <link href="http://www.geekheads.net/blog/2013/05/07/Falling-in-Love-with-Git/"/>
-    <updated>2013-05-07T17:00:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/05/07/Falling-in-Love-with-Git</id>
-    <content type="html"><![CDATA[<p>As I mentioned earlier, we&rsquo;re transitioning from subversion to git, and one of the things we need to do is convert from many-projects-per-repository, which is what we had in subversion, to one-project-per-repository for git. This is partly to make things nicer, and partly because it will make <a href="http://jenkins-ci.org/">Jenkins</a> work better. So, thinking in subversion-terms, I thought I&rsquo;d have to do it myself, and even tried by renaming all the files in one of the projects into the upper-level directory, removing all the other projects, committing locally, and then pushing to a new repo. Royal pain.</p>
-
-<p>And then, I came across <a href="https://help.github.com/articles/splitting-a-subpath-out-into-a-new-repository">this</a>. Oh. My. God. Git actually does the work for you. It&rsquo;s so easy, you just do the <code>git filter-branch</code> command, and suddenly your project is its own repository! Then, you just change the remote repository (<code>git remote rm origin</code> followed by <code>git remote add</code> <em>new-url</em>), and Bob&rsquo;s your uncle, you have a new, smaller repository.</p>
-
-<p>I mean, seriously? That is AWESOME!</p>
-
-<p>So, to be explicit, here&rsquo;s the series of commands:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clone repo-url
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>repo
-</span><span class='line'><span class="nv">$ </span>git filter-branch --prune-empty --subdirectory-filter subdir-name master
-</span><span class='line'><span class="nv">$ </span>git remote rm origin
-</span><span class='line'><span class="nv">$ </span>git remote add new-repo-url
-</span><span class='line'><span class="nv">$ </span>git push -u origin --all --tags
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Updated 05/12/2013</strong>
-Okay, after messing around with this for some time, I&rsquo;ve discovered that the above doesn&rsquo;t work quite right, because the pathnames in the commits are wrong &ndash; instead of being <em>subdir-name</em><code>/src/foo/Bar.java</code>, it ends up being <code>src/foo/Bar.java</code>, which doesn&rsquo;t work. So, instead of trying to pull each subdirectory into their own repository, I&rsquo;m taking the existing repository, with a bunch of subdirs, including the ones I&rsquo;m interested in, and simply using <code>git filter-branch</code> to get rid of the ones I&rsquo;m not interested in, as well as update the tags. So, here&rsquo;s what I&rsquo;ve got now, which seems to work well:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Get a list of the directories I&#39;m not interested in</span>
-</span><span class='line'><span class="nv">$ excludes</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> <span class="nv">$*</span> | tr <span class="s2">&quot; &quot;</span> <span class="s2">&quot;|&quot;</span><span class="sb">`</span>
-</span><span class='line'><span class="nv">$ files</span><span class="o">=</span><span class="sb">`</span>ls | egrep -v <span class="nv">$excludes</span> | tr <span class="s2">&quot;\\n&quot;</span> <span class="s2">&quot; &quot;</span><span class="sb">`</span>
-</span><span class='line'><span class="c"># Disconnect from remote for safety</span>
-</span><span class='line'><span class="nv">$ </span>git remote rm origin
-</span><span class='line'><span class="c"># Get rid of all tags that don&#39;t fit my pattern</span>
-</span><span class='line'><span class="nv">$ </span>git tag -l | grep -v <span class="nv">$pattern</span> | xargs git tag -d
-</span><span class='line'><span class="c"># Prune the directories I&#39;m not interested in</span>
-</span><span class='line'><span class="nv">$ </span>git filter-branch --tag-name-filter cat --prune-empty <span class="se">\</span>
-</span><span class='line'>    --tree-filter <span class="s2">&quot;rm -rf ${files}&quot;</span> -- --all
-</span><span class='line'><span class="c"># Reset the indexes</span>
-</span><span class='line'><span class="nv">$ </span>git reset --hard
-</span><span class='line'><span class="c"># Get rid of obsolete references in the logs</span>
-</span><span class='line'><span class="nv">$ </span>git <span class="k">for</span>-each-ref --format<span class="o">=</span><span class="s2">&quot;%(refname)&quot;</span> refs/original/ | <span class="se">\</span>
-</span><span class='line'>    xargs -n 1 git update-ref -d
-</span><span class='line'><span class="nv">$ </span>git reflog expire --expire<span class="o">=</span>now --all
-</span><span class='line'><span class="nv">$ </span>git gc --aggressive --prune<span class="o">=</span>now
-</span></code></pre></td></tr></table></div></figure>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Airport Extreme]]></title>
-    <link href="http://www.geekheads.net/blog/2013/05/06/Airport-Extreme/"/>
-    <updated>2013-05-06T22:05:00-05:00</updated>
-    <id>http://www.geekheads.net/blog/2013/05/06/Airport-Extreme</id>
-    <content type="html"><![CDATA[<p>Had to replace my old, crappy Netgear router over the weekend &ndash; it was getting flaky, and causing my Skype calls to freak out at inopportune moments. I was thinking about going the <a href="http://en.wikipedia.org/wiki/DD-WRT">DD-WRT</a> route (if you&rsquo;ll excuse the pun), but it looked like it required more of a time commitment than I am able to manage at the moment. Since almost everything we have in this house is some form of Apple product, I decided to try out the Airport Extreme.</p>
-
-<p>Man, was that thing easy to set up, especially compared to the Living Hell that is most router setups. I just went into Airport Utility on my laptop, it automagically found the router, I configured it right there, and it just frickin&#8217; worked! Unbelievable! Admittedly, it&rsquo;s a pricey router, but I think it&rsquo;s worth it with the time it saved me.</p>
-
-<p>It also seems to be a <strong>lot</strong> more powerful than those underpowered Netgear POSes, which is an added benefit.</p>
 ]]></content>
   </entry>
   
