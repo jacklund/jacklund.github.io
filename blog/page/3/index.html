@@ -9,7 +9,8 @@
   <meta name="author" content="Jack Lund">
 
   
-  <meta name="description" content="I got my TI Bluetooth SensorTag Friday, and played with it some over the weekend. It&rsquo;s pretty nice. It&rsquo;s basically a small device with a &hellip;">
+  <meta name="description" content="Handy safety tip: to create a RESTEasy-friendly Maven project in Eclipse, do the following: Create the project as a simple Maven project
+In the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -74,6 +75,55 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/05/20/Creating-RESTEasy-Project-with-Eclipse-and-Maven/">Creating RESTEasy Project With Eclipse and Maven</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-20T00:00:00-05:00" pubdate data-updated="true">May 20<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Handy safety tip: to create a RESTEasy-friendly Maven project in Eclipse, do the following:</p>
+
+<ol>
+<li>Create the project as a simple Maven project</li>
+<li>In the project Properties &ndash;> Project Facets, make the project faceted, and select &ldquo;Dynamic Web Module&rdquo; (you may get a NullPointerException, but it doesn&rsquo;t seem to matter). Under &ldquo;Further Configuration&hellip;&rdquo;, point the WebApp directory to be <code>src/main/webapp</code>, and have it create the <code>web.xml</code> file.</li>
+<li>Under &ldquo;Web Content Settings&rdquo;, set the Context root</li>
+<li>Under &ldquo;Deployment Assembly&rdquo;, select &ldquo;Add&hellip;&rdquo;, select &ldquo;Java Build Path Entries&rdquo;, and select &ldquo;Maven Dependencies&rdquo;. It should put them in <code>WEB-INF/lib</code>.</li>
+<li>Add the code and the dependencies to the <code>pom.xml</code>. Make sure to add the RESTEasy stuff to the <code>web.xml</code> file.</li>
+</ol>
+
+
+<p>You should be able to deploy it from Eclipse into Tomcat without any issues</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -703,50 +753,6 @@ Okay, after messing around with this for some time, I&rsquo;ve discovered that t
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2012/04/03/Deployment-Sucks/">Deployment Sucks</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-03T00:00:00-05:00" pubdate data-updated="true">Apr 3<span>rd</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>We&rsquo;re using Ant + Ivy + Jenkins + Artifactory to do our builds &ndash; Ant to build, Ivy for dependency management, Jenkins for continuous integration, and Artifactory to store the build artifacts. One thing we&rsquo;re struggling with is how to promote an artifact through the three stages &ndash; build &ndash;> stage &ndash;> release. Jenkins puts it into the build repository once it passes CI, so that part is easy. However, having an automated process for moving the artifacts from build to stage and from stage to release is painful, at best, which is surprising.</p>
-
-<p>The problem is with Ivy. It&rsquo;s a pretty good tool for dependency management &ndash; it finds and downloads specific versions of jars for you, which is nice, but it&rsquo;s not so good at going outside that realm, like, for instance, pulling down an artifact from the repository, and then pushing it back again with updated metadata, into a different repository.</p>
-
-<p>We&rsquo;ve tried just specifying the artifact as the depndency, giving it a revision of &ldquo;latest.integration&rdquo; to pull it from build, and then publishing to stage, for instance, but Ivy complains that it can&rsquo;t be its own dependency, which makes sense. We&rsquo;ve tried publishing it as a different module name to stage, for instance, but then you run into the same problem getting it from stage to release.</p>
-
-<p>There has to be a better way. Unfortunately, the Artifactory people aren&rsquo;t much help &ndash; their solutions involve buying their &ldquo;pro&rdquo; version, and using their REST interface. Blech.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -764,6 +770,10 @@ Okay, after messing around with this for some time, I&rsquo;ve discovered that t
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/01/14/logging-using-eventemitters-in-node-dot-js/">Logging Using EventEmitters in Node.js</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/01/05/inheritance-in-functional-languages/">Inheritance in Functional Languages</a>
       </li>
     
@@ -779,15 +789,11 @@ Okay, after messing around with this for some time, I&rsquo;ve discovered that t
         <a href="/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/">btle.js 0.2.0 released</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2013/09/25/fun-with-beaglebone-black/">Fun with BeagleBone Black</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 120.0%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 110.0%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 120.0%'>beaglebone</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 110.0%'>beaglebone-black</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 120.0%'>beaglebone_black</a>   <a href='/blog/categories/bluetooth' style='font-size: 120.0%'>bluetooth</a>   <a href='/blog/categories/bluetooth-le' style='font-size: 130.0%'>bluetooth_le</a>   <a href='/blog/categories/bluez' style='font-size: 120.0%'>bluez</a>   <a href='/blog/categories/bonescript' style='font-size: 110.0%'>bonescript</a>   <a href='/blog/categories/bonjour' style='font-size: 110.0%'>bonjour</a>   <a href='/blog/categories/btle-js' style='font-size: 110.0%'>btle.js</a>   <a href='/blog/categories/c-' style='font-size: 120.0%'>c++</a>   <a href='/blog/categories/cobertura' style='font-size: 110.0%'>cobertura</a>   <a href='/blog/categories/documents' style='font-size: 110.0%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 140.0%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 110.0%'>eskrima</a>   <a href='/blog/categories/functional' style='font-size: 110.0%'>functional</a>   <a href='/blog/categories/gatt' style='font-size: 120.0%'>gatt</a>   <a href='/blog/categories/git' style='font-size: 120.0%'>git</a>   <a href='/blog/categories/github' style='font-size: 110.0%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 110.0%'>hornetq</a>   <a href='/blog/categories/ibeacon' style='font-size: 110.0%'>iBeacon</a>   <a href='/blog/categories/idea' style='font-size: 110.0%'>idea</a>   <a href='/blog/categories/inheritance' style='font-size: 110.0%'>inheritance</a>   <a href='/blog/categories/java' style='font-size: 120.0%'>java</a>   <a href='/blog/categories/javascript' style='font-size: 110.0%'>javascript</a>   <a href='/blog/categories/jboss' style='font-size: 110.0%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 110.0%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 110.0%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 110.0%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 110.0%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 110.0%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 110.0%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 150.0%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 110.0%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 110.0%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 120.0%'>maven</a>   <a href='/blog/categories/mqtt' style='font-size: 110.0%'>mqtt</a>   <a href='/blog/categories/node-js' style='font-size: 160.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 110.0%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 110.0%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 110.0%'>programming</a>   <a href='/blog/categories/python' style='font-size: 110.0%'>python</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 120.0%'>raspberry-pi</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 110.0%'>raspberry_pi</a>   <a href='/blog/categories/rest' style='font-size: 110.0%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 110.0%'>resteasy</a>   <a href='/blog/categories/sbt' style='font-size: 120.0%'>sbt</a>   <a href='/blog/categories/scala' style='font-size: 120.0%'>scala</a>   <a href='/blog/categories/scalability' style='font-size: 110.0%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 110.0%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 110.0%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 130.0%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 110.0%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 110.0%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 110.0%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 110.0%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 120.0%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 110.0%'>windows</a>   <a href='/blog/categories/zeroconf' style='font-size: 110.0%'>zeroconf</a>   <a href='/blog/categories/zigbee' style='font-size: 110.0%'>zigbee</a>   <a href='/blog/categories/zookeeper' style='font-size: 110.0%'>zookeeper</a>   </ul>
+    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 117.14285714285714%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 108.57142857142857%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 117.14285714285714%'>beaglebone</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 108.57142857142857%'>beaglebone-black</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 117.14285714285714%'>beaglebone_black</a>   <a href='/blog/categories/bluetooth' style='font-size: 117.14285714285714%'>bluetooth</a>   <a href='/blog/categories/bluetooth-le' style='font-size: 125.71428571428572%'>bluetooth_le</a>   <a href='/blog/categories/bluez' style='font-size: 117.14285714285714%'>bluez</a>   <a href='/blog/categories/bonescript' style='font-size: 108.57142857142857%'>bonescript</a>   <a href='/blog/categories/bonjour' style='font-size: 108.57142857142857%'>bonjour</a>   <a href='/blog/categories/btle-js' style='font-size: 108.57142857142857%'>btle.js</a>   <a href='/blog/categories/c-' style='font-size: 117.14285714285714%'>c++</a>   <a href='/blog/categories/cobertura' style='font-size: 108.57142857142857%'>cobertura</a>   <a href='/blog/categories/documents' style='font-size: 108.57142857142857%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 134.28571428571428%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 108.57142857142857%'>eskrima</a>   <a href='/blog/categories/functional' style='font-size: 108.57142857142857%'>functional</a>   <a href='/blog/categories/gatt' style='font-size: 117.14285714285714%'>gatt</a>   <a href='/blog/categories/git' style='font-size: 117.14285714285714%'>git</a>   <a href='/blog/categories/github' style='font-size: 108.57142857142857%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 108.57142857142857%'>hornetq</a>   <a href='/blog/categories/ibeacon' style='font-size: 108.57142857142857%'>iBeacon</a>   <a href='/blog/categories/idea' style='font-size: 108.57142857142857%'>idea</a>   <a href='/blog/categories/inheritance' style='font-size: 108.57142857142857%'>inheritance</a>   <a href='/blog/categories/java' style='font-size: 117.14285714285714%'>java</a>   <a href='/blog/categories/javascript' style='font-size: 117.14285714285714%'>javascript</a>   <a href='/blog/categories/jboss' style='font-size: 108.57142857142857%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 108.57142857142857%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 108.57142857142857%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 108.57142857142857%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 108.57142857142857%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 108.57142857142857%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 108.57142857142857%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 142.85714285714286%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 108.57142857142857%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 108.57142857142857%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 117.14285714285714%'>maven</a>   <a href='/blog/categories/mqtt' style='font-size: 108.57142857142857%'>mqtt</a>   <a href='/blog/categories/node-js' style='font-size: 160.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 108.57142857142857%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 108.57142857142857%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 108.57142857142857%'>programming</a>   <a href='/blog/categories/python' style='font-size: 108.57142857142857%'>python</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 117.14285714285714%'>raspberry-pi</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 108.57142857142857%'>raspberry_pi</a>   <a href='/blog/categories/rest' style='font-size: 108.57142857142857%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 108.57142857142857%'>resteasy</a>   <a href='/blog/categories/sbt' style='font-size: 117.14285714285714%'>sbt</a>   <a href='/blog/categories/scala' style='font-size: 117.14285714285714%'>scala</a>   <a href='/blog/categories/scalability' style='font-size: 108.57142857142857%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 108.57142857142857%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 108.57142857142857%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 125.71428571428572%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 108.57142857142857%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 108.57142857142857%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 108.57142857142857%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 108.57142857142857%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 117.14285714285714%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 108.57142857142857%'>windows</a>   <a href='/blog/categories/zeroconf' style='font-size: 108.57142857142857%'>zeroconf</a>   <a href='/blog/categories/zigbee' style='font-size: 108.57142857142857%'>zigbee</a>   <a href='/blog/categories/zookeeper' style='font-size: 108.57142857142857%'>zookeeper</a>   </ul>
 </section>
 
 <section>

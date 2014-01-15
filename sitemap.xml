@@ -161,6 +161,12 @@
         <lastmod>2014-01-05T21:46:24-06:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://jacklund.github.io/blog/2014/01/14/logging-using-eventemitters-in-node-dot-js/
+        </loc>
+        <lastmod>2014-01-14T22:19:46-06:00</lastmod>
+    </url>
+    <url>
         <loc>http://jacklund.github.io/about/bajiquan.html</loc>
         <lastmod>2013-11-15T17:00:15-06:00</lastmod>
     </url>
@@ -186,11 +192,11 @@
     </url>
     <url>
         <loc>http://jacklund.github.io/blog/archives/</loc>
-        <lastmod>2014-01-05T21:46:24-06:00</lastmod>
+        <lastmod>2014-01-14T22:19:46-06:00</lastmod>
     </url>
     <url>
         <loc>http://jacklund.github.io/</loc>
-        <lastmod>2014-01-05T21:46:24-06:00</lastmod>
+        <lastmod>2014-01-14T22:19:46-06:00</lastmod>
     </url>
     <url>
         <loc>http://jacklund.github.io/robots.txt</loc>

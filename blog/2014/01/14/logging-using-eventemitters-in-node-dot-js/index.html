@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Second-to-last Day at Work - Geekheads</title>
+  <title>Logging Using EventEmitters in Node.js - Geekheads</title>
   <meta name="author" content="Jack Lund">
 
   
-  <meta name="description" content="My second-to-last day at my old job. It&rsquo;s always strange being almost out the door &ndash; people don&rsquo;t really know what to say to you. &hellip;">
+  <meta name="description" content="I&rsquo;ve been working a lot in node.js lately for a work project. Javascript as a language is an odd duck (pun not intended). It&rsquo;s got all &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jacklund.github.io/blog/2012/01/10/Second-to-last-Day-at-Work/">
+  <link rel="canonical" href="http://jacklund.github.io/blog/2014/01/14/logging-using-eventemitters-in-node-dot-js/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -78,7 +78,7 @@
   <header>
     
       
-        <h1 class="entry-title">Second-to-last Day at Work</h1>
+        <h1 class="entry-title">Logging Using EventEmitters in Node.js</h1>
       
     
     
@@ -95,18 +95,56 @@
   
 
 
-<time datetime="2012-01-10T00:00:00-06:00" pubdate data-updated="true">Jan 10<span>th</span>, 2012</time>
+<time datetime="2014-01-14T21:45:00-06:00" pubdate data-updated="true">Jan 14<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>My second-to-last day at my old job. It&rsquo;s always strange being <em>almost</em> out the door &ndash; people don&rsquo;t really know what to say to you. Everybody&rsquo;s really nice, but I think it&rsquo;s kind of confusing &ndash; they don&rsquo;t know whether to treat you as a colleague or a stranger.</p>
+<div class="entry-content"><p>I&rsquo;ve been working a lot in node.js lately for a work project. Javascript as a language is an odd duck (<a href="http://en.wikipedia.org/wiki/Duck_typing#In_JavaScript">pun not intended</a>). It&rsquo;s got all these incredibly powerful features &ndash; dynamic typing, inheritance-by-prototype, functions as first-class objects &ndash; but it has some really odd anachronisms, including having to use the C-style <code>for (var i = 0; i &lt; length; i++)</code> loop to iterate over arrays. Node adds a lot to the language as well, such as <a href="http://nodejs.org/api/events.html">EventEmitters</a>, which are very powerful. This afternoon I found a nifty new use for them: logging.</p>
 
-<p>The basement is finished now, so it&rsquo;s time now to begin the process of turning it into an office/server room. I&rsquo;ve got the cabling set up, so next I have to move the cable modem and wireless router down there into the space under the stairs, make sure everything still works on the network, and then start building my office furniture &ndash; one chair, one big-ass table, a small bookcase, put up my whiteboard(s), move my books down, and set up all the machines (once they come in). I have a Mac Mini coming in, and Mike, who is also in this new escapade with me, is sending me the parts for a Linux server which is going to be housed in my new &ldquo;server room&rdquo;.</p>
+<p>One of the issues that always seems to come up is the fact that logging is one of those things that is both local and global &ndash; it&rsquo;s local, in that you want to do the logging at the place where the event you&rsquo;re logging occurs, but global in that you want your logging configured globally &ndash; you don&rsquo;t want each and every class/module to have to &ldquo;know&rdquo; about logging. One consequence of this, especially with respect to testing, is that you end up having to configure loggers for your unit tests, which, in a way, makes them no longer &ldquo;unit&rdquo; tests at all. Optimally, what you want is a situation where you&rsquo;re logging locally, but if logging hasn&rsquo;t been set up by anyone, the logs just go into <code>/dev/null</code>. Basically, you want your logging to involve sending out logging &ldquo;events&rdquo;, which are either captured by something, or not. EventEmitters give that to you for free.</p>
 
-<p>I&rsquo;m really excited about the change, not just about working from home (which will undoubtedly be a double-edged sword), but also about the work. I&rsquo;ve been putting together a prototype of a RESTful data collection service using JBoss, RESTEasy, and Spring, and it&rsquo;s really coming along nicely. I think a side-effect of all this will be some tools we can leverage for creating RESTful Web Services easily.</p>
+<p>All EventEmitters are, for those of you unfamiliar with them (but familiar with OO terminology) are an implementation of the <a href="http://en.wikipedia.org/wiki/Observer_pattern">observer pattern</a>, but a really lightweight and easy to use one. I won&rsquo;t go into details on how it works, if you&rsquo;re interested, look at the docs (or, even better, check out <a href="https://github.com/hij1nx/EventEmitter2">eventemitter2</a>, which adds wildcards and namespaces to it). What I want to talk about is how to leverage it to make logging nicer.</p>
+
+<p>For instance, if you have a logging package that you&rsquo;re using (I&rsquo;m using <a href="https://github.com/flatiron/winston">winston</a>), you just create a module containing a class that is an <code>EventEmitter</code>:</p>
+
+<pre><code>var EventEmitter = require('events').EventEmitter;
+var util = require('util');
+
+function LogEmitter() {
+  EventEmitter.call(this);
+}
+
+util.inherit(LogEmitter, EventEmitter);
+</code></pre>
+
+<p>Then, create an instance of your emitter, and you make your logging method emit an event:</p>
+
+<pre><code>var logEmitter = new LogEmitter();
+
+module.exports.log = function(level, message) {
+  logEmitter.emit('logging', level, message);
+}
+</code></pre>
+
+<p>This just emits a <code>logging</code> event when <code>log()</code> is called, passing the parameters along.</p>
+
+<p>Finally, you also have something listening if someone initializes logging:</p>
+
+<pre><code>var initialized = false;
+module.exports.initialize = function() {
+  if (!initialized) {
+    initialized = true;
+    logEmitter.on('logging', function(level, message) {
+      // Log the message through your logging package here
+    });
+  }
+}
+</code></pre>
+
+<p>Then, you&rsquo;re good to go. Just distribute <code>logging.log()</code> calls throughout your code. If something in the code calls <code>logging.initialize()</code>, great, your messages get logged. If not (like, say, in a unit test), the messages go into the bitbucket.</p>
 </div>
 
 
@@ -129,15 +167,21 @@
   
 
 
-<time datetime="2012-01-10T00:00:00-06:00" pubdate data-updated="true">Jan 10<span>th</span>, 2012</time>
+<time datetime="2014-01-14T21:45:00-06:00" pubdate data-updated="true">Jan 14<span>th</span>, 2014</time>
       
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/node-dot-js/'>node.js</a>
+  
+</span>
 
 
     </p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jacklund.github.io/blog/2012/01/10/Second-to-last-Day-at-Work/" data-via="" data-counturl="http://jacklund.github.io/blog/2012/01/10/Second-to-last-Day-at-Work/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jacklund.github.io/blog/2014/01/14/logging-using-eventemitters-in-node-dot-js/" data-via="" data-counturl="http://jacklund.github.io/blog/2014/01/14/logging-using-eventemitters-in-node-dot-js/" >Tweet</a>
   
   
   
@@ -146,8 +190,8 @@
     
     <p class="meta">
       
+        <a class="basic-alignment left articlenav" href="/blog/2014/01/05/inheritance-in-functional-languages/" title="Previous Post: Inheritance in Functional Languages">&laquo; Inheritance in Functional Languages</a>
       
-        <a class="basic-alignment right articlenav" href="/blog/2012/01/11/Last-Day/" title="Next Post: Last Day">Last Day &raquo;</a>
       
     </p>
   </footer>
@@ -280,8 +324,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://jacklund.github.io/blog/2012/01/10/Second-to-last-Day-at-Work/';
-        var disqus_url = 'http://jacklund.github.io/blog/2012/01/10/Second-to-last-Day-at-Work/';
+        var disqus_identifier = 'http://jacklund.github.io/blog/2014/01/14/logging-using-eventemitters-in-node-dot-js/';
+        var disqus_url = 'http://jacklund.github.io/blog/2014/01/14/logging-using-eventemitters-in-node-dot-js/';
         var disqus_script = 'embed.js';
       
     (function () {

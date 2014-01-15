@@ -9,7 +9,7 @@
   <meta name="author" content="Jack Lund">
 
   
-  <meta name="description" content="There&rsquo;s a tendency amongst proponents of functional languages, like Javascript, to consider inheritance an anachronism of older (and, by &hellip;">
+  <meta name="description" content="I&rsquo;ve been working a lot in node.js lately for a work project. Javascript as a language is an odd duck (pun not intended). It&rsquo;s got all &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -74,6 +74,86 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2014/01/14/logging-using-eventemitters-in-node-dot-js/">Logging Using EventEmitters in Node.js</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-14T21:45:00-06:00" pubdate data-updated="true">Jan 14<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&rsquo;ve been working a lot in node.js lately for a work project. Javascript as a language is an odd duck (<a href="http://en.wikipedia.org/wiki/Duck_typing#In_JavaScript">pun not intended</a>). It&rsquo;s got all these incredibly powerful features &ndash; dynamic typing, inheritance-by-prototype, functions as first-class objects &ndash; but it has some really odd anachronisms, including having to use the C-style <code>for (var i = 0; i &lt; length; i++)</code> loop to iterate over arrays. Node adds a lot to the language as well, such as <a href="http://nodejs.org/api/events.html">EventEmitters</a>, which are very powerful. This afternoon I found a nifty new use for them: logging.</p>
+
+<p>One of the issues that always seems to come up is the fact that logging is one of those things that is both local and global &ndash; it&rsquo;s local, in that you want to do the logging at the place where the event you&rsquo;re logging occurs, but global in that you want your logging configured globally &ndash; you don&rsquo;t want each and every class/module to have to &ldquo;know&rdquo; about logging. One consequence of this, especially with respect to testing, is that you end up having to configure loggers for your unit tests, which, in a way, makes them no longer &ldquo;unit&rdquo; tests at all. Optimally, what you want is a situation where you&rsquo;re logging locally, but if logging hasn&rsquo;t been set up by anyone, the logs just go into <code>/dev/null</code>. Basically, you want your logging to involve sending out logging &ldquo;events&rdquo;, which are either captured by something, or not. EventEmitters give that to you for free.</p>
+
+<p>All EventEmitters are, for those of you unfamiliar with them (but familiar with OO terminology) are an implementation of the <a href="http://en.wikipedia.org/wiki/Observer_pattern">observer pattern</a>, but a really lightweight and easy to use one. I won&rsquo;t go into details on how it works, if you&rsquo;re interested, look at the docs (or, even better, check out <a href="https://github.com/hij1nx/EventEmitter2">eventemitter2</a>, which adds wildcards and namespaces to it). What I want to talk about is how to leverage it to make logging nicer.</p>
+
+<p>For instance, if you have a logging package that you&rsquo;re using (I&rsquo;m using <a href="https://github.com/flatiron/winston">winston</a>), you just create a module containing a class that is an <code>EventEmitter</code>:</p>
+
+<pre><code>var EventEmitter = require('events').EventEmitter;
+var util = require('util');
+
+function LogEmitter() {
+  EventEmitter.call(this);
+}
+
+util.inherit(LogEmitter, EventEmitter);
+</code></pre>
+
+<p>Then, create an instance of your emitter, and you make your logging method emit an event:</p>
+
+<pre><code>var logEmitter = new LogEmitter();
+
+module.exports.log = function(level, message) {
+  logEmitter.emit('logging', level, message);
+}
+</code></pre>
+
+<p>This just emits a <code>logging</code> event when <code>log()</code> is called, passing the parameters along.</p>
+
+<p>Finally, you also have something listening if someone initializes logging:</p>
+
+<pre><code>var initialized = false;
+module.exports.initialize = function() {
+  if (!initialized) {
+    initialized = true;
+    logEmitter.on('logging', function(level, message) {
+      // Log the message through your logging package here
+    });
+  }
+}
+</code></pre>
+
+<p>Then, you&rsquo;re good to go. Just distribute <code>logging.log()</code> calls throughout your code. If something in the code calls <code>logging.initialize()</code>, great, your messages get logged. If not (like, say, in a unit test), the messages go into the bitbucket.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -702,70 +782,6 @@ characteristics, which return <code>Characteristics</code> objects.</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/06/27/Zeroconf-Rocks/">Zeroconf Rocks!</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-27T22:27:00-05:00" pubdate data-updated="true">Jun 27<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I have a lot of computers on my network now &ndash; my laptop and desktop, my wife&rsquo;s 3(!) computers, her iPad, two Linux servers and miscellaneous other devices, along with my Raspberry Pi and two BeagleBone Blacks, so managing all these was starting to be a pain. So, just on a hunch, I wanted to see if <a href="http://en.wikipedia.org/wiki/Zero-configuration_networking">Bonjour/Zeroconf/Avahi</a> could help. I did some investigation, and it turns out that you can access any machines that advertise on Zeroconf by <em>name</em>.local. Since I work predominantly on Macs, I was already pretty comfortable with the idea of dynamically finding service. When I brought up my Bonjour Browser application, however, I was surprised: My two BeagleBone Blacks were already advertising (the wrong IP address for my network, but still)!</p>
-
-<p>So, first step: set up the Raspberry Pi to do the same. Fortunately, the Internet came to the rescue, in the form of <a href="http://elinux.org/RPi_Advanced_Setup">this page</a> about setting up Zeroconf on the Pi. I just followed the instructions, and it worked.</p>
-
-<p>Next, I had to fix my BeagleBone Blacks. To do this, I found the DHCP daemon config file, <code>/etc/udhcpd.conf</code>, which looked like this:</p>
-
-<pre><code>start      192.168.7.1
-end        192.168.7.1
-interface  usb0
-max_leases 1
-option subnet 255.255.255.252
-</code></pre>
-
-<p>and which I changed to match my network:</p>
-
-<pre><code>start      192.168.1.2
-end        192.168.1.99
-interface  usb0
-max_leases 1
-option subnet 255.255.255.0
-</code></pre>
-
-<p>Then, I just restarted them, and they suddenly had the right IP addresses.</p>
-
-<p>Now, all I have to do to SSH into my Pi is do <code>ssh raspberry-pi.local</code>. For my BeagleBones, it would be <code>ssh beaglebone-red.local</code> or <code>ssh beaglebone-blue.local</code>.</p>
-
-<p>W00t!!!!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -779,6 +795,10 @@ option subnet 255.255.255.0
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/01/14/logging-using-eventemitters-in-node-dot-js/">Logging Using EventEmitters in Node.js</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/01/05/inheritance-in-functional-languages/">Inheritance in Functional Languages</a>
@@ -796,15 +816,11 @@ option subnet 255.255.255.0
         <a href="/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/">btle.js 0.2.0 released</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2013/09/25/fun-with-beaglebone-black/">Fun with BeagleBone Black</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 120.0%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 110.0%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 120.0%'>beaglebone</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 110.0%'>beaglebone-black</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 120.0%'>beaglebone_black</a>   <a href='/blog/categories/bluetooth' style='font-size: 120.0%'>bluetooth</a>   <a href='/blog/categories/bluetooth-le' style='font-size: 130.0%'>bluetooth_le</a>   <a href='/blog/categories/bluez' style='font-size: 120.0%'>bluez</a>   <a href='/blog/categories/bonescript' style='font-size: 110.0%'>bonescript</a>   <a href='/blog/categories/bonjour' style='font-size: 110.0%'>bonjour</a>   <a href='/blog/categories/btle-js' style='font-size: 110.0%'>btle.js</a>   <a href='/blog/categories/c-' style='font-size: 120.0%'>c++</a>   <a href='/blog/categories/cobertura' style='font-size: 110.0%'>cobertura</a>   <a href='/blog/categories/documents' style='font-size: 110.0%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 140.0%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 110.0%'>eskrima</a>   <a href='/blog/categories/functional' style='font-size: 110.0%'>functional</a>   <a href='/blog/categories/gatt' style='font-size: 120.0%'>gatt</a>   <a href='/blog/categories/git' style='font-size: 120.0%'>git</a>   <a href='/blog/categories/github' style='font-size: 110.0%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 110.0%'>hornetq</a>   <a href='/blog/categories/ibeacon' style='font-size: 110.0%'>iBeacon</a>   <a href='/blog/categories/idea' style='font-size: 110.0%'>idea</a>   <a href='/blog/categories/inheritance' style='font-size: 110.0%'>inheritance</a>   <a href='/blog/categories/java' style='font-size: 120.0%'>java</a>   <a href='/blog/categories/javascript' style='font-size: 110.0%'>javascript</a>   <a href='/blog/categories/jboss' style='font-size: 110.0%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 110.0%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 110.0%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 110.0%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 110.0%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 110.0%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 110.0%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 150.0%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 110.0%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 110.0%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 120.0%'>maven</a>   <a href='/blog/categories/mqtt' style='font-size: 110.0%'>mqtt</a>   <a href='/blog/categories/node-js' style='font-size: 160.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 110.0%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 110.0%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 110.0%'>programming</a>   <a href='/blog/categories/python' style='font-size: 110.0%'>python</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 120.0%'>raspberry-pi</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 110.0%'>raspberry_pi</a>   <a href='/blog/categories/rest' style='font-size: 110.0%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 110.0%'>resteasy</a>   <a href='/blog/categories/sbt' style='font-size: 120.0%'>sbt</a>   <a href='/blog/categories/scala' style='font-size: 120.0%'>scala</a>   <a href='/blog/categories/scalability' style='font-size: 110.0%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 110.0%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 110.0%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 130.0%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 110.0%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 110.0%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 110.0%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 110.0%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 120.0%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 110.0%'>windows</a>   <a href='/blog/categories/zeroconf' style='font-size: 110.0%'>zeroconf</a>   <a href='/blog/categories/zigbee' style='font-size: 110.0%'>zigbee</a>   <a href='/blog/categories/zookeeper' style='font-size: 110.0%'>zookeeper</a>   </ul>
+    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 117.14285714285714%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 108.57142857142857%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 117.14285714285714%'>beaglebone</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 108.57142857142857%'>beaglebone-black</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 117.14285714285714%'>beaglebone_black</a>   <a href='/blog/categories/bluetooth' style='font-size: 117.14285714285714%'>bluetooth</a>   <a href='/blog/categories/bluetooth-le' style='font-size: 125.71428571428572%'>bluetooth_le</a>   <a href='/blog/categories/bluez' style='font-size: 117.14285714285714%'>bluez</a>   <a href='/blog/categories/bonescript' style='font-size: 108.57142857142857%'>bonescript</a>   <a href='/blog/categories/bonjour' style='font-size: 108.57142857142857%'>bonjour</a>   <a href='/blog/categories/btle-js' style='font-size: 108.57142857142857%'>btle.js</a>   <a href='/blog/categories/c-' style='font-size: 117.14285714285714%'>c++</a>   <a href='/blog/categories/cobertura' style='font-size: 108.57142857142857%'>cobertura</a>   <a href='/blog/categories/documents' style='font-size: 108.57142857142857%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 134.28571428571428%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 108.57142857142857%'>eskrima</a>   <a href='/blog/categories/functional' style='font-size: 108.57142857142857%'>functional</a>   <a href='/blog/categories/gatt' style='font-size: 117.14285714285714%'>gatt</a>   <a href='/blog/categories/git' style='font-size: 117.14285714285714%'>git</a>   <a href='/blog/categories/github' style='font-size: 108.57142857142857%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 108.57142857142857%'>hornetq</a>   <a href='/blog/categories/ibeacon' style='font-size: 108.57142857142857%'>iBeacon</a>   <a href='/blog/categories/idea' style='font-size: 108.57142857142857%'>idea</a>   <a href='/blog/categories/inheritance' style='font-size: 108.57142857142857%'>inheritance</a>   <a href='/blog/categories/java' style='font-size: 117.14285714285714%'>java</a>   <a href='/blog/categories/javascript' style='font-size: 117.14285714285714%'>javascript</a>   <a href='/blog/categories/jboss' style='font-size: 108.57142857142857%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 108.57142857142857%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 108.57142857142857%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 108.57142857142857%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 108.57142857142857%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 108.57142857142857%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 108.57142857142857%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 142.85714285714286%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 108.57142857142857%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 108.57142857142857%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 117.14285714285714%'>maven</a>   <a href='/blog/categories/mqtt' style='font-size: 108.57142857142857%'>mqtt</a>   <a href='/blog/categories/node-js' style='font-size: 160.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 108.57142857142857%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 108.57142857142857%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 108.57142857142857%'>programming</a>   <a href='/blog/categories/python' style='font-size: 108.57142857142857%'>python</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 117.14285714285714%'>raspberry-pi</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 108.57142857142857%'>raspberry_pi</a>   <a href='/blog/categories/rest' style='font-size: 108.57142857142857%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 108.57142857142857%'>resteasy</a>   <a href='/blog/categories/sbt' style='font-size: 117.14285714285714%'>sbt</a>   <a href='/blog/categories/scala' style='font-size: 117.14285714285714%'>scala</a>   <a href='/blog/categories/scalability' style='font-size: 108.57142857142857%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 108.57142857142857%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 108.57142857142857%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 125.71428571428572%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 108.57142857142857%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 108.57142857142857%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 108.57142857142857%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 108.57142857142857%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 117.14285714285714%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 108.57142857142857%'>windows</a>   <a href='/blog/categories/zeroconf' style='font-size: 108.57142857142857%'>zeroconf</a>   <a href='/blog/categories/zigbee' style='font-size: 108.57142857142857%'>zigbee</a>   <a href='/blog/categories/zookeeper' style='font-size: 108.57142857142857%'>zookeeper</a>   </ul>
 </section>
 
 <section>
