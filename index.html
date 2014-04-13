@@ -9,7 +9,7 @@
   <meta name="author" content="Jack Lund">
 
   
-  <meta name="description" content="I&rsquo;ve been working a lot in node.js lately for a work project. Javascript as a language is an odd duck (pun not intended). It&rsquo;s got all &hellip;">
+  <meta name="description" content="One of my new personal projects involves writing an application using Node.js and MongoDB. It&rsquo;s going to have a RESTful interface for the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -74,6 +74,58 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2014/04/13/dependency-injection-and-the-yagni-principle/">Dependency Injection and the YAGNI Principle</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-13T10:07:00-05:00" pubdate data-updated="true">Apr 13<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>One of my new personal projects involves writing an application using <a href="http://nodejs.org">Node.js</a> and <a href="http://www.mongodb.org">MongoDB</a>. It&rsquo;s going to have a <a href="http://en.wikipedia.org/wiki/Representational_state_transfer">RESTful</a> interface for the services, and MongoDB as the database (I haven&rsquo;t decided about what I&rsquo;m going to use for the front-end, but <a href="http://angularjs.org">Angular.js</a> is a strong contender). I had looked at using <a href="http://www.mean.io/">mean.io</a> to build it, but after playing with it for a while, it seemed to bring in too many things I wouldn&rsquo;t end up needing, so I decided to build it all from scratch using <a href="https://github.com/mcavage/node-restify">Restify</a> for the RESTful services.</p>
+
+<p>I&rsquo;m writing it in an <a href="http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">MVC</a>-ish way (really, since it&rsquo;s REST, it&rsquo;s more like MRC &ndash; Model &ndash; Route &ndash; Controller) where the top-level module requires routing modules from whatever Javascript files are in a particular directory (<code>lib/routes</code>), and calls them as functions, passing in the Restify server instance so the routes can be set up. Each route would call a corresponding &ldquo;controller&rdquo;, which would bring in a corresponding &ldquo;model&rdquo;, and set up the functions that each route would use to do its thing. So, the question became: how do I pass the database connection down to the model?</p>
+
+<p>When I looked at how mean.io does things, I noticed that they use a dependency injection package called &ldquo;<a href="https://github.com/idottv/dependable">dependable</a>&rdquo;. The way it works is that you create a &ldquo;container&rdquo; using dependable, and register dependencies in it, then the module that needs it would grab the container and read the dependencies out of it.</p>
+
+<p>First of all, this <em>isn&rsquo;t</em> dependency injection, because the module needing the dependencies has to actively retrieve the dependencies from a container, rather than having them <em>injected</em> (hence the term &ldquo;dependency <em>injection</em>&rdquo;). Of course, it doesn&rsquo;t really matter what you call it, the package performs the basic function well &ndash; removing the coupling between the module creating the dependency and the module using it. However, I question whether it makes sense for the mean.io stack to use it in this case, for the simple reason that I believe this is a case where coupling is fine, in that the top-level module is already coupled to the routing modules, which are coupled to the controllers, which are coupled to the models, so pretending that they don&rsquo;t know anything about one another is kind of silly.</p>
+
+<p>This speaks to another issue I&rsquo;ve seen a lot of (especially in the Java world), which is a lack of understanding of the role <a href="http://en.wikipedia.org/wiki/You_aren't_gonna_need_it">YAGNI</a> (&ldquo;You Ain&rsquo;t Gonna Need It&rdquo;) should play in programming.</p>
+
+<p>One of the most egregious examples of this (which I&rsquo;ve been guilty of myself) is the idea, in Java, that any class which is a dependency of another class should have an interface which the depending class uses as a proxy for it. In other words, if I have a class <code>A</code> which contains class <code>B</code>, I feel like I have to create a <code>BInterface</code> interface which <code>A</code> really contains, but which is implemented using <code>B</code>. The idea behind this is: what if, some day, I create a new class <code>C</code> which implements <code>BInterface</code>, but with a different implementation. Then, I don&rsquo;t have to change <code>A</code>&rsquo;s declaration, I just change where it creates <code>B</code> to create <code>C</code>.</p>
+
+<p>This is fundamentally the same idea as the one where you have to dependency inject everything &ndash; you want everything to be perfectly flexible, so you don&rsquo;t have to make changes when the implementation changes. However, the hidden expense here is that you now have twice as many classes/modules that you have to manage. Admittedly, half of them are interfaces, so they don&rsquo;t do much, but it&rsquo;s still adding a lot of complexity where it isn&rsquo;t needed, because, chances are, YAGNI. And, in those places where you do need it, creating a new interface is trivial (especially in something like Eclipse), so you can do it then.</p>
+
+<p>Flexibility <em>always</em> comes with a cost. The key to a good design is knowing where to add flexibility, and where not to. In the case of my Node.js code, I decided to pass the database connection through the route, simply because I think it&rsquo;s fine that the top-level module understands that the routes might need to pass it down to their dependencies &ndash; that&rsquo;s what having it as a parameter <em>means</em> &ndash; either &ldquo;I&rsquo;m going to need it&rdquo;, or &ldquo;one of my children will need it&rdquo;. Either way, it doesn&rsquo;t make the design any less clean, and, if something changes where I <em>do</em> need dependency injection, well, I can always add it later. YAGNI.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -720,68 +772,6 @@ characteristics, which return <code>Characteristics</code> objects.</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez/">Got Them Bluetooth LE Bluez</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-01T17:15:00-05:00" pubdate data-updated="true">Jul 1<span>st</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&rsquo;m trying to get my Raspberry Pi to talk to my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?INTC=SensorTag&amp;HQS=sensortag">TI Sensortag</a> over Bluetooth LE, using an <a href="http://www.iogear.com/product/GBU521/">IOGear Bluetooth 4.0 USB adapter</a>. I chose that adapter because it is supported by Linux, and so far it works quite nicely with the Pi.</p>
-
-<p>To start with, I&rsquo;d like to write something to pull the sensor data &ndash; temperature, humidity, pressure, etc &ndash; from the SensorTag and publish it over <a href="http://mqtt.org/">MQTT</a>. However, reading the data seems to be problematic.</p>
-
-<p>Problem #1 is that the most-used bluetooth package for Python, <a href="https://code.google.com/p/pybluez/">PyBluez</a> had their last release (0.18) in November, 2009, which, obviously, doesn&rsquo;t include Bluetooth LE. Not a problem, I thought, I&rsquo;ll just fork the project, add the bindings for LE, and off we go!</p>
-
-<p>Which brings me to problem #2: the developers of the <a href="http://www.bluez.org/">BlueZ</a> protocol stack, which is how you access bluetooth from, well, pretty much everywhere, haven&rsquo;t seen fit to include <a href="http://en.wikipedia.org/wiki/Bluetooth_profile#Generic_Attribute_Profile_.28GATT.29">GATT</a> support either via a public library or via D-Bus, despite the fact that they&rsquo;ve had the code in their codebase since around 2010.</p>
-
-<p>*<strong><em>facepalm</em></strong>*</p>
-
-<p>Look, I understand that everybody&rsquo;s busy and all, but, really, you couldn&rsquo;t, in the last THREE YEARS break out the GATT code into a library so that people can access it? Really?</p>
-
-<p>Of course, I shouldn&rsquo;t complain, I guess &ndash; they do provide a nice little command-line tool, <code>gatttool</code>, to let you do GATT stuff, just nothing to do, you know, programming with. Somebody (who is much braver than I) is even trying to <a href="https://github.com/msaunby/ble-sensor-pi">access that via Python and pexpect</a>, which works, sort of, but, uh, really, there has to be a better way.</p>
-
-<p>So, I guess my only option is to pull the GATT code out of the BlueZ project and add it to the Python project. It&rsquo;s ugly, but it&rsquo;s better than expect scripts.</p>
-
-<p>And, really, BlueZ developers: Come on, throw us a bone here.</p>
-
-<h3>Update</h3>
-
-<p>Well, it looks like I spoke too soon. Because the BlueZ developers have the GATT-layer stuff hooked heavily into glib 2.0 using callbacks, it would be much more work than I&rsquo;m willing to put into it to do this within Python, which probably explains why nobody else has done it either. Thanks again, BlueZ team! <em>sigh</em></p>
-
-<p>So, I guess what I&rsquo;m going to have to end up doing is writing all this in C/C++, and pulling parts of their GATT code into my project. Either that, or just implementing the parts I need myself.</p>
-
-<p>My guess is that the BlueZ developers are really more interested in writing kernel code than user-space code. It really sucks for anybody who wants to play with LE applications, though &ndash; right now everybody seems to be just writing wrappers around the BlueZ command-line apps and calling it a day. Not a great way to help with adoption of a standard, guys!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -795,6 +785,10 @@ characteristics, which return <code>Characteristics</code> objects.</p>
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/04/13/dependency-injection-and-the-yagni-principle/">Dependency Injection and the YAGNI principle</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/01/14/logging-using-eventemitters-in-node-dot-js/">Logging Using EventEmitters in Node.js</a>
@@ -812,15 +806,11 @@ characteristics, which return <code>Characteristics</code> objects.</p>
         <a href="/blog/2013/10/19/more-fun-with-beaglebone-black/">More Fun With BeagleBone Black</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/">btle.js 0.2.0 released</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 117.14285714285714%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 108.57142857142857%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 117.14285714285714%'>beaglebone</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 108.57142857142857%'>beaglebone-black</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 117.14285714285714%'>beaglebone_black</a>   <a href='/blog/categories/bluetooth' style='font-size: 117.14285714285714%'>bluetooth</a>   <a href='/blog/categories/bluetooth-le' style='font-size: 125.71428571428572%'>bluetooth_le</a>   <a href='/blog/categories/bluez' style='font-size: 117.14285714285714%'>bluez</a>   <a href='/blog/categories/bonescript' style='font-size: 108.57142857142857%'>bonescript</a>   <a href='/blog/categories/bonjour' style='font-size: 108.57142857142857%'>bonjour</a>   <a href='/blog/categories/btle-js' style='font-size: 108.57142857142857%'>btle.js</a>   <a href='/blog/categories/c-' style='font-size: 117.14285714285714%'>c++</a>   <a href='/blog/categories/cobertura' style='font-size: 108.57142857142857%'>cobertura</a>   <a href='/blog/categories/documents' style='font-size: 108.57142857142857%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 134.28571428571428%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 108.57142857142857%'>eskrima</a>   <a href='/blog/categories/functional' style='font-size: 108.57142857142857%'>functional</a>   <a href='/blog/categories/gatt' style='font-size: 117.14285714285714%'>gatt</a>   <a href='/blog/categories/git' style='font-size: 117.14285714285714%'>git</a>   <a href='/blog/categories/github' style='font-size: 108.57142857142857%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 108.57142857142857%'>hornetq</a>   <a href='/blog/categories/ibeacon' style='font-size: 108.57142857142857%'>iBeacon</a>   <a href='/blog/categories/idea' style='font-size: 108.57142857142857%'>idea</a>   <a href='/blog/categories/inheritance' style='font-size: 108.57142857142857%'>inheritance</a>   <a href='/blog/categories/java' style='font-size: 117.14285714285714%'>java</a>   <a href='/blog/categories/javascript' style='font-size: 117.14285714285714%'>javascript</a>   <a href='/blog/categories/jboss' style='font-size: 108.57142857142857%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 108.57142857142857%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 108.57142857142857%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 108.57142857142857%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 108.57142857142857%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 108.57142857142857%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 108.57142857142857%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 142.85714285714286%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 108.57142857142857%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 108.57142857142857%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 117.14285714285714%'>maven</a>   <a href='/blog/categories/mqtt' style='font-size: 108.57142857142857%'>mqtt</a>   <a href='/blog/categories/node-js' style='font-size: 160.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 108.57142857142857%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 108.57142857142857%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 108.57142857142857%'>programming</a>   <a href='/blog/categories/python' style='font-size: 108.57142857142857%'>python</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 117.14285714285714%'>raspberry-pi</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 108.57142857142857%'>raspberry_pi</a>   <a href='/blog/categories/rest' style='font-size: 108.57142857142857%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 108.57142857142857%'>resteasy</a>   <a href='/blog/categories/sbt' style='font-size: 117.14285714285714%'>sbt</a>   <a href='/blog/categories/scala' style='font-size: 117.14285714285714%'>scala</a>   <a href='/blog/categories/scalability' style='font-size: 108.57142857142857%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 108.57142857142857%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 108.57142857142857%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 125.71428571428572%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 108.57142857142857%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 108.57142857142857%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 108.57142857142857%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 108.57142857142857%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 117.14285714285714%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 108.57142857142857%'>windows</a>   <a href='/blog/categories/zeroconf' style='font-size: 108.57142857142857%'>zeroconf</a>   <a href='/blog/categories/zigbee' style='font-size: 108.57142857142857%'>zigbee</a>   <a href='/blog/categories/zookeeper' style='font-size: 108.57142857142857%'>zookeeper</a>   </ul>
+    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 115.0%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 107.5%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 115.0%'>beaglebone</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 107.5%'>beaglebone-black</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 115.0%'>beaglebone_black</a>   <a href='/blog/categories/bluetooth' style='font-size: 115.0%'>bluetooth</a>   <a href='/blog/categories/bluetooth-le' style='font-size: 122.5%'>bluetooth_le</a>   <a href='/blog/categories/bluez' style='font-size: 115.0%'>bluez</a>   <a href='/blog/categories/bonescript' style='font-size: 107.5%'>bonescript</a>   <a href='/blog/categories/bonjour' style='font-size: 107.5%'>bonjour</a>   <a href='/blog/categories/btle-js' style='font-size: 107.5%'>btle.js</a>   <a href='/blog/categories/c-' style='font-size: 115.0%'>c++</a>   <a href='/blog/categories/cobertura' style='font-size: 107.5%'>cobertura</a>   <a href='/blog/categories/dependency-injection' style='font-size: 107.5%'>dependency injection</a>   <a href='/blog/categories/documents' style='font-size: 107.5%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 130.0%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 107.5%'>eskrima</a>   <a href='/blog/categories/functional' style='font-size: 107.5%'>functional</a>   <a href='/blog/categories/gatt' style='font-size: 115.0%'>gatt</a>   <a href='/blog/categories/git' style='font-size: 115.0%'>git</a>   <a href='/blog/categories/github' style='font-size: 107.5%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 107.5%'>hornetq</a>   <a href='/blog/categories/ibeacon' style='font-size: 107.5%'>iBeacon</a>   <a href='/blog/categories/idea' style='font-size: 107.5%'>idea</a>   <a href='/blog/categories/inheritance' style='font-size: 107.5%'>inheritance</a>   <a href='/blog/categories/java' style='font-size: 122.5%'>java</a>   <a href='/blog/categories/javascript' style='font-size: 122.5%'>javascript</a>   <a href='/blog/categories/jboss' style='font-size: 107.5%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 107.5%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 107.5%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 107.5%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 107.5%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 107.5%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 107.5%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 137.5%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 107.5%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 107.5%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 115.0%'>maven</a>   <a href='/blog/categories/mqtt' style='font-size: 107.5%'>mqtt</a>   <a href='/blog/categories/node-js' style='font-size: 160.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 107.5%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 107.5%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 115.0%'>programming</a>   <a href='/blog/categories/python' style='font-size: 107.5%'>python</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 115.0%'>raspberry-pi</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 107.5%'>raspberry_pi</a>   <a href='/blog/categories/rest' style='font-size: 107.5%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 107.5%'>resteasy</a>   <a href='/blog/categories/sbt' style='font-size: 115.0%'>sbt</a>   <a href='/blog/categories/scala' style='font-size: 115.0%'>scala</a>   <a href='/blog/categories/scalability' style='font-size: 107.5%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 107.5%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 107.5%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 122.5%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 107.5%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 107.5%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 107.5%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 107.5%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 115.0%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 107.5%'>windows</a>   <a href='/blog/categories/zeroconf' style='font-size: 107.5%'>zeroconf</a>   <a href='/blog/categories/zigbee' style='font-size: 107.5%'>zigbee</a>   <a href='/blog/categories/zookeeper' style='font-size: 107.5%'>zookeeper</a>   </ul>
 </section>
 
 <section>

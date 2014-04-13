@@ -4,7 +4,7 @@
   <title><![CDATA[Category: node.js | Geekheads]]></title>
   <link href="http://jacklund.github.io/blog/categories/node-dot-js/atom.xml" rel="self"/>
   <link href="http://jacklund.github.io/"/>
-  <updated>2014-01-14T22:40:51-06:00</updated>
+  <updated>2014-04-13T11:22:50-05:00</updated>
   <id>http://jacklund.github.io/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
@@ -12,6 +12,29 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Dependency Injection and the YAGNI principle]]></title>
+    <link href="http://jacklund.github.io/blog/2014/04/13/dependency-injection-and-the-yagni-principle/"/>
+    <updated>2014-04-13T10:07:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2014/04/13/dependency-injection-and-the-yagni-principle</id>
+    <content type="html"><![CDATA[<p>One of my new personal projects involves writing an application using <a href="http://nodejs.org">Node.js</a> and <a href="http://www.mongodb.org">MongoDB</a>. It&rsquo;s going to have a <a href="http://en.wikipedia.org/wiki/Representational_state_transfer">RESTful</a> interface for the services, and MongoDB as the database (I haven&rsquo;t decided about what I&rsquo;m going to use for the front-end, but <a href="http://angularjs.org">Angular.js</a> is a strong contender). I had looked at using <a href="http://www.mean.io/">mean.io</a> to build it, but after playing with it for a while, it seemed to bring in too many things I wouldn&rsquo;t end up needing, so I decided to build it all from scratch using <a href="https://github.com/mcavage/node-restify">Restify</a> for the RESTful services.</p>
+
+<p>I&rsquo;m writing it in an <a href="http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">MVC</a>-ish way (really, since it&rsquo;s REST, it&rsquo;s more like MRC &ndash; Model &ndash; Route &ndash; Controller) where the top-level module requires routing modules from whatever Javascript files are in a particular directory (<code>lib/routes</code>), and calls them as functions, passing in the Restify server instance so the routes can be set up. Each route would call a corresponding &ldquo;controller&rdquo;, which would bring in a corresponding &ldquo;model&rdquo;, and set up the functions that each route would use to do its thing. So, the question became: how do I pass the database connection down to the model?</p>
+
+<p>When I looked at how mean.io does things, I noticed that they use a dependency injection package called &ldquo;<a href="https://github.com/idottv/dependable">dependable</a>&rdquo;. The way it works is that you create a &ldquo;container&rdquo; using dependable, and register dependencies in it, then the module that needs it would grab the container and read the dependencies out of it.</p>
+
+<p>First of all, this <em>isn&rsquo;t</em> dependency injection, because the module needing the dependencies has to actively retrieve the dependencies from a container, rather than having them <em>injected</em> (hence the term &ldquo;dependency <em>injection</em>&rdquo;). Of course, it doesn&rsquo;t really matter what you call it, the package performs the basic function well &ndash; removing the coupling between the module creating the dependency and the module using it. However, I question whether it makes sense for the mean.io stack to use it in this case, for the simple reason that I believe this is a case where coupling is fine, in that the top-level module is already coupled to the routing modules, which are coupled to the controllers, which are coupled to the models, so pretending that they don&rsquo;t know anything about one another is kind of silly.</p>
+
+<p>This speaks to another issue I&rsquo;ve seen a lot of (especially in the Java world), which is a lack of understanding of the role <a href="http://en.wikipedia.org/wiki/You_aren't_gonna_need_it">YAGNI</a> (&ldquo;You Ain&rsquo;t Gonna Need It&rdquo;) should play in programming.</p>
+
+<p>One of the most egregious examples of this (which I&rsquo;ve been guilty of myself) is the idea, in Java, that any class which is a dependency of another class should have an interface which the depending class uses as a proxy for it. In other words, if I have a class <code>A</code> which contains class <code>B</code>, I feel like I have to create a <code>BInterface</code> interface which <code>A</code> really contains, but which is implemented using <code>B</code>. The idea behind this is: what if, some day, I create a new class <code>C</code> which implements <code>BInterface</code>, but with a different implementation. Then, I don&rsquo;t have to change <code>A</code>&rsquo;s declaration, I just change where it creates <code>B</code> to create <code>C</code>.</p>
+
+<p>This is fundamentally the same idea as the one where you have to dependency inject everything &ndash; you want everything to be perfectly flexible, so you don&rsquo;t have to make changes when the implementation changes. However, the hidden expense here is that you now have twice as many classes/modules that you have to manage. Admittedly, half of them are interfaces, so they don&rsquo;t do much, but it&rsquo;s still adding a lot of complexity where it isn&rsquo;t needed, because, chances are, YAGNI. And, in those places where you do need it, creating a new interface is trivial (especially in something like Eclipse), so you can do it then.</p>
+
+<p>Flexibility <em>always</em> comes with a cost. The key to a good design is knowing where to add flexibility, and where not to. In the case of my Node.js code, I decided to pass the database connection through the route, simply because I think it&rsquo;s fine that the top-level module understands that the routes might need to pass it down to their dependencies &ndash; that&rsquo;s what having it as a parameter <em>means</em> &ndash; either &ldquo;I&rsquo;m going to need it&rdquo;, or &ldquo;one of my children will need it&rdquo;. Either way, it doesn&rsquo;t make the design any less clean, and, if something changes where I <em>do</em> need dependency injection, well, I can always add it later. YAGNI.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Logging Using EventEmitters in Node.js]]></title>
@@ -166,37 +189,6 @@ characteristics, which return <code>Characteristics</code> objects.</p>
 <p>Turns out, this is an <a href="https://github.com/jadonk/bonescript/issues/51">issue with the latest bonescript</a>. So, I ended up having to back down to the previous version of bonescript via opkg. Once I investigated the <code>module bonescript not found</code> issue, it turned out that, for some reason, the bonescript module in <code>/usr/lib/node_modules</code> wasn&rsquo;t getting written, so I had to do a <code>opkg remove bonescript</code> followed by <code>opkg install bonescript</code> to make it all work.</p>
 
 <p>All this, and I haven&rsquo;t even tried to get the XBee stuff working yet. Oy.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Node.js Bit Operations]]></title>
-    <link href="http://jacklund.github.io/blog/2013/09/12/node-dot-js-bit-operations/"/>
-    <updated>2013-09-12T09:07:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/09/12/node-dot-js-bit-operations</id>
-    <content type="html"><![CDATA[<p>I was working on trying to get the barometer readings from my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?DCMP=sensortag&amp;HQS=sensortag-bn">TI SensorTag</a> using Node.js when I came across this problem. See, the <a href="http://processors.wiki.ti.com/index.php/SensorTag_User_Guide#Barometric_Pressure_Sensor_2">user&rsquo;s guide</a> has two code examples for the algorithm for the pressure &ndash; one in C, and one in Java. The one in C uses primarily bit shift operations, whereas the one in Java uses <code>Math.pow()</code> to do the same thing. Naturally, I tended towards the bit shift operations since it makes the code a bit clearer as to what it&rsquo;s doing (ultimately, from a performance perspective, it doesn&rsquo;t matter since <code>Math.pow(2, x)</code> probably ultimately resolves to bit shifts anyway).</p>
-
-<p>However, when I did this, I kept on getting pressure values that were all over the place. When I broke it down, it looked like the &ldquo;offset&rdquo; and &ldquo;scale&rdquo; factors, which rely heavily on bit shifts, were bouncing all over the place.</p>
-
-<p>So, I did some looking, and discovered that, although Node.js stores all its variables as 64-bit floating point numbers, when it comes to bit operations, it does those as 32-bit numbers. A quick test showed that this is true:</p>
-
-<pre><code>&gt; a = Math.pow(2, 31)-1
-2147483647
-&gt; a &gt;&gt; 10
-2097151
-&gt; a = Math.pow(2, 32) -1
-4294967295
-&gt; a &gt;&gt; 10
--1
-&gt; a &gt;&gt; 2
--1
-</code></pre>
-
-<p>Notice the sharp transition once you hit that 32-bit border. What that meant was that any time I was doing bit operations, if the value I was operating on was less than 2<sup>32</sup>, I got the right answer, otherwise I got garbage. Fun.</p>
-
-<p>So, when I switched to the Java algorithm (modified, of course, because they seem to have forgotten to divide those values by 100 at the end) everything worked.</p>
-
-<p>Good. To. Know.</p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Geekheads]]></title>
   <link href="http://jacklund.github.io/atom.xml" rel="self"/>
   <link href="http://jacklund.github.io/"/>
-  <updated>2014-01-14T22:40:51-06:00</updated>
+  <updated>2014-04-13T11:22:50-05:00</updated>
   <id>http://jacklund.github.io/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
@@ -12,6 +12,29 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Dependency Injection and the YAGNI principle]]></title>
+    <link href="http://jacklund.github.io/blog/2014/04/13/dependency-injection-and-the-yagni-principle/"/>
+    <updated>2014-04-13T10:07:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2014/04/13/dependency-injection-and-the-yagni-principle</id>
+    <content type="html"><![CDATA[<p>One of my new personal projects involves writing an application using <a href="http://nodejs.org">Node.js</a> and <a href="http://www.mongodb.org">MongoDB</a>. It&rsquo;s going to have a <a href="http://en.wikipedia.org/wiki/Representational_state_transfer">RESTful</a> interface for the services, and MongoDB as the database (I haven&rsquo;t decided about what I&rsquo;m going to use for the front-end, but <a href="http://angularjs.org">Angular.js</a> is a strong contender). I had looked at using <a href="http://www.mean.io/">mean.io</a> to build it, but after playing with it for a while, it seemed to bring in too many things I wouldn&rsquo;t end up needing, so I decided to build it all from scratch using <a href="https://github.com/mcavage/node-restify">Restify</a> for the RESTful services.</p>
+
+<p>I&rsquo;m writing it in an <a href="http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">MVC</a>-ish way (really, since it&rsquo;s REST, it&rsquo;s more like MRC &ndash; Model &ndash; Route &ndash; Controller) where the top-level module requires routing modules from whatever Javascript files are in a particular directory (<code>lib/routes</code>), and calls them as functions, passing in the Restify server instance so the routes can be set up. Each route would call a corresponding &ldquo;controller&rdquo;, which would bring in a corresponding &ldquo;model&rdquo;, and set up the functions that each route would use to do its thing. So, the question became: how do I pass the database connection down to the model?</p>
+
+<p>When I looked at how mean.io does things, I noticed that they use a dependency injection package called &ldquo;<a href="https://github.com/idottv/dependable">dependable</a>&rdquo;. The way it works is that you create a &ldquo;container&rdquo; using dependable, and register dependencies in it, then the module that needs it would grab the container and read the dependencies out of it.</p>
+
+<p>First of all, this <em>isn&rsquo;t</em> dependency injection, because the module needing the dependencies has to actively retrieve the dependencies from a container, rather than having them <em>injected</em> (hence the term &ldquo;dependency <em>injection</em>&rdquo;). Of course, it doesn&rsquo;t really matter what you call it, the package performs the basic function well &ndash; removing the coupling between the module creating the dependency and the module using it. However, I question whether it makes sense for the mean.io stack to use it in this case, for the simple reason that I believe this is a case where coupling is fine, in that the top-level module is already coupled to the routing modules, which are coupled to the controllers, which are coupled to the models, so pretending that they don&rsquo;t know anything about one another is kind of silly.</p>
+
+<p>This speaks to another issue I&rsquo;ve seen a lot of (especially in the Java world), which is a lack of understanding of the role <a href="http://en.wikipedia.org/wiki/You_aren't_gonna_need_it">YAGNI</a> (&ldquo;You Ain&rsquo;t Gonna Need It&rdquo;) should play in programming.</p>
+
+<p>One of the most egregious examples of this (which I&rsquo;ve been guilty of myself) is the idea, in Java, that any class which is a dependency of another class should have an interface which the depending class uses as a proxy for it. In other words, if I have a class <code>A</code> which contains class <code>B</code>, I feel like I have to create a <code>BInterface</code> interface which <code>A</code> really contains, but which is implemented using <code>B</code>. The idea behind this is: what if, some day, I create a new class <code>C</code> which implements <code>BInterface</code>, but with a different implementation. Then, I don&rsquo;t have to change <code>A</code>&rsquo;s declaration, I just change where it creates <code>B</code> to create <code>C</code>.</p>
+
+<p>This is fundamentally the same idea as the one where you have to dependency inject everything &ndash; you want everything to be perfectly flexible, so you don&rsquo;t have to make changes when the implementation changes. However, the hidden expense here is that you now have twice as many classes/modules that you have to manage. Admittedly, half of them are interfaces, so they don&rsquo;t do much, but it&rsquo;s still adding a lot of complexity where it isn&rsquo;t needed, because, chances are, YAGNI. And, in those places where you do need it, creating a new interface is trivial (especially in something like Eclipse), so you can do it then.</p>
+
+<p>Flexibility <em>always</em> comes with a cost. The key to a good design is knowing where to add flexibility, and where not to. In the case of my Node.js code, I decided to pass the database connection through the route, simply because I think it&rsquo;s fine that the top-level module understands that the routes might need to pass it down to their dependencies &ndash; that&rsquo;s what having it as a parameter <em>means</em> &ndash; either &ldquo;I&rsquo;m going to need it&rdquo;, or &ldquo;one of my children will need it&rdquo;. Either way, it doesn&rsquo;t make the design any less clean, and, if something changes where I <em>do</em> need dependency injection, well, I can always add it later. YAGNI.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Logging Using EventEmitters in Node.js]]></title>
@@ -708,65 +731,6 @@ You should consider updating Angstrom!
 </code></pre>
 
 <p>I tried updating the OS using <a href="http://learn.adafruit.com/beaglebone-black-installing-operating-systems/overview">these instructions</a>, however it didn&rsquo;t make the problem go away. That&rsquo;s when I discovered that PyBBIO <a href="https://github.com/alexanderhiam/PyBBIO/issues/18">doesn&rsquo;t support the 3.8 kernel that comes with BB Blacks</a>, so it looks like I&rsquo;m stuck with Javascript for the moment.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[I Hate LaTeX]]></title>
-    <link href="http://jacklund.github.io/blog/2013/05/30/I-Hate-LaTeX/"/>
-    <updated>2013-05-30T11:30:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/05/30/I-Hate-LaTeX</id>
-    <content type="html"><![CDATA[<p>No, I really do. It&rsquo;s not hyperbole. I hate it.</p>
-
-<p>It&rsquo;s frickin&#8217; 2013, people. We should not have to deal with languages that look like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='latex'><span class='line'><span class="k">\renewcommand</span><span class="nb">{</span><span class="k">\href</span><span class="nb">}</span>[2]<span class="nb">{</span>#2<span class="k">\footnote</span><span class="nb">{</span><span class="k">\url</span><span class="nb">{</span>#1<span class="nb">}}}</span>
-</span><span class='line'><span class="s">$</span><span class="nb">endif</span><span class="s">$</span>
-</span><span class='line'><span class="s">$</span><span class="nb">if</span><span class="o">(</span><span class="nb">strikeout</span><span class="o">)</span><span class="s">$</span>
-</span><span class='line'><span class="k">\usepackage</span><span class="na">[normalem]</span><span class="nb">{</span>ulem<span class="nb">}</span>
-</span><span class='line'><span class="c">% avoid problems with \sout in headers with hyperref:</span>
-</span><span class='line'><span class="k">\pdfstringdefDisableCommands</span><span class="nb">{</span><span class="k">\renewcommand</span><span class="nb">{</span><span class="k">\sout</span><span class="nb">}{}}</span>
-</span><span class='line'><span class="s">$</span><span class="nb">endif</span><span class="s">$</span>
-</span><span class='line'><span class="k">\setlength</span><span class="nb">{</span><span class="k">\parindent</span><span class="nb">}{</span>0pt<span class="nb">}</span>
-</span><span class='line'><span class="k">\setlength</span><span class="nb">{</span><span class="k">\parskip</span><span class="nb">}{</span>6pt plus 2pt minus 1pt<span class="nb">}</span>
-</span><span class='line'><span class="k">\setlength</span><span class="nb">{</span><span class="k">\emergencystretch</span><span class="nb">}{</span>3em<span class="nb">}</span>  <span class="c">% prevent overfull lines</span>
-</span><span class='line'><span class="s">$</span><span class="nb">if</span><span class="o">(</span><span class="nb">numbersections</span><span class="o">)</span><span class="s">$</span>
-</span><span class='line'><span class="k">\setcounter</span><span class="nb">{</span>secnumdepth<span class="nb">}{</span>5<span class="nb">}</span>
-</span><span class='line'><span class="s">$</span><span class="nb">else</span><span class="s">$</span>
-</span><span class='line'><span class="k">\setcounter</span><span class="nb">{</span>secnumdepth<span class="nb">}{</span>0<span class="nb">}</span>
-</span><span class='line'><span class="s">$</span><span class="nb">endif</span><span class="s">$</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>and parsers that give errors like this:</p>
-
-<pre><code>paragraph ended before Gin@iii was completed.
-</code></pre>
-
-<p>The reason I&rsquo;m even messing with this is that I want a way to convert <a href="http://daringfireball.net/projects/markdown/">markdown</a> to PDF. Should be easy, right?</p>
-
-<p>Guess again. Just about everything either converts from markdown to HTML, then to PDF, which renders pretty badly, or from markdown to LaTeX to PDF, which renders rather nicely. Except, in order to tweak it (like adding a logo to the title) you have to hack LaTeX. Ugh.</p>
-
-<p>One of the most flexible converters, <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>, which, don&rsquo;t get me wrong, is a very nice package, requires you to tweak a <code>default.latex</code> file to modify the default format, hence my problem: I just spent around an hour and a half just trying to get a frickin&#8217; logo on the cover page where I want it (there&rsquo;s a LaTeX package called &ldquo;titlepic&rdquo; which puts it where <em>it</em> wants, but if you want it elsewhere, you&rsquo;re SOL).</p>
-
-<p>Again, it&rsquo;s 2013 and document creation shouldn&rsquo;t be frickin&#8217; rocket science! The whole point of writing in markdown is that we don&rsquo;t want to have to mess with complex document formats. I should be able to take a markdown document, pass it into a converter, give it some options in a syntax that doesn&rsquo;t look like 80&rsquo;s-era gobbledygook, and get a decent-looking document out the other end.</p>
-
-<p><em>facepalm</em></p>
 ]]></content>
   </entry>
   
