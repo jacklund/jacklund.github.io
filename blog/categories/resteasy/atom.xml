@@ -4,7 +4,7 @@
   <title><![CDATA[Category: resteasy | Geekheads]]></title>
   <link href="http://jacklund.github.io/blog/categories/resteasy/atom.xml" rel="self"/>
   <link href="http://jacklund.github.io/"/>
-  <updated>2014-04-13T11:22:50-05:00</updated>
+  <updated>2014-04-13T21:23:25-05:00</updated>
   <id>http://jacklund.github.io/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
@@ -21,13 +21,12 @@
     <content type="html"><![CDATA[<p>Handy safety tip: to create a RESTEasy-friendly Maven project in Eclipse, do the following:</p>
 
 <ol>
-<li>Create the project as a simple Maven project</li>
-<li>In the project Properties &ndash;> Project Facets, make the project faceted, and select &ldquo;Dynamic Web Module&rdquo; (you may get a NullPointerException, but it doesn&rsquo;t seem to matter). Under &ldquo;Further Configuration&hellip;&rdquo;, point the WebApp directory to be <code>src/main/webapp</code>, and have it create the <code>web.xml</code> file.</li>
-<li>Under &ldquo;Web Content Settings&rdquo;, set the Context root</li>
-<li>Under &ldquo;Deployment Assembly&rdquo;, select &ldquo;Add&hellip;&rdquo;, select &ldquo;Java Build Path Entries&rdquo;, and select &ldquo;Maven Dependencies&rdquo;. It should put them in <code>WEB-INF/lib</code>.</li>
-<li>Add the code and the dependencies to the <code>pom.xml</code>. Make sure to add the RESTEasy stuff to the <code>web.xml</code> file.</li>
+  <li>Create the project as a simple Maven project</li>
+  <li>In the project Properties -&gt; Project Facets, make the project faceted, and select “Dynamic Web Module” (you may get a NullPointerException, but it doesn’t seem to matter). Under “Further Configuration…”, point the WebApp directory to be <code>src/main/webapp</code>, and have it create the <code>web.xml</code> file.</li>
+  <li>Under “Web Content Settings”, set the Context root</li>
+  <li>Under “Deployment Assembly”, select “Add…”, select “Java Build Path Entries”, and select “Maven Dependencies”. It should put them in <code>WEB-INF/lib</code>.</li>
+  <li>Add the code and the dependencies to the <code>pom.xml</code>. Make sure to add the RESTEasy stuff to the <code>web.xml</code> file.</li>
 </ol>
-
 
 <p>You should be able to deploy it from Eclipse into Tomcat without any issues</p>
 ]]></content>

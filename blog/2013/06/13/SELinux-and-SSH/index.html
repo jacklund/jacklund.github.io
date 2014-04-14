@@ -102,7 +102,7 @@
   </header>
 
 
-<div class="entry-content"><p>I needed to set up Jenkins so that it could run an agent on another Linux box. To do this the default way, you need to allow Jenkins to access the remote box via SSH. So, I set up the Jenkins user and the SSH keys on the remote machine, but trying to do an ssh from the Jenkins user on one machine to the other still didn&rsquo;t work. After doing <code>sudo journalctl -f</code> on the remote machine, I saw the following:</p>
+<div class="entry-content"><p>I needed to set up Jenkins so that it could run an agent on another Linux box. To do this the default way, you need to allow Jenkins to access the remote box via SSH. So, I set up the Jenkins user and the SSH keys on the remote machine, but trying to do an ssh from the Jenkins user on one machine to the other still didn’t work. After doing <code>sudo journalctl -f</code> on the remote machine, I saw the following:</p>
 
 <pre><code>Jun 13 12:41:50 m2m-linux setroubleshoot[701]: SELinux is preventing /usr/sbin/sshd from read access on the file authorized_keys. For complete SELinux messages. run sealert -l ca7b7aea-64cf-46e5-8bfa-6650ad23f55b
 </code></pre>
@@ -133,7 +133,7 @@ allow this access for now by executing:
 # semodule -i mypol.pp
 </code></pre>
 
-<p>Not really helpful, so I dug around the web and found <a href="http://serverfault.com/questions/50573/selinux-preventing-passwordless-ssh-login">this post on ServerFault</a>. It turns out that the problem is that I created the Jenkins user&rsquo;s home directory by hand (I had to, it was <code>/var/jenkins</code>, which <code>adduser</code> wouldn&rsquo;t create), so SELinux didn&rsquo;t know it was a home directory.</p>
+<p>Not really helpful, so I dug around the web and found <a href="http://serverfault.com/questions/50573/selinux-preventing-passwordless-ssh-login">this post on ServerFault</a>. It turns out that the problem is that I created the Jenkins user’s home directory by hand (I had to, it was <code>/var/jenkins</code>, which <code>adduser</code> wouldn’t create), so SELinux didn’t know it was a home directory.</p>
 
 <p>To fix this, I added the following lines to the end of <code>/etc/selinux/targeted/contexts/files/file_contexts.homedirs</code>:</p>
 

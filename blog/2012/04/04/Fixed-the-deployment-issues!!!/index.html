@@ -9,7 +9,7 @@
   <meta name="author" content="Jack Lund">
 
   
-  <meta name="description" content="I finally figured out how to get Ant + Ivy to copy artifacts from one Artifactory repository to another, modifying the appropriate metadata (AKA & &hellip;">
+  <meta name="description" content="I finally figured out how to get Ant + Ivy to copy artifacts from one Artifactory repository to another, modifying the appropriate metadata (AKA “ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -102,101 +102,99 @@
   </header>
 
 
-<div class="entry-content"><p>I finally figured out how to get Ant + Ivy to copy artifacts from one Artifactory repository to another, modifying the appropriate metadata (AKA &ldquo;promotion&rdquo;). First, you need a separate ivy.xml file (I call mine &ldquo;ivy-publish.xml&rdquo;) that looks like this:</p>
+<div class="entry-content"><p>I finally figured out how to get Ant + Ivy to copy artifacts from one Artifactory repository to another, modifying the appropriate metadata (AKA “promotion”). First, you need a separate ivy.xml file (I call mine “ivy-publish.xml”) that looks like this:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;ivy-module</span> <span class="na">version=</span><span class="s">&quot;2.0&quot;</span>
-</span><span class='line'>       <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
-</span><span class='line'>       <span class="na">xsi:noNamespaceSchemaLocation=</span>
-</span><span class='line'>         <span class="s">&quot;http://ant.apache.org/ivy/schemas/ivy.xsd&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;info</span> <span class="na">organisation=</span><span class="s">&quot;foo&quot;</span> <span class="na">module=</span><span class="s">&quot;FooDeploy&quot;</span> <span class="na">status=</span><span class="s">&quot;integration&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nt">&lt;configurations&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;conf</span> <span class="na">name=</span><span class="s">&quot;integration&quot;</span><span class="nt">/&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;conf</span> <span class="na">name=</span><span class="s">&quot;milestone&quot;</span><span class="nt">/&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;conf</span> <span class="na">name=</span><span class="s">&quot;release&quot;</span><span class="nt">/&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;/configurations&gt;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nt">&lt;publications&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;artifact</span> <span class="na">name=</span><span class="s">&quot;Foo&quot;</span> <span class="na">ext=</span><span class="s">&quot;war&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;artifact</span> <span class="na">name=</span><span class="s">&quot;Foo-src&quot;</span> <span class="na">ext=</span><span class="s">&quot;jar&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/publications&gt;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nt">&lt;dependencies&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;dependency</span> <span class="na">org=</span><span class="s">&quot;foo&quot;</span> <span class="na">name=</span><span class="s">&quot;Foo&quot;</span> <span class="na">rev=</span><span class="s">&quot;latest.integration&quot;</span>
-</span><span class='line'>          <span class="na">conf=</span><span class="s">&quot;integration-&gt;deploy&quot;</span> <span class="na">transitive=</span><span class="s">&quot;false&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;dependency</span> <span class="na">org=</span><span class="s">&quot;foo&quot;</span> <span class="na">name=</span><span class="s">&quot;Foo&quot;</span> <span class="na">rev=</span><span class="s">&quot;latest.milestone&quot;</span>
-</span><span class='line'>          <span class="na">conf=</span><span class="s">&quot;milestone-&gt;deploy&quot;</span> <span class="na">transitive=</span><span class="s">&quot;false&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;dependency</span> <span class="na">org=</span><span class="s">&quot;foo&quot;</span> <span class="na">name=</span><span class="s">&quot;Foo&quot;</span> <span class="na">rev=</span><span class="s">&quot;latest.release&quot;</span>
-</span><span class='line'>          <span class="na">conf=</span><span class="s">&quot;release-&gt;deploy&quot;</span> <span class="na">transitive=</span><span class="s">&quot;false&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/dependencies&gt;</span>
-</span><span class='line'><span class="nt">&lt;/ivy-module&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;ivy-module</span> <span class="na">version=</span><span class="s">&quot;2.0&quot;</span>
+</span><span class="line">       <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+</span><span class="line">       <span class="na">xsi:noNamespaceSchemaLocation=</span>
+</span><span class="line">         <span class="s">&quot;http://ant.apache.org/ivy/schemas/ivy.xsd&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;info</span> <span class="na">organisation=</span><span class="s">&quot;foo&quot;</span> <span class="na">module=</span><span class="s">&quot;FooDeploy&quot;</span> <span class="na">status=</span><span class="s">&quot;integration&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line">
+</span><span class="line">    <span class="nt">&lt;configurations&gt;</span>
+</span><span class="line">    	<span class="nt">&lt;conf</span> <span class="na">name=</span><span class="s">&quot;integration&quot;</span><span class="nt">/&gt;</span>
+</span><span class="line">    	<span class="nt">&lt;conf</span> <span class="na">name=</span><span class="s">&quot;milestone&quot;</span><span class="nt">/&gt;</span>
+</span><span class="line">    	<span class="nt">&lt;conf</span> <span class="na">name=</span><span class="s">&quot;release&quot;</span><span class="nt">/&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/configurations&gt;</span>
+</span><span class="line">
+</span><span class="line">	<span class="nt">&lt;publications&gt;</span>
+</span><span class="line">		<span class="nt">&lt;artifact</span> <span class="na">name=</span><span class="s">&quot;Foo&quot;</span> <span class="na">ext=</span><span class="s">&quot;war&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line">		<span class="nt">&lt;artifact</span> <span class="na">name=</span><span class="s">&quot;Foo-src&quot;</span> <span class="na">ext=</span><span class="s">&quot;jar&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line">	<span class="nt">&lt;/publications&gt;</span>
+</span><span class="line">
+</span><span class="line">	<span class="nt">&lt;dependencies&gt;</span>
+</span><span class="line">		<span class="nt">&lt;dependency</span> <span class="na">org=</span><span class="s">&quot;foo&quot;</span> <span class="na">name=</span><span class="s">&quot;Foo&quot;</span> <span class="na">rev=</span><span class="s">&quot;latest.integration&quot;</span>
+</span><span class="line">          <span class="na">conf=</span><span class="s">&quot;integration-&gt;deploy&quot;</span> <span class="na">transitive=</span><span class="s">&quot;false&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line">		<span class="nt">&lt;dependency</span> <span class="na">org=</span><span class="s">&quot;foo&quot;</span> <span class="na">name=</span><span class="s">&quot;Foo&quot;</span> <span class="na">rev=</span><span class="s">&quot;latest.milestone&quot;</span>
+</span><span class="line">          <span class="na">conf=</span><span class="s">&quot;milestone-&gt;deploy&quot;</span> <span class="na">transitive=</span><span class="s">&quot;false&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line">		<span class="nt">&lt;dependency</span> <span class="na">org=</span><span class="s">&quot;foo&quot;</span> <span class="na">name=</span><span class="s">&quot;Foo&quot;</span> <span class="na">rev=</span><span class="s">&quot;latest.release&quot;</span>
+</span><span class="line">          <span class="na">conf=</span><span class="s">&quot;release-&gt;deploy&quot;</span> <span class="na">transitive=</span><span class="s">&quot;false&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line">	<span class="nt">&lt;/dependencies&gt;</span>
+</span><span class="line"><span class="nt">&lt;/ivy-module&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>And then, you need an ant target that looks like this:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;target</span> <span class="na">name=</span><span class="s">&quot;publish-stage&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;ivy:configure</span> <span class="na">file=</span><span class="s">&quot;${common.build.dir}/ivysettings.xml&quot;</span>
-</span><span class='line'>          <span class="na">host=</span><span class="s">&quot;myserver&quot;</span> <span class="na">realm=</span><span class="s">&quot;Artifactory Realm&quot;</span> <span class="na">username=</span><span class="s">&quot;user&quot;</span>
-</span><span class='line'>          <span class="na">passwd=</span><span class="s">&quot;password!&quot;</span> <span class="na">override=</span><span class="s">&quot;true&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;ivy:retrieve</span> <span class="na">file=</span><span class="s">&quot;ivy-publish.xml&quot;</span> <span class="na">conf=</span><span class="s">&quot;integration&quot;</span>
-</span><span class='line'>          <span class="na">pattern=</span><span class="s">&quot;${ivy.lib.dir}/[conf]/[artifact].[ext]&quot;</span>
-</span><span class='line'>          <span class="na">ivypattern=</span><span class="s">&quot;${ivy.lib.dir}/[conf]/ivy.xml&quot;</span><span class="nt">/&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;ivy:buildnumber</span> <span class="na">organisation=</span><span class="s">&quot;${ivy.organisation}&quot;</span>
-</span><span class='line'>          <span class="na">module=</span><span class="s">&quot;${ivy.module}&quot;</span> <span class="na">revision=</span><span class="s">&quot;1.0&quot;</span> <span class="na">defaultBuildNumber=</span><span class="s">&quot;1&quot;</span>
-</span><span class='line'>          <span class="na">resolver=</span><span class="s">&quot;stage&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;ivy:publish</span> <span class="na">resolver=</span><span class="s">&quot;stage&quot;</span>
-</span><span class='line'>          <span class="na">pubrevision=</span><span class="s">&quot;1.0.${ivy.new.build.number}&quot;</span>
-</span><span class='line'>          <span class="na">status=</span><span class="s">&quot;milestone&quot;</span> <span class="na">overwrite=</span><span class="s">&quot;true&quot;</span> <span class="na">update=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;artifacts</span> <span class="na">pattern=</span><span class="s">&quot;${lib}/integration/[artifact].[ext]&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/ivy:publish&gt;</span>
-</span><span class='line'><span class="nt">&lt;/target&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;target</span> <span class="na">name=</span><span class="s">&quot;publish-stage&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">	<span class="nt">&lt;ivy:configure</span> <span class="na">file=</span><span class="s">&quot;${common.build.dir}/ivysettings.xml&quot;</span>
+</span><span class="line">  		<span class="na">host=</span><span class="s">&quot;myserver&quot;</span> <span class="na">realm=</span><span class="s">&quot;Artifactory Realm&quot;</span> <span class="na">username=</span><span class="s">&quot;user&quot;</span>
+</span><span class="line">  		<span class="na">passwd=</span><span class="s">&quot;password!&quot;</span> <span class="na">override=</span><span class="s">&quot;true&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line">	<span class="nt">&lt;ivy:retrieve</span> <span class="na">file=</span><span class="s">&quot;ivy-publish.xml&quot;</span> <span class="na">conf=</span><span class="s">&quot;integration&quot;</span>
+</span><span class="line">  		<span class="na">pattern=</span><span class="s">&quot;${ivy.lib.dir}/[conf]/[artifact].[ext]&quot;</span>
+</span><span class="line">    	    <span class="na">ivypattern=</span><span class="s">&quot;${ivy.lib.dir}/[conf]/ivy.xml&quot;</span><span class="nt">/&gt;</span>
+</span><span class="line">	<span class="nt">&lt;ivy:buildnumber</span> <span class="na">organisation=</span><span class="s">&quot;${ivy.organisation}&quot;</span>
+</span><span class="line">  		<span class="na">module=</span><span class="s">&quot;${ivy.module}&quot;</span> <span class="na">revision=</span><span class="s">&quot;1.0&quot;</span> <span class="na">defaultBuildNumber=</span><span class="s">&quot;1&quot;</span>
+</span><span class="line">  		<span class="na">resolver=</span><span class="s">&quot;stage&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line">	<span class="nt">&lt;ivy:publish</span> <span class="na">resolver=</span><span class="s">&quot;stage&quot;</span>
+</span><span class="line">  		<span class="na">pubrevision=</span><span class="s">&quot;1.0.${ivy.new.build.number}&quot;</span>
+</span><span class="line">  		<span class="na">status=</span><span class="s">&quot;milestone&quot;</span> <span class="na">overwrite=</span><span class="s">&quot;true&quot;</span> <span class="na">update=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">		<span class="nt">&lt;artifacts</span> <span class="na">pattern=</span><span class="s">&quot;${lib}/integration/[artifact].[ext]&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line">	<span class="nt">&lt;/ivy:publish&gt;</span>
+</span><span class="line"><span class="nt">&lt;/target&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
-<p>What this does is first retrieve the &ldquo;dependencies&rdquo; (the artifacts we&rsquo;re interested in) specified in the ivy-publish.xml file to lib/integration. Then, it turns around and publishes them, changing the status from &ldquo;integration&rdquo; to &ldquo;milestone&rdquo;.</p>
+<p>What this does is first retrieve the “dependencies” (the artifacts we’re interested in) specified in the ivy-publish.xml file to lib/integration. Then, it turns around and publishes them, changing the status from “integration” to “milestone”.</p>
 
 <p>Works like a charm.</p>
 </div>

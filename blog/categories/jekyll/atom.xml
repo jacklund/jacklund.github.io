@@ -4,7 +4,7 @@
   <title><![CDATA[Category: jekyll | Geekheads]]></title>
   <link href="http://jacklund.github.io/blog/categories/jekyll/atom.xml" rel="self"/>
   <link href="http://jacklund.github.io/"/>
-  <updated>2014-04-13T11:22:50-05:00</updated>
+  <updated>2014-04-13T21:23:25-05:00</updated>
   <id>http://jacklund.github.io/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
@@ -18,9 +18,9 @@
     <link href="http://jacklund.github.io/blog/2013/06/18/moved-to-github-slash-octopress/"/>
     <updated>2013-06-18T10:51:00-05:00</updated>
     <id>http://jacklund.github.io/blog/2013/06/18/moved-to-github-slash-octopress</id>
-    <content type="html"><![CDATA[<p>I finally gave up on <a href="http://www.scriptogr.am">scriptogr.am</a>. I was struggling with their syntax highlighting, even sent a message to their support. The only answer I got back was from another user (who was very helpful, but it didn&rsquo;t really fix my problem). So, I&rsquo;m done.</p>
+    <content type="html"><![CDATA[<p>I finally gave up on <a href="http://www.scriptogr.am">scriptogr.am</a>. I was struggling with their syntax highlighting, even sent a message to their support. The only answer I got back was from another user (who was very helpful, but it didn’t really fix my problem). So, I’m done.</p>
 
-<p>I&rsquo;m now using <a href="http://pages.github.com/">GitHub Pages</a>, which generates their pages using <a href="https://github.com/mojombo/jekyll">Jekyll</a>. I&rsquo;m also using <a href="http://octopress.org/">Octopress</a> for the layout, which makes it all pretty easy (well, that is, once you go through the somewhat painful ruby setup).</p>
+<p>I’m now using <a href="http://pages.github.com/">GitHub Pages</a>, which generates their pages using <a href="https://github.com/mojombo/jekyll">Jekyll</a>. I’m also using <a href="http://octopress.org/">Octopress</a> for the layout, which makes it all pretty easy (well, that is, once you go through the somewhat painful ruby setup).</p>
 ]]></content>
   </entry>
   

@@ -9,7 +9,7 @@
   <meta name="author" content="Jack Lund">
 
   
-  <meta name="description" content="I&rsquo;m trying to get my Raspberry Pi to talk to my TI Sensortag over Bluetooth LE, using an IOGear Bluetooth 4.0 USB adapter. I chose that adapter &hellip;">
+  <meta name="description" content="I’m trying to get my Raspberry Pi to talk to my TI Sensortag over Bluetooth LE, using an IOGear Bluetooth 4.0 USB adapter. I chose that adapter &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -105,31 +105,30 @@
   </header>
 
 
-  <div class="entry-content"><p>I&rsquo;m trying to get my Raspberry Pi to talk to my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?INTC=SensorTag&amp;HQS=sensortag">TI Sensortag</a> over Bluetooth LE, using an <a href="http://www.iogear.com/product/GBU521/">IOGear Bluetooth 4.0 USB adapter</a>. I chose that adapter because it is supported by Linux, and so far it works quite nicely with the Pi.</p>
+  <div class="entry-content"><p>I’m trying to get my Raspberry Pi to talk to my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?INTC=SensorTag&amp;HQS=sensortag">TI Sensortag</a> over Bluetooth LE, using an <a href="http://www.iogear.com/product/GBU521/">IOGear Bluetooth 4.0 USB adapter</a>. I chose that adapter because it is supported by Linux, and so far it works quite nicely with the Pi.</p>
 
-<p>To start with, I&rsquo;d like to write something to pull the sensor data &ndash; temperature, humidity, pressure, etc &ndash; from the SensorTag and publish it over <a href="http://mqtt.org/">MQTT</a>. However, reading the data seems to be problematic.</p>
+<p>To start with, I’d like to write something to pull the sensor data - temperature, humidity, pressure, etc - from the SensorTag and publish it over <a href="http://mqtt.org/">MQTT</a>. However, reading the data seems to be problematic.</p>
 
-<p>Problem #1 is that the most-used bluetooth package for Python, <a href="https://code.google.com/p/pybluez/">PyBluez</a> had their last release (0.18) in November, 2009, which, obviously, doesn&rsquo;t include Bluetooth LE. Not a problem, I thought, I&rsquo;ll just fork the project, add the bindings for LE, and off we go!</p>
+<p>Problem #1 is that the most-used bluetooth package for Python, <a href="https://code.google.com/p/pybluez/">PyBluez</a> had their last release (0.18) in November, 2009, which, obviously, doesn’t include Bluetooth LE. Not a problem, I thought, I’ll just fork the project, add the bindings for LE, and off we go!</p>
 
-<p>Which brings me to problem #2: the developers of the <a href="http://www.bluez.org/">BlueZ</a> protocol stack, which is how you access bluetooth from, well, pretty much everywhere, haven&rsquo;t seen fit to include <a href="http://en.wikipedia.org/wiki/Bluetooth_profile#Generic_Attribute_Profile_.28GATT.29">GATT</a> support either via a public library or via D-Bus, despite the fact that they&rsquo;ve had the code in their codebase since around 2010.</p>
+<p>Which brings me to problem #2: the developers of the <a href="http://www.bluez.org/">BlueZ</a> protocol stack, which is how you access bluetooth from, well, pretty much everywhere, haven’t seen fit to include <a href="http://en.wikipedia.org/wiki/Bluetooth_profile#Generic_Attribute_Profile_.28GATT.29">GATT</a> support either via a public library or via D-Bus, despite the fact that they’ve had the code in their codebase since around 2010.</p>
 
 <p>*<strong><em>facepalm</em></strong>*</p>
 
-<p>Look, I understand that everybody&rsquo;s busy and all, but, really, you couldn&rsquo;t, in the last THREE YEARS break out the GATT code into a library so that people can access it? Really?</p>
+<p>Look, I understand that everybody’s busy and all, but, really, you couldn’t, in the last THREE YEARS break out the GATT code into a library so that people can access it? Really?</p>
 
-<p>Of course, I shouldn&rsquo;t complain, I guess &ndash; they do provide a nice little command-line tool, <code>gatttool</code>, to let you do GATT stuff, just nothing to do, you know, programming with. Somebody (who is much braver than I) is even trying to <a href="https://github.com/msaunby/ble-sensor-pi">access that via Python and pexpect</a>, which works, sort of, but, uh, really, there has to be a better way.</p>
+<p>Of course, I shouldn’t complain, I guess - they do provide a nice little command-line tool, <code>gatttool</code>, to let you do GATT stuff, just nothing to do, you know, programming with. Somebody (who is much braver than I) is even trying to <a href="https://github.com/msaunby/ble-sensor-pi">access that via Python and pexpect</a>, which works, sort of, but, uh, really, there has to be a better way.</p>
 
-<p>So, I guess my only option is to pull the GATT code out of the BlueZ project and add it to the Python project. It&rsquo;s ugly, but it&rsquo;s better than expect scripts.</p>
+<p>So, I guess my only option is to pull the GATT code out of the BlueZ project and add it to the Python project. It’s ugly, but it’s better than expect scripts.</p>
 
 <p>And, really, BlueZ developers: Come on, throw us a bone here.</p>
 
-<h3>Update</h3>
+<h3 id="update">Update</h3>
+<p>Well, it looks like I spoke too soon. Because the BlueZ developers have the GATT-layer stuff hooked heavily into glib 2.0 using callbacks, it would be much more work than I’m willing to put into it to do this within Python, which probably explains why nobody else has done it either. Thanks again, BlueZ team! <em>sigh</em></p>
 
-<p>Well, it looks like I spoke too soon. Because the BlueZ developers have the GATT-layer stuff hooked heavily into glib 2.0 using callbacks, it would be much more work than I&rsquo;m willing to put into it to do this within Python, which probably explains why nobody else has done it either. Thanks again, BlueZ team! <em>sigh</em></p>
+<p>So, I guess what I’m going to have to end up doing is writing all this in C/C++, and pulling parts of their GATT code into my project. Either that, or just implementing the parts I need myself.</p>
 
-<p>So, I guess what I&rsquo;m going to have to end up doing is writing all this in C/C++, and pulling parts of their GATT code into my project. Either that, or just implementing the parts I need myself.</p>
-
-<p>My guess is that the BlueZ developers are really more interested in writing kernel code than user-space code. It really sucks for anybody who wants to play with LE applications, though &ndash; right now everybody seems to be just writing wrappers around the BlueZ command-line apps and calling it a day. Not a great way to help with adoption of a standard, guys!</p>
+<p>My guess is that the BlueZ developers are really more interested in writing kernel code than user-space code. It really sucks for anybody who wants to play with LE applications, though - right now everybody seems to be just writing wrappers around the BlueZ command-line apps and calling it a day. Not a great way to help with adoption of a standard, guys!</p>
 </div>
   
   
@@ -167,7 +166,7 @@
   </header>
 
 
-  <div class="entry-content"><p>I have a lot of computers on my network now &ndash; my laptop and desktop, my wife&rsquo;s 3(!) computers, her iPad, two Linux servers and miscellaneous other devices, along with my Raspberry Pi and two BeagleBone Blacks, so managing all these was starting to be a pain. So, just on a hunch, I wanted to see if <a href="http://en.wikipedia.org/wiki/Zero-configuration_networking">Bonjour/Zeroconf/Avahi</a> could help. I did some investigation, and it turns out that you can access any machines that advertise on Zeroconf by <em>name</em>.local. Since I work predominantly on Macs, I was already pretty comfortable with the idea of dynamically finding service. When I brought up my Bonjour Browser application, however, I was surprised: My two BeagleBone Blacks were already advertising (the wrong IP address for my network, but still)!</p>
+  <div class="entry-content"><p>I have a lot of computers on my network now - my laptop and desktop, my wife’s 3(!) computers, her iPad, two Linux servers and miscellaneous other devices, along with my Raspberry Pi and two BeagleBone Blacks, so managing all these was starting to be a pain. So, just on a hunch, I wanted to see if <a href="http://en.wikipedia.org/wiki/Zero-configuration_networking">Bonjour/Zeroconf/Avahi</a> could help. I did some investigation, and it turns out that you can access any machines that advertise on Zeroconf by <em>name</em>.local. Since I work predominantly on Macs, I was already pretty comfortable with the idea of dynamically finding service. When I brought up my Bonjour Browser application, however, I was surprised: My two BeagleBone Blacks were already advertising (the wrong IP address for my network, but still)!</p>
 
 <p>So, first step: set up the Raspberry Pi to do the same. Fortunately, the Internet came to the rescue, in the form of <a href="http://elinux.org/RPi_Advanced_Setup">this page</a> about setting up Zeroconf on the Pi. I just followed the instructions, and it worked.</p>
 
@@ -231,19 +230,19 @@ option subnet 255.255.255.0
   </header>
 
 
-  <div class="entry-content"><p>So, I&rsquo;ve been playing around with Scala, and, while I&rsquo;m quite impressed with the language syntax, it&rsquo;s a real pain-in-the-ass to deal with. To begin with, the various versions (2.7, 2.8, 2.9., 2.10) are <a href="http://lift.la/scalas-version-fragility-make-the-enterprise">binary incompatible</a>, which is really annoying. I understand that the language is still in development, but you would think they&rsquo;d have the core of the language all worked out by now.</p>
+  <div class="entry-content"><p>So, I’ve been playing around with Scala, and, while I’m quite impressed with the language syntax, it’s a real pain-in-the-ass to deal with. To begin with, the various versions (2.7, 2.8, 2.9., 2.10) are <a href="http://lift.la/scalas-version-fragility-make-the-enterprise">binary incompatible</a>, which is really annoying. I understand that the language is still in development, but you would think they’d have the core of the language all worked out by now.</p>
 
-<p>I understand the <a href="http://suereth.blogspot.com/2011/12/scala-fresh-is-alive.html">reasons behind it</a>: they&rsquo;re still making changes to the base traits which causes all the objects to change. But, really, this is one of those things that every language (well, every language with a base class or interface) goes through. These are the things you go through, however, when you&rsquo;re doing the pre-1.0 releases of the language, not 2.x; at most, you make these changes when you transition between major revisions &ndash; from 2.x to 3.0, for instance &ndash; <em>not</em> between minor revisions.</p>
+<p>I understand the <a href="http://suereth.blogspot.com/2011/12/scala-fresh-is-alive.html">reasons behind it</a>: they’re still making changes to the base traits which causes all the objects to change. But, really, this is one of those things that every language (well, every language with a base class or interface) goes through. These are the things you go through, however, when you’re doing the pre-1.0 releases of the language, not 2.x; at most, you make these changes when you transition between major revisions - from 2.x to 3.0, for instance - <em>not</em> between minor revisions.</p>
 
-<p>What concerns me with this, besides the PIA factor, is that a) the language developers don&rsquo;t seem to think this is a problem, and b) that it indicates a tendency to want to &ldquo;fiddle&rdquo; with the language. I understand the desire to &ldquo;fiddle&rdquo;, it&rsquo;s one of those things that every software developer goes through, the desire to &ldquo;tweak it just a little bit more&rdquo; after it&rsquo;s released. It&rsquo;s also one of those things that mature software developers grow out of. &ldquo;The perfect is the enemy of the good&rdquo;.</p>
+<p>What concerns me with this, besides the PIA factor, is that a) the language developers don’t seem to think this is a problem, and b) that it indicates a tendency to want to “fiddle” with the language. I understand the desire to “fiddle”, it’s one of those things that every software developer goes through, the desire to “tweak it just a little bit more” after it’s released. It’s also one of those things that mature software developers grow out of. “The perfect is the enemy of the good”.</p>
 
-<p>They don&rsquo;t seem to realize that this is going to make it <em>really</em> hard for it to be taken seriously as a general-purpose language. When you&rsquo;re trying to make a business case for using a new language, one of the things that you have to demonstrate is that the language is mature enough to not change out from under you. Scala is changing constantly, and the Scala developers seem to think this is a virtue, rather than a problem.</p>
+<p>They don’t seem to realize that this is going to make it <em>really</em> hard for it to be taken seriously as a general-purpose language. When you’re trying to make a business case for using a new language, one of the things that you have to demonstrate is that the language is mature enough to not change out from under you. Scala is changing constantly, and the Scala developers seem to think this is a virtue, rather than a problem.</p>
 
-<p>Why is this a problem? Well, the fact that you have Scala libraries having to label themselves with the version of Scala they&rsquo;re compiled against is an immediate indication. If I&rsquo;m trying to do a project that&rsquo;s dependent on libraries, I now have to make absolutely sure that there is some version of Scala that they&rsquo;re all compatible with, and then use that version for my project, rather than using the version based on the feature set I need. What&rsquo;s more, if there is no overlap &ndash; if one of my dependencies is only compatible with, say, 2.9, and another only builds on 2.7, then I&rsquo;m hosed. I either have to try to build one or the other on a different version of the compiler, which may or may not work, or use different libraries.</p>
+<p>Why is this a problem? Well, the fact that you have Scala libraries having to label themselves with the version of Scala they’re compiled against is an immediate indication. If I’m trying to do a project that’s dependent on libraries, I now have to make absolutely sure that there is some version of Scala that they’re all compatible with, and then use that version for my project, rather than using the version based on the feature set I need. What’s more, if there is no overlap - if one of my dependencies is only compatible with, say, 2.9, and another only builds on 2.7, then I’m hosed. I either have to try to build one or the other on a different version of the compiler, which may or may not work, or use different libraries.</p>
 
-<p>The other bit of craziness is the Eclipse Scala plugin can&rsquo;t change versions, and, you can&rsquo;t have more than one version running at a time. Even more fun: the only Scala plugins for Eclipse Juno are for 2.9 and 2.10 &ndash; if you have to use 2.8, you&rsquo;re either going to have to use Indigo, or cross-compile to a newer version of Scala.</p>
+<p>The other bit of craziness is the Eclipse Scala plugin can’t change versions, and, you can’t have more than one version running at a time. Even more fun: the only Scala plugins for Eclipse Juno are for 2.9 and 2.10 - if you have to use 2.8, you’re either going to have to use Indigo, or cross-compile to a newer version of Scala.</p>
 
-<p>All in all, I&rsquo;d have to say that, as much as I like the idea of Scala, I can&rsquo;t see using it for anything significant until it becomes more stable.</p>
+<p>All in all, I’d have to say that, as much as I like the idea of Scala, I can’t see using it for anything significant until it becomes more stable.</p>
 </div>
   
   
@@ -283,15 +282,14 @@ option subnet 255.255.255.0
 
   <div class="entry-content"><p>I had this idea for doing a Scala project integrating WebSockets with <a href="http://kafka.apache.org/">Kafka</a>, so I spent a good bit of today trying out different configurations for doing Scala development. My first pass was to try <a href="http://www.jetbrains.com/idea/features/scala.html">IntellijIDEA</a> from JetBrains. I really liked their <a href="http://www.jetbrains.com/ruby/">RubyMine</a> IDE for Ruby, and people were raving about IDEA for Scala development, so I gave it a go.</p>
 
-<p>It&rsquo;s actually not a bad IDE. I had some trouble navigating, but most of that was because I was so used to Eclipse. However, the big thing that was lacking was good <a href="http://www.scala-sbt.org/">sbt</a> support. Whatever project I was going to use sbt, since that seems to be the builder of choice, and the integration with IDEA seemed to be, well, not really good. You can use sbt to generate the IDEA project, but there didn&rsquo;t seem to be a good way to have IDEA use the dependencies defined in the sbt build file for the code completion, which seemed to me to be a big problem.</p>
+<p>It’s actually not a bad IDE. I had some trouble navigating, but most of that was because I was so used to Eclipse. However, the big thing that was lacking was good <a href="http://www.scala-sbt.org/">sbt</a> support. Whatever project I was going to use sbt, since that seems to be the builder of choice, and the integration with IDEA seemed to be, well, not really good. You can use sbt to generate the IDEA project, but there didn’t seem to be a good way to have IDEA use the dependencies defined in the sbt build file for the code completion, which seemed to me to be a big problem.</p>
 
-<p>So, I tried out using Eclipse (which wasn&rsquo;t a stretch since I use it for my Java work), and <a href="https://github.com/typesafehub/sbteclipse">sbteclipse</a>, which is an sbt plugin for Eclipse. It worked really well! Basically, you install the plugin per the instructions, create a minimal sbt build file for the project, and then type <code>sbt eclipse</code> to generate the Eclipse configuration. The cool thing is, you can do this at any time, so if you add a dependency to the build file, just do <code>sbt eclipse</code> again, then refresh the project in Eclipse, and suddenly it has your dependency. Very nice.</p>
+<p>So, I tried out using Eclipse (which wasn’t a stretch since I use it for my Java work), and <a href="https://github.com/typesafehub/sbteclipse">sbteclipse</a>, which is an sbt plugin for Eclipse. It worked really well! Basically, you install the plugin per the instructions, create a minimal sbt build file for the project, and then type <code>sbt eclipse</code> to generate the Eclipse configuration. The cool thing is, you can do this at any time, so if you add a dependency to the build file, just do <code>sbt eclipse</code> again, then refresh the project in Eclipse, and suddenly it has your dependency. Very nice.</p>
 
-<p>The one thing I needed to do, which I eventually found out how to do, was to have sbt use my local maven repository as one of its repositories. sbt uses <a href="http://ant.apache.org/ivy/">ivy</a> under the covers, so Maven integration is there, it just doesn&rsquo;t know about all the local Maven repositories. to add it, I just had to add the following to my <code>~/.sbt/global.sbt</code> file:</p>
+<p>The one thing I needed to do, which I eventually found out how to do, was to have sbt use my local maven repository as one of its repositories. sbt uses <a href="http://ant.apache.org/ivy/">ivy</a> under the covers, so Maven integration is there, it just doesn’t know about all the local Maven repositories. to add it, I just had to add the following to my <code>~/.sbt/global.sbt</code> file:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>resolvers += "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository"</span></code></pre></td></tr></table></div></figure>
-
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">resolvers += "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository"</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>and, voila, it worked!</p>
 </div>
@@ -331,9 +329,9 @@ option subnet 255.255.255.0
   </header>
 
 
-  <div class="entry-content"><p>I wasted a considerable amount of time following the instructions from <a href="http://subclipse.tigris.org/wiki/JavaHL">this page</a> on how to install Subclipse on OS X, trying to get MacPorts to install the right version of Subversion (Why subversion, you may ask? Because a customer is still using it, that&rsquo;s why&hellip;).</p>
+  <div class="entry-content"><p>I wasted a considerable amount of time following the instructions from <a href="http://subclipse.tigris.org/wiki/JavaHL">this page</a> on how to install Subclipse on OS X, trying to get MacPorts to install the right version of Subversion (Why subversion, you may ask? Because a customer is still using it, that’s why…).</p>
 
-<p>It turns out that MacPorts doesn&rsquo;t even have the 1.8 version of Subversion &ndash; it&rsquo;s only got 1.7, which won&rsquo;t work with the version of Subclipse I&rsquo;m using. So, I had to go to <a href="http://www.wandisco.com/subversion/download#osx">WanDisco</a> and download it (after removing the MacPorts versions first), and then everything worked.</p>
+<p>It turns out that MacPorts doesn’t even have the 1.8 version of Subversion - it’s only got 1.7, which won’t work with the version of Subclipse I’m using. So, I had to go to <a href="http://www.wandisco.com/subversion/download#osx">WanDisco</a> and download it (after removing the MacPorts versions first), and then everything worked.</p>
 </div>
   
   
@@ -371,9 +369,9 @@ option subnet 255.255.255.0
   </header>
 
 
-  <div class="entry-content"><p>I finally gave up on <a href="http://www.scriptogr.am">scriptogr.am</a>. I was struggling with their syntax highlighting, even sent a message to their support. The only answer I got back was from another user (who was very helpful, but it didn&rsquo;t really fix my problem). So, I&rsquo;m done.</p>
+  <div class="entry-content"><p>I finally gave up on <a href="http://www.scriptogr.am">scriptogr.am</a>. I was struggling with their syntax highlighting, even sent a message to their support. The only answer I got back was from another user (who was very helpful, but it didn’t really fix my problem). So, I’m done.</p>
 
-<p>I&rsquo;m now using <a href="http://pages.github.com/">GitHub Pages</a>, which generates their pages using <a href="https://github.com/mojombo/jekyll">Jekyll</a>. I&rsquo;m also using <a href="http://octopress.org/">Octopress</a> for the layout, which makes it all pretty easy (well, that is, once you go through the somewhat painful ruby setup).</p>
+<p>I’m now using <a href="http://pages.github.com/">GitHub Pages</a>, which generates their pages using <a href="https://github.com/mojombo/jekyll">Jekyll</a>. I’m also using <a href="http://octopress.org/">Octopress</a> for the layout, which makes it all pretty easy (well, that is, once you go through the somewhat painful ruby setup).</p>
 </div>
   
   
@@ -411,7 +409,7 @@ option subnet 255.255.255.0
   </header>
 
 
-  <div class="entry-content"><p>I needed to set up Jenkins so that it could run an agent on another Linux box. To do this the default way, you need to allow Jenkins to access the remote box via SSH. So, I set up the Jenkins user and the SSH keys on the remote machine, but trying to do an ssh from the Jenkins user on one machine to the other still didn&rsquo;t work. After doing <code>sudo journalctl -f</code> on the remote machine, I saw the following:</p>
+  <div class="entry-content"><p>I needed to set up Jenkins so that it could run an agent on another Linux box. To do this the default way, you need to allow Jenkins to access the remote box via SSH. So, I set up the Jenkins user and the SSH keys on the remote machine, but trying to do an ssh from the Jenkins user on one machine to the other still didn’t work. After doing <code>sudo journalctl -f</code> on the remote machine, I saw the following:</p>
 
 <pre><code>Jun 13 12:41:50 m2m-linux setroubleshoot[701]: SELinux is preventing /usr/sbin/sshd from read access on the file authorized_keys. For complete SELinux messages. run sealert -l ca7b7aea-64cf-46e5-8bfa-6650ad23f55b
 </code></pre>
@@ -442,7 +440,7 @@ allow this access for now by executing:
 # semodule -i mypol.pp
 </code></pre>
 
-<p>Not really helpful, so I dug around the web and found <a href="http://serverfault.com/questions/50573/selinux-preventing-passwordless-ssh-login">this post on ServerFault</a>. It turns out that the problem is that I created the Jenkins user&rsquo;s home directory by hand (I had to, it was <code>/var/jenkins</code>, which <code>adduser</code> wouldn&rsquo;t create), so SELinux didn&rsquo;t know it was a home directory.</p>
+<p>Not really helpful, so I dug around the web and found <a href="http://serverfault.com/questions/50573/selinux-preventing-passwordless-ssh-login">this post on ServerFault</a>. It turns out that the problem is that I created the Jenkins user’s home directory by hand (I had to, it was <code>/var/jenkins</code>, which <code>adduser</code> wouldn’t create), so SELinux didn’t know it was a home directory.</p>
 
 <p>To fix this, I added the following lines to the end of <code>/etc/selinux/targeted/contexts/files/file_contexts.homedirs</code>:</p>
 
@@ -490,13 +488,13 @@ allow this access for now by executing:
 
   <div class="entry-content"><p>Having my new <a href="/jacklund/post/beaglebone-black">BeagleBone Black</a> has made me look at the default programming environment for it, <a href="http://nodejs.org">Node.js</a>. Companies like <a href="http://www.linkedin.com">LinkedIn</a> are <a href="http://engineering.linkedin.com/nodejs/blazing-fast-nodejs-10-performance-tips-linkedin-mobile">using it</a> on the server side, which sort of surprises me. I can definitely see its uses in devices like the BeagleBone, since it has such a small footprint and minimal use of resources, but I was surprised at how many people are using it on the server side.</p>
 
-<p>It makes sense, though &ndash; as <a href="http://wiki.nginx.org/Main">Nginx</a> demonstrated, an event-driven model can eat a thread-based server&rsquo;s lunch, performance-wise, under certain circumstances. What are those circumstances, though?</p>
+<p>It makes sense, though - as <a href="http://wiki.nginx.org/Main">Nginx</a> demonstrated, an event-driven model can eat a thread-based server’s lunch, performance-wise, under certain circumstances. What are those circumstances, though?</p>
 
 <p>To begin with, your application would have to be overwhelmingly I/O-bound; anything that does a lot of CPU operations would gain no real benefit from the event-driven model. So, for example, an application which receives requests and stores data in the database without a lot of processing would work really well here. Why? Because in a thread-based model, you would spawn a thread to handle the request, and that thread would be waiting, doing, basically, nothing while waiting for the database request to return. In the Node.js model, you would handle the incoming request, send off an asynchronous call for the database insert, registering a callback, and then handle the next event.</p>
 
 <p>However, if you were doing a lot of processing of the data, your event handler would be running longer than you would really like, and the other requests might get starved. You could get around this by offloading the processing to another service, so you would send off the request, and go about your business until the response came back, and you could respond to your client.</p>
 
-<p>This is all very interesting, and it would be even more interesting to do some performance comparisons of a &ldquo;traditional&rdquo; app written in something like Java vs. a Node.js app.</p>
+<p>This is all very interesting, and it would be even more interesting to do some performance comparisons of a “traditional” app written in something like Java vs. a Node.js app.</p>
 </div>
   
   
@@ -534,92 +532,83 @@ allow this access for now by executing:
   </header>
 
 
-  <div class="entry-content"><p>For some reason, they didn&rsquo;t seem to see the need to set up the time service on the BeagleBone Blacks by default. I tried using the instructions from <a href="http://derekmolloy.ie/automatically-setting-the-beaglebone-black-time-using-ntp/">this gentleman</a>, but I had to make some modifications.</p>
+  <div class="entry-content"><p>For some reason, they didn’t seem to see the need to set up the time service on the BeagleBone Blacks by default. I tried using the instructions from <a href="http://derekmolloy.ie/automatically-setting-the-beaglebone-black-time-using-ntp/">this gentleman</a>, but I had to make some modifications.</p>
 
 <ol>
-<li>Install NTP</li>
+  <li>Install NTP</li>
 </ol>
 
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>    <span class="nv">$ </span>opkg update <span class="o">&amp;&amp;</span> opkg install ntp
-</span></code></pre></td></tr></table></div></figure>
-
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">    <span class="nv">$ </span>opkg update <span class="o">&amp;&amp;</span> opkg install ntp
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ol>
-<li>Edit <code>/etc/ntp.conf</code>, adding <code>pool.ntp.org</code> as the server:</li>
+  <li>Edit <code>/etc/ntp.conf</code>, adding <code>pool.ntp.org</code> as the server:</li>
 </ol>
 
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='apache'><span class='line'>    <span class="c"># This is the most basic ntp configuration file</span>
-</span><span class='line'>    <span class="c"># The driftfile must remain in a place specific to this</span>
-</span><span class='line'>    <span class="c"># machine - it records the machine specific clock error</span>
-</span><span class='line'>    <span class="nb">driftfile</span> <span class="sx">/etc/ntp.drift</span>
-</span><span class='line'>    <span class="c"># This obtains a random server which will be close</span>
-</span><span class='line'>    <span class="c"># (in IP terms) to the machine.  Add other servers</span>
-</span><span class='line'>    <span class="c"># as required, or change this.</span>
-</span><span class='line'>    <span class="nb">server</span> pool.ntp.org
-</span><span class='line'>    <span class="c"># Using local hardware clock as fallback</span>
-</span><span class='line'>    <span class="c"># Disable this when using ntpd -q -g -x as ntpdate or it will sync to itself</span>
-</span><span class='line'>    <span class="nb">server</span> <span class="m">127.127.1.0</span>
-</span><span class='line'>    <span class="nb">fudge</span> <span class="m">127.127.1.0</span> stratum <span class="m">14</span>
-</span><span class='line'>    <span class="c"># Defining a default security setting</span>
-</span><span class='line'>    <span class="nb">restrict</span> default
-</span></code></pre></td></tr></table></div></figure>
-
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+</pre></td><td class="code"><pre><code class="apache"><span class="line">    <span class="c"># This is the most basic ntp configuration file</span>
+</span><span class="line">    <span class="c"># The driftfile must remain in a place specific to this</span>
+</span><span class="line">    <span class="c"># machine - it records the machine specific clock error</span>
+</span><span class="line">    <span class="nb">driftfile</span> <span class="sx">/etc/ntp.drift</span>
+</span><span class="line">    <span class="c"># This obtains a random server which will be close</span>
+</span><span class="line">    <span class="c"># (in IP terms) to the machine.  Add other servers</span>
+</span><span class="line">    <span class="c"># as required, or change this.</span>
+</span><span class="line">    <span class="nb">server</span> pool.ntp.org
+</span><span class="line">    <span class="c"># Using local hardware clock as fallback</span>
+</span><span class="line">    <span class="c"># Disable this when using ntpd -q -g -x as ntpdate or it will sync to itself</span>
+</span><span class="line">    <span class="nb">server</span> <span class="m">127.127.1.0</span>
+</span><span class="line">    <span class="nb">fudge</span> <span class="m">127.127.1.0</span> stratum <span class="m">14</span>
+</span><span class="line">    <span class="c"># Defining a default security setting</span>
+</span><span class="line">    <span class="nb">restrict</span> default
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ol>
-<li>Set your local time:</li>
+  <li>Set your local time:</li>
 </ol>
 
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>    <span class="nv">$ </span><span class="nb">cd</span> /etc
-</span><span class='line'>    <span class="nv">$ </span>rm -f localtime
-</span><span class='line'>    <span class="nv">$ </span>ln -s ../usr/share/zoneinfo/America/Chicago localtime
-</span></code></pre></td></tr></table></div></figure>
-
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">    <span class="nv">$ </span><span class="nb">cd</span> /etc
+</span><span class="line">    <span class="nv">$ </span>rm -f localtime
+</span><span class="line">    <span class="nv">$ </span>ln -s ../usr/share/zoneinfo/America/Chicago localtime
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ol>
-<li>Edit <code>/etc/default/ntpdate</code>:</li>
+  <li>Edit <code>/etc/default/ntpdate</code>:</li>
 </ol>
 
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='apache'><span class='line'>    <span class="c"># Configuration script used by ntpdate-sync script</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="err">NTPSERVERS=&quot;pool</span>.<span class="err">ntp</span>.<span class="err">org&quot;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c"># Set to &quot;yes&quot; to write time to hardware clock on success</span>
-</span><span class='line'>    <span class="err">UPDATE_HWCLOCK=&quot;yes&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="apache"><span class="line">    <span class="c"># Configuration script used by ntpdate-sync script</span>
+</span><span class="line">
+</span><span class="line">    <span class="err">NTPSERVERS=&quot;pool</span>.<span class="err">ntp</span>.<span class="err">org&quot;</span>
+</span><span class="line">
+</span><span class="line">    <span class="c"># Set to &quot;yes&quot; to write time to hardware clock on success</span>
+</span><span class="line">    <span class="err">UPDATE_HWCLOCK=&quot;yes&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ol>
-<li>Now, reboot and see if the clock gets set correctly</li>
+  <li>Now, reboot and see if the clock gets set correctly</li>
 </ol>
-
 </div>
   
   
@@ -657,21 +646,21 @@ allow this access for now by executing:
   </header>
 
 
-  <div class="entry-content"><p>Got my two <a href="http://beagleboard.org/Products/BeagleBone%20Black">BeagleBone Blacks</a> from <a href="http://adafruit.com/">AdaFruit</a> on Friday. Really nice. I bought them without enclosures because, well, the enclosures were $20, and the BeagleBones themselves were only $45. The nice thing is, though, that they fit exactly into an Altoids tin, so I turned two into my enclosures. I used tin snips to cut holes for power and Ethernet, and lined them with electrical tape to insulate the board from the box. Here&rsquo;s what they ended up looking like:</p>
+  <div class="entry-content"><p>Got my two <a href="http://beagleboard.org/Products/BeagleBone%20Black">BeagleBone Blacks</a> from <a href="http://adafruit.com/">AdaFruit</a> on Friday. Really nice. I bought them without enclosures because, well, the enclosures were $20, and the BeagleBones themselves were only $45. The nice thing is, though, that they fit exactly into an Altoids tin, so I turned two into my enclosures. I used tin snips to cut holes for power and Ethernet, and lined them with electrical tape to insulate the board from the box. Here’s what they ended up looking like:</p>
 
-<p><img src="https://dl.dropbox.com/s/bpgc7lc5azhazw5/altoids_closed.jpg" title="Closed" alt="" /></p>
+<p><img src="https://dl.dropbox.com/s/bpgc7lc5azhazw5/altoids_closed.jpg" alt="" title="Closed" /></p>
 
-<p><img src="https://dl.dropbox.com/s/d87y38ydxqtcv2q/altoids_open.jpg" title="Open" alt="" /></p>
+<p><img src="https://dl.dropbox.com/s/d87y38ydxqtcv2q/altoids_open.jpg" alt="" title="Open" /></p>
 
-<p><img src="https://dl.dropbox.com/s/7nocbp8nnb65pwn/altoids_working.jpg" title="Running" alt="" /></p>
+<p><img src="https://dl.dropbox.com/s/7nocbp8nnb65pwn/altoids_working.jpg" alt="" title="Running" /></p>
 
-<p>By default, they run <a href="http://www.angstrom-distribution.org/">Ångström Linux</a>. The default programming environment for them is a variant of Javascript they call <a href="http://beagleboard.org/Support/BoneScript">&ldquo;Bonescript&rdquo;</a>, which runs via <a href="http://nodejs.org/">Node.js</a>. However, a kind soul had put together a Python library called <a href="https://github.com/alexanderhiam/PyBBIO">PyBBIO</a>, which I downloaded and tried to install. I kept getting the following warning, however:</p>
+<p>By default, they run <a href="http://www.angstrom-distribution.org/">Ångström Linux</a>. The default programming environment for them is a variant of Javascript they call <a href="http://beagleboard.org/Support/BoneScript">“Bonescript”</a>, which runs via <a href="http://nodejs.org/">Node.js</a>. However, a kind soul had put together a Python library called <a href="https://github.com/alexanderhiam/PyBBIO">PyBBIO</a>, which I downloaded and tried to install. I kept getting the following warning, however:</p>
 
 <pre><code>Warning: you seem to have a BeagleBone image which only has drivers for the PWM1 module, PWM2A and PWM2B will not be available in PyBBIO.
 You should consider updating Angstrom!
 </code></pre>
 
-<p>I tried updating the OS using <a href="http://learn.adafruit.com/beaglebone-black-installing-operating-systems/overview">these instructions</a>, however it didn&rsquo;t make the problem go away. That&rsquo;s when I discovered that PyBBIO <a href="https://github.com/alexanderhiam/PyBBIO/issues/18">doesn&rsquo;t support the 3.8 kernel that comes with BB Blacks</a>, so it looks like I&rsquo;m stuck with Javascript for the moment.</p>
+<p>I tried updating the OS using <a href="http://learn.adafruit.com/beaglebone-black-installing-operating-systems/overview">these instructions</a>, however it didn’t make the problem go away. That’s when I discovered that PyBBIO <a href="https://github.com/alexanderhiam/PyBBIO/issues/18">doesn’t support the 3.8 kernel that comes with BB Blacks</a>, so it looks like I’m stuck with Javascript for the moment.</p>
 </div>
   
   

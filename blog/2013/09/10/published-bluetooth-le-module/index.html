@@ -9,7 +9,7 @@
   <meta name="author" content="Jack Lund">
 
   
-  <meta name="description" content="Well, I published my Node.js module for Bluetooth LE, btle.js (pronounced &ldquo;Beetle Juice&rdquo;) to npm. Even though it&rsquo;s labeled version &hellip;">
+  <meta name="description" content="Well, I published my Node.js module for Bluetooth LE, btle.js (pronounced “Beetle Juice”) to npm. Even though it’s labeled version 0.1.0, it’s got &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -102,13 +102,13 @@
   </header>
 
 
-<div class="entry-content"><p>Well, I published my Node.js module for Bluetooth LE, <a href="https://github.com/jacklund/btle.js">btle.js</a> (pronounced &ldquo;Beetle Juice&rdquo;) to <a href="https://npmjs.org/package/btle.js">npm</a>. Even though it&rsquo;s labeled version 0.1.0, it&rsquo;s got most of the functionality that&rsquo;s necessary for Bluetooth LE &ndash; reading attributes, writing commands and requests, and listening for notifications. I&rsquo;m hoping to add more functionality over the next few weeks/months.</p>
+<div class="entry-content"><p>Well, I published my Node.js module for Bluetooth LE, <a href="https://github.com/jacklund/btle.js">btle.js</a> (pronounced “Beetle Juice”) to <a href="https://npmjs.org/package/btle.js">npm</a>. Even though it’s labeled version 0.1.0, it’s got most of the functionality that’s necessary for Bluetooth LE - reading attributes, writing commands and requests, and listening for notifications. I’m hoping to add more functionality over the next few weeks/months.</p>
 
-<p>The main reason I was doing this was to get my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?DCMP=sensortag&amp;HQS=sensortag-bn">TI SensorTag</a> working with my Raspberry Pi and Bluetooth LE dongle, which it now does. I&rsquo;ve even got the beginnings of a Node.js module for the sensortag, <a href="https://github.com/jacklund/sensortag.js">sensortag.js</a>, which is built on top of btle.js. I&rsquo;ve got everything working except the Barometric Pressure sensor readings and the Gyroscope readings.</p>
+<p>The main reason I was doing this was to get my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?DCMP=sensortag&amp;HQS=sensortag-bn">TI SensorTag</a> working with my Raspberry Pi and Bluetooth LE dongle, which it now does. I’ve even got the beginnings of a Node.js module for the sensortag, <a href="https://github.com/jacklund/sensortag.js">sensortag.js</a>, which is built on top of btle.js. I’ve got everything working except the Barometric Pressure sensor readings and the Gyroscope readings.</p>
 
-<p>The nice thing about btle.js is that it&rsquo;s purely native C++ code, talking directly to the Linux Bluetooth stack &ndash; it&rsquo;s not having to shell out to run gatttool, for instance, which is pretty nice.</p>
+<p>The nice thing about btle.js is that it’s purely native C++ code, talking directly to the Linux Bluetooth stack - it’s not having to shell out to run gatttool, for instance, which is pretty nice.</p>
 
-<p>For anyone wanting to write some Bluetooth LE code for Linux in a non-Node.js environment, I extracted the low-level I/O code from the <a href="http://www.bluez.org/">Bluez</a> project, removing the dependency on glib so that it&rsquo;s a true, low-level Linux I/O package. The higher-level code is dependant on <a href="https://github.com/joyent/libuv">libuv</a>, of course &ndash; I couldn&rsquo;t figure out any good way to separate them &ndash; but it shouldn&rsquo;t be too difficult to extract what you need from there as well.</p>
+<p>For anyone wanting to write some Bluetooth LE code for Linux in a non-Node.js environment, I extracted the low-level I/O code from the <a href="http://www.bluez.org/">Bluez</a> project, removing the dependency on glib so that it’s a true, low-level Linux I/O package. The higher-level code is dependant on <a href="https://github.com/joyent/libuv">libuv</a>, of course - I couldn’t figure out any good way to separate them - but it shouldn’t be too difficult to extract what you need from there as well.</p>
 </div>
 
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | Geekheads]]></title>
   <link href="http://jacklund.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://jacklund.github.io/"/>
-  <updated>2014-04-13T11:22:50-05:00</updated>
+  <updated>2014-04-13T21:23:25-05:00</updated>
   <id>http://jacklund.github.io/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
@@ -18,11 +18,11 @@
     <link href="http://jacklund.github.io/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon/"/>
     <updated>2013-11-15T16:00:00-06:00</updated>
     <id>http://jacklund.github.io/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon</id>
-    <content type="html"><![CDATA[<p>There&rsquo;s an excellent <a href="http://developer.radiusnetworks.com/2013/10/09/how-to-make-an-ibeacon-out-of-a-raspberry-pi.html">blog post by by James Nebeker and David G. Young</a> about simulating an <a href="http://en.wikipedia.org/wiki/IBeacon">iBeacon</a> using a Raspberry Pi and a bluetooth dongle. Since I already had both, I thought I&rsquo;d give it a try. It worked really well, and I&rsquo;ve even put together the files necessary to do it <a href="https://github.com/jacklund/piBeacon">in my GitHub repository</a>.</p>
+    <content type="html"><![CDATA[<p>There’s an excellent <a href="http://developer.radiusnetworks.com/2013/10/09/how-to-make-an-ibeacon-out-of-a-raspberry-pi.html">blog post by by James Nebeker and David G. Young</a> about simulating an <a href="http://en.wikipedia.org/wiki/IBeacon">iBeacon</a> using a Raspberry Pi and a bluetooth dongle. Since I already had both, I thought I’d give it a try. It worked really well, and I’ve even put together the files necessary to do it <a href="https://github.com/jacklund/piBeacon">in my GitHub repository</a>.</p>
 
-<p>You&rsquo;ll need to install <a href="http://www.bluez.org/">BlueZ</a> as well for this to work. Once you get it all installed and working you can use one of the mobile iBeacon apps, such as <a href="https://itunes.apple.com/us/app/ibeacon-locate/id738709014?ls=1&amp;mt=8">iBeacon Locate</a>. Very fun to play with, and a good way to be able to develop mobile apps to access iBeacons without having to wait for them to come out.</p>
+<p>You’ll need to install <a href="http://www.bluez.org/">BlueZ</a> as well for this to work. Once you get it all installed and working you can use one of the mobile iBeacon apps, such as <a href="https://itunes.apple.com/us/app/ibeacon-locate/id738709014?ls=1&amp;mt=8">iBeacon Locate</a>. Very fun to play with, and a good way to be able to develop mobile apps to access iBeacons without having to wait for them to come out.</p>
 
-<p>Also, it&rsquo;s just fun to play with.</p>
+<p>Also, it’s just fun to play with.</p>
 ]]></content>
   </entry>
   
@@ -31,27 +31,27 @@
     <link href="http://jacklund.github.io/blog/2013/10/19/more-fun-with-beaglebone-black/"/>
     <updated>2013-10-19T21:10:00-05:00</updated>
     <id>http://jacklund.github.io/blog/2013/10/19/more-fun-with-beaglebone-black</id>
-    <content type="html"><![CDATA[<p>I&rsquo;ve discovered that owning a BeagleBone Black (or, in my case, two) is kind of like owning one of those really, really nice
-cars that you buy but you can almost never drive because it spends so much time in the shop. It&rsquo;s a lovely piece of hardware, it
+    <content type="html"><![CDATA[<p>I’ve discovered that owning a BeagleBone Black (or, in my case, two) is kind of like owning one of those really, really nice
+cars that you buy but you can almost never drive because it spends so much time in the shop. It’s a lovely piece of hardware, it
 really is, but the people who created it seem to have gone to great lengths to make sure that all you can do is sit back and admire
-it, because you certainly won&rsquo;t be able to do anything useful with it.</p>
+it, because you certainly won’t be able to do anything useful with it.</p>
 
-<p>My next foray into BBB craziness was attempting to get a wifi dongle to work with it, so I don&rsquo;t have to constantly hook it up
-to my wireless adapter. Should be easy, right? Of course not, this is the BeagleBone Black we&rsquo;re talking about. <em>Nothing</em> is easy.</p>
+<p>My next foray into BBB craziness was attempting to get a wifi dongle to work with it, so I don’t have to constantly hook it up
+to my wireless adapter. Should be easy, right? Of course not, this is the BeagleBone Black we’re talking about. <em>Nothing</em> is easy.</p>
 
 <p>I bought the <a href="http://www.edimax.com/en/produce_detail.php?pd_id=347&amp;pl1_id=1">Edimax EW-7811-UN</a>, which is recommended for BeagleBones,
-Raspberry Pi&rsquo;s, and the BBB. Unfortunately, what I didn&rsquo;t realize is that, while it <em>used</em> to work with the BBB, some OS changes were
-made to it so that it takes a lot of wrangling to get it to work, if you can get it to work at all (I couldn&rsquo;t).</p>
+Raspberry Pi’s, and the BBB. Unfortunately, what I didn’t realize is that, while it <em>used</em> to work with the BBB, some OS changes were
+made to it so that it takes a lot of wrangling to get it to work, if you can get it to work at all (I couldn’t).</p>
 
-<p>First of all, it seems that, at some point, the drivers weren&rsquo;t really available, so you would have to build them yourselves. I think
+<p>First of all, it seems that, at some point, the drivers weren’t really available, so you would have to build them yourselves. I think
 the drivers are available now, but I went ahead and compiled the drivers per
 <a href="http://www.codealpha.net/864/how-to-set-up-a-rtl8192cu-on-the-beaglebone-black-bbb/">these instructions</a>.
 The next hurdle was getting it to work with <a href="https://connman.net/">connman</a>, the connection manager, which is, basically,
-almost completely undocumented &ndash; Fun! (<strong><em>Note to developers everywhere:</em></strong> in the words of an former boss &ndash; &ldquo;if it ain&rsquo;t documented,
-it doesn&rsquo;t exist&rdquo;).</p>
+almost completely undocumented - Fun! (<strong><em>Note to developers everywhere:</em></strong> in the words of an former boss - “if it ain’t documented,
+it doesn’t exist”).</p>
 
 <p>However, from what I can gather, <code>connman</code> uses <a href="http://hostap.epitest.fi/wpa_supplicant/">wpa_supplicant</a> for the WPA transactions
-(if you&rsquo;re using WPA, which, um, you should be). So, after fiddling around for a while, here&rsquo;s what my <code>/var/lib/connman/settings</code>
+(if you’re using WPA, which, um, you should be). So, after fiddling around for a while, here’s what my <code>/var/lib/connman/settings</code>
 file looks like:</p>
 
 <pre><code>[global]
@@ -64,7 +64,7 @@ Enable=true
 Enable=true
 </code></pre>
 
-<p>And here&rsquo;s my <code>/var/lib/connman/wifi.config</code> file:</p>
+<p>And here’s my <code>/var/lib/connman/wifi.config</code> file:</p>
 
 <pre><code>[service_home]
 Type=wifi
@@ -75,7 +75,7 @@ Passphrase=my_encrypted_passphrase
 
 <p>where <code>my_ssid</code> is my SSID name, and <code>my_encrypted_passphrase</code> is the result of running <code>wpa_passphrase &lt;ssid&gt; &lt;password&gt;</code>.</p>
 
-<p>Finally, my <code>/etc/wpa_supplicant.conf</code> &ndash; I&rsquo;m running WPA2-Personal on my wireless router, so this is, as far as I can tell, the
+<p>Finally, my <code>/etc/wpa_supplicant.conf</code> - I’m running WPA2-Personal on my wireless router, so this is, as far as I can tell, the
 way you set up <code>wpa_supplicant</code>:</p>
 
 <pre><code>ctrl_interface=/var/run/wpa_supplicant
@@ -93,8 +93,8 @@ network={
 }
 </code></pre>
 
-<p>Now, just getting to this point took a lot of tweaking and messing around with various settings. However, it&rsquo;s still not connecting.
-It&rsquo;s finding the access point, and even getting its MAC address, but it&rsquo;s unable to authenticate. Here&rsquo;s what happens when I run
+<p>Now, just getting to this point took a lot of tweaking and messing around with various settings. However, it’s still not connecting.
+It’s finding the access point, and even getting its MAC address, but it’s unable to authenticate. Here’s what happens when I run
 <code>wpa_supplicant</code> manually in debug mode:</p>
 
 <pre><code># wpa_supplicant -iwlan0 -c/etc/wpa_supplicant.conf -d
@@ -138,28 +138,28 @@ EAPOL: Supplicant port status: Unauthorized
 RSN: Ignored PMKID candidate without preauth flag
 </code></pre>
 
-<p>and basically it cycles through this over and over. Now, I&rsquo;m sure this all means something to whoever wrote this code, but to me
-there&rsquo;s absoutely nothing helpful here. it&rsquo;s written for someone to try to debug the program, not to help someone troubleshoot
+<p>and basically it cycles through this over and over. Now, I’m sure this all means something to whoever wrote this code, but to me
+there’s absoutely nothing helpful here. it’s written for someone to try to debug the program, not to help someone troubleshoot
 a problem with their setup. And, yet, this is, as far as I can tell, the only troubleshooting tool these fine folks have seen
 fit to provide. Nice.</p>
 
 <p>So, after wading through all this garbage, and trying a bunch of different things, I finally gleaned (with absolutely no help
-from whoever wrote this crappy software, thank you very much!) that it&rsquo;s failing authentication. Why? Who knows. Really, there&rsquo;s
+from whoever wrote this crappy software, thank you very much!) that it’s failing authentication. Why? Who knows. Really, there’s
 a special circle of hell for people who write error messages like this for their users to have to decode. When you get there,
 you spend eternity debugging Windows NT BSOD error messages.</p>
 
 <p>So, I tried looking up the incredibly clear message <code>EAPOL: Supplicant port status: Unauthorized</code>. Now, there are a number of posts that
-imply that you need to have <code>eth0</code> disconnected in order for this to work (which makes absolutely no sense to me whatsover &ndash;
-since when are you only able to connect to one network interface at a time?), but doing that seems to make no difference. I&rsquo;ve also
+imply that you need to have <code>eth0</code> disconnected in order for this to work (which makes absolutely no sense to me whatsover -
+since when are you only able to connect to one network interface at a time?), but doing that seems to make no difference. I’ve also
 seen a lot of descriptions of procedures people use to get this to work that are the technological equivalent of holding a dead
-chicken over the machine and praying. This didn&rsquo;t work for me either (well, okay, I didn&rsquo;t try the chicken&hellip;yet).</p>
+chicken over the machine and praying. This didn’t work for me either (well, okay, I didn’t try the chicken…yet).</p>
 
 <p>Which brings up my gripe: why is this so $@%^!&amp;@ hard? Why do you have to go through this hell to just connect to a wireless access
-point &ndash; something that they do in the Mac and Windows worlds all the time? Would it be so bleeping hard to just spit out some relatively
-helpful messages &ndash; something along the lines of &ldquo;authentication failed&rdquo;, or even &ldquo;bad passphrase&rdquo;? Something.</p>
+point - something that they do in the Mac and Windows worlds all the time? Would it be so bleeping hard to just spit out some relatively
+helpful messages - something along the lines of “authentication failed”, or even “bad passphrase”? Something.</p>
 
 <p>If you are guilty of writing software like this, do me a favor: go to the mirror, grab yourself by the collar and slap yourself
-repeatedly, saying &ldquo;Bad Programmer! Bad!&rdquo; over and over, because it&rsquo;s exactly what I&rsquo;d be doing if I were there with you.</p>
+repeatedly, saying “Bad Programmer! Bad!” over and over, because it’s exactly what I’d be doing if I were there with you.</p>
 ]]></content>
   </entry>
   
@@ -168,7 +168,7 @@ repeatedly, saying &ldquo;Bad Programmer! Bad!&rdquo; over and over, because it&
     <link href="http://jacklund.github.io/blog/2013/06/27/Zeroconf-Rocks/"/>
     <updated>2013-06-27T22:27:00-05:00</updated>
     <id>http://jacklund.github.io/blog/2013/06/27/Zeroconf-Rocks</id>
-    <content type="html"><![CDATA[<p>I have a lot of computers on my network now &ndash; my laptop and desktop, my wife&rsquo;s 3(!) computers, her iPad, two Linux servers and miscellaneous other devices, along with my Raspberry Pi and two BeagleBone Blacks, so managing all these was starting to be a pain. So, just on a hunch, I wanted to see if <a href="http://en.wikipedia.org/wiki/Zero-configuration_networking">Bonjour/Zeroconf/Avahi</a> could help. I did some investigation, and it turns out that you can access any machines that advertise on Zeroconf by <em>name</em>.local. Since I work predominantly on Macs, I was already pretty comfortable with the idea of dynamically finding service. When I brought up my Bonjour Browser application, however, I was surprised: My two BeagleBone Blacks were already advertising (the wrong IP address for my network, but still)!</p>
+    <content type="html"><![CDATA[<p>I have a lot of computers on my network now - my laptop and desktop, my wife’s 3(!) computers, her iPad, two Linux servers and miscellaneous other devices, along with my Raspberry Pi and two BeagleBone Blacks, so managing all these was starting to be a pain. So, just on a hunch, I wanted to see if <a href="http://en.wikipedia.org/wiki/Zero-configuration_networking">Bonjour/Zeroconf/Avahi</a> could help. I did some investigation, and it turns out that you can access any machines that advertise on Zeroconf by <em>name</em>.local. Since I work predominantly on Macs, I was already pretty comfortable with the idea of dynamically finding service. When I brought up my Bonjour Browser application, however, I was surprised: My two BeagleBone Blacks were already advertising (the wrong IP address for my network, but still)!</p>
 
 <p>So, first step: set up the Raspberry Pi to do the same. Fortunately, the Internet came to the rescue, in the form of <a href="http://elinux.org/RPi_Advanced_Setup">this page</a> about setting up Zeroconf on the Pi. I just followed the instructions, and it worked.</p>
 
@@ -203,80 +203,63 @@ option subnet 255.255.255.0
     <link href="http://jacklund.github.io/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black/"/>
     <updated>2013-06-10T11:50:00-05:00</updated>
     <id>http://jacklund.github.io/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black</id>
-    <content type="html"><![CDATA[<p>For some reason, they didn&rsquo;t seem to see the need to set up the time service on the BeagleBone Blacks by default. I tried using the instructions from <a href="http://derekmolloy.ie/automatically-setting-the-beaglebone-black-time-using-ntp/">this gentleman</a>, but I had to make some modifications.</p>
+    <content type="html"><![CDATA[<p>For some reason, they didn’t seem to see the need to set up the time service on the BeagleBone Blacks by default. I tried using the instructions from <a href="http://derekmolloy.ie/automatically-setting-the-beaglebone-black-time-using-ntp/">this gentleman</a>, but I had to make some modifications.</p>
 
 <ol>
-<li>Install NTP</li>
+  <li>Install NTP</li>
 </ol>
 
-
-<p>```bash</p>
-
-<pre><code>    $ opkg update &amp;&amp; opkg install ntp
-</code></pre>
-
-<p>```</p>
+<p><code>bash
+        $ opkg update &amp;&amp; opkg install ntp
+</code></p>
 
 <ol>
-<li>Edit <code>/etc/ntp.conf</code>, adding <code>pool.ntp.org</code> as the server:</li>
+  <li>Edit <code>/etc/ntp.conf</code>, adding <code>pool.ntp.org</code> as the server:</li>
 </ol>
 
-
-<p>```apache</p>
-
-<pre><code>    # This is the most basic ntp configuration file
-    # The driftfile must remain in a place specific to this
-    # machine - it records the machine specific clock error
-    driftfile /etc/ntp.drift
-    # This obtains a random server which will be close
-    # (in IP terms) to the machine.  Add other servers
-    # as required, or change this.
-    server pool.ntp.org
-    # Using local hardware clock as fallback
-    # Disable this when using ntpd -q -g -x as ntpdate or it will sync to itself
-    server 127.127.1.0
-    fudge 127.127.1.0 stratum 14
-    # Defining a default security setting
-    restrict default
-</code></pre>
-
-<p>```</p>
+<p><code>apache
+        # This is the most basic ntp configuration file
+        # The driftfile must remain in a place specific to this
+        # machine - it records the machine specific clock error
+        driftfile /etc/ntp.drift
+        # This obtains a random server which will be close
+        # (in IP terms) to the machine.  Add other servers
+        # as required, or change this.
+        server pool.ntp.org
+        # Using local hardware clock as fallback
+        # Disable this when using ntpd -q -g -x as ntpdate or it will sync to itself
+        server 127.127.1.0
+        fudge 127.127.1.0 stratum 14
+        # Defining a default security setting
+        restrict default
+</code></p>
 
 <ol>
-<li>Set your local time:</li>
+  <li>Set your local time:</li>
 </ol>
 
-
-<p>```bash</p>
-
-<pre><code>    $ cd /etc
-    $ rm -f localtime
-    $ ln -s ../usr/share/zoneinfo/America/Chicago localtime
-</code></pre>
-
-<p>```</p>
+<p><code>bash
+        $ cd /etc
+        $ rm -f localtime
+        $ ln -s ../usr/share/zoneinfo/America/Chicago localtime
+</code></p>
 
 <ol>
-<li>Edit <code>/etc/default/ntpdate</code>:</li>
+  <li>Edit <code>/etc/default/ntpdate</code>:</li>
 </ol>
 
+<p>```apache
+        # Configuration script used by ntpdate-sync script</p>
 
-<p>```apache</p>
-
-<pre><code>    # Configuration script used by ntpdate-sync script
-
-    NTPSERVERS="pool.ntp.org"
+<pre><code>    NTPSERVERS="pool.ntp.org"
 
     # Set to "yes" to write time to hardware clock on success
-    UPDATE_HWCLOCK="yes"
+    UPDATE_HWCLOCK="yes" ```
 </code></pre>
 
-<p>```</p>
-
 <ol>
-<li>Now, reboot and see if the clock gets set correctly</li>
+  <li>Now, reboot and see if the clock gets set correctly</li>
 </ol>
-
 ]]></content>
   </entry>
   
@@ -285,21 +268,21 @@ option subnet 255.255.255.0
     <link href="http://jacklund.github.io/blog/2013/06/09/BeagleBone-Black/"/>
     <updated>2013-06-09T20:00:00-05:00</updated>
     <id>http://jacklund.github.io/blog/2013/06/09/BeagleBone-Black</id>
-    <content type="html"><![CDATA[<p>Got my two <a href="http://beagleboard.org/Products/BeagleBone%20Black">BeagleBone Blacks</a> from <a href="http://adafruit.com/">AdaFruit</a> on Friday. Really nice. I bought them without enclosures because, well, the enclosures were $20, and the BeagleBones themselves were only $45. The nice thing is, though, that they fit exactly into an Altoids tin, so I turned two into my enclosures. I used tin snips to cut holes for power and Ethernet, and lined them with electrical tape to insulate the board from the box. Here&rsquo;s what they ended up looking like:</p>
+    <content type="html"><![CDATA[<p>Got my two <a href="http://beagleboard.org/Products/BeagleBone%20Black">BeagleBone Blacks</a> from <a href="http://adafruit.com/">AdaFruit</a> on Friday. Really nice. I bought them without enclosures because, well, the enclosures were $20, and the BeagleBones themselves were only $45. The nice thing is, though, that they fit exactly into an Altoids tin, so I turned two into my enclosures. I used tin snips to cut holes for power and Ethernet, and lined them with electrical tape to insulate the board from the box. Here’s what they ended up looking like:</p>
 
-<p><img src="https://dl.dropbox.com/s/bpgc7lc5azhazw5/altoids_closed.jpg" title="Closed" alt="" /></p>
+<p><img src="https://dl.dropbox.com/s/bpgc7lc5azhazw5/altoids_closed.jpg" alt="" title="Closed" /></p>
 
-<p><img src="https://dl.dropbox.com/s/d87y38ydxqtcv2q/altoids_open.jpg" title="Open" alt="" /></p>
+<p><img src="https://dl.dropbox.com/s/d87y38ydxqtcv2q/altoids_open.jpg" alt="" title="Open" /></p>
 
-<p><img src="https://dl.dropbox.com/s/7nocbp8nnb65pwn/altoids_working.jpg" title="Running" alt="" /></p>
+<p><img src="https://dl.dropbox.com/s/7nocbp8nnb65pwn/altoids_working.jpg" alt="" title="Running" /></p>
 
-<p>By default, they run <a href="http://www.angstrom-distribution.org/">Ångström Linux</a>. The default programming environment for them is a variant of Javascript they call <a href="http://beagleboard.org/Support/BoneScript">&ldquo;Bonescript&rdquo;</a>, which runs via <a href="http://nodejs.org/">Node.js</a>. However, a kind soul had put together a Python library called <a href="https://github.com/alexanderhiam/PyBBIO">PyBBIO</a>, which I downloaded and tried to install. I kept getting the following warning, however:</p>
+<p>By default, they run <a href="http://www.angstrom-distribution.org/">Ångström Linux</a>. The default programming environment for them is a variant of Javascript they call <a href="http://beagleboard.org/Support/BoneScript">“Bonescript”</a>, which runs via <a href="http://nodejs.org/">Node.js</a>. However, a kind soul had put together a Python library called <a href="https://github.com/alexanderhiam/PyBBIO">PyBBIO</a>, which I downloaded and tried to install. I kept getting the following warning, however:</p>
 
 <pre><code>Warning: you seem to have a BeagleBone image which only has drivers for the PWM1 module, PWM2A and PWM2B will not be available in PyBBIO.
 You should consider updating Angstrom!
 </code></pre>
 
-<p>I tried updating the OS using <a href="http://learn.adafruit.com/beaglebone-black-installing-operating-systems/overview">these instructions</a>, however it didn&rsquo;t make the problem go away. That&rsquo;s when I discovered that PyBBIO <a href="https://github.com/alexanderhiam/PyBBIO/issues/18">doesn&rsquo;t support the 3.8 kernel that comes with BB Blacks</a>, so it looks like I&rsquo;m stuck with Javascript for the moment.</p>
+<p>I tried updating the OS using <a href="http://learn.adafruit.com/beaglebone-black-installing-operating-systems/overview">these instructions</a>, however it didn’t make the problem go away. That’s when I discovered that PyBBIO <a href="https://github.com/alexanderhiam/PyBBIO/issues/18">doesn’t support the 3.8 kernel that comes with BB Blacks</a>, so it looks like I’m stuck with Javascript for the moment.</p>
 ]]></content>
   </entry>
   
