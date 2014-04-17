@@ -1,0 +1,340 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Got Them Bluetooth LE Bluez - Geekheads</title>
+  <meta name="author" content="Jack Lund">
+
+  
+  <meta name="description" content="I’m trying to get my Raspberry Pi to talk to my TI Sensortag over Bluetooth LE, using an IOGear Bluetooth 4.0 USB adapter. I chose that adapter &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jacklund.github.io/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Geekheads" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <!--
+  <div id="logo">
+  	<div id="logoLeft">{</div>
+  	<div id="logoText">GH</div>
+  	<div id="logoRight">}</div>
+  	<div class="clear"></div>
+  </div> -->
+  <h1><a href="/">Geekheads</a></h1>
+  
+    <h2>Geeks are people, too. Sort of.</h2>
+  
+  <div class="clear"></div>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jacklund.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Got Them Bluetooth LE Bluez</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-01T17:15:00-05:00" pubdate data-updated="true">Jul 1<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I’m trying to get my Raspberry Pi to talk to my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?INTC=SensorTag&amp;HQS=sensortag">TI Sensortag</a> over Bluetooth LE, using an <a href="http://www.iogear.com/product/GBU521/">IOGear Bluetooth 4.0 USB adapter</a>. I chose that adapter because it is supported by Linux, and so far it works quite nicely with the Pi.</p>
+
+<p>To start with, I’d like to write something to pull the sensor data - temperature, humidity, pressure, etc - from the SensorTag and publish it over <a href="http://mqtt.org/">MQTT</a>. However, reading the data seems to be problematic.</p>
+
+<p>Problem #1 is that the most-used bluetooth package for Python, <a href="https://code.google.com/p/pybluez/">PyBluez</a> had their last release (0.18) in November, 2009, which, obviously, doesn’t include Bluetooth LE. Not a problem, I thought, I’ll just fork the project, add the bindings for LE, and off we go!</p>
+
+<p>Which brings me to problem #2: the developers of the <a href="http://www.bluez.org/">BlueZ</a> protocol stack, which is how you access bluetooth from, well, pretty much everywhere, haven’t seen fit to include <a href="http://en.wikipedia.org/wiki/Bluetooth_profile#Generic_Attribute_Profile_.28GATT.29">GATT</a> support either via a public library or via D-Bus, despite the fact that they’ve had the code in their codebase since around 2010.</p>
+
+<p>*<strong><em>facepalm</em></strong>*</p>
+
+<p>Look, I understand that everybody’s busy and all, but, really, you couldn’t, in the last THREE YEARS break out the GATT code into a library so that people can access it? Really?</p>
+
+<p>Of course, I shouldn’t complain, I guess - they do provide a nice little command-line tool, <code>gatttool</code>, to let you do GATT stuff, just nothing to do, you know, programming with. Somebody (who is much braver than I) is even trying to <a href="https://github.com/msaunby/ble-sensor-pi">access that via Python and pexpect</a>, which works, sort of, but, uh, really, there has to be a better way.</p>
+
+<p>So, I guess my only option is to pull the GATT code out of the BlueZ project and add it to the Python project. It’s ugly, but it’s better than expect scripts.</p>
+
+<p>And, really, BlueZ developers: Come on, throw us a bone here.</p>
+
+<h3 id="update">Update</h3>
+<p>Well, it looks like I spoke too soon. Because the BlueZ developers have the GATT-layer stuff hooked heavily into glib 2.0 using callbacks, it would be much more work than I’m willing to put into it to do this within Python, which probably explains why nobody else has done it either. Thanks again, BlueZ team! <em>sigh</em></p>
+
+<p>So, I guess what I’m going to have to end up doing is writing all this in C/C++, and pulling parts of their GATT code into my project. Either that, or just implementing the parts I need myself.</p>
+
+<p>My guess is that the BlueZ developers are really more interested in writing kernel code than user-space code. It really sucks for anybody who wants to play with LE applications, though - right now everybody seems to be just writing wrappers around the BlueZ command-line apps and calling it a day. Not a great way to help with adoption of a standard, guys!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jack Lund</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-01T17:15:00-05:00" pubdate data-updated="true">Jul 1<span>st</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/bluetooth-le/'>bluetooth_le</a>, <a class='category' href='/blog/categories/bluez/'>bluez</a>, <a class='category' href='/blog/categories/gatt/'>gatt</a>, <a class='category' href='/blog/categories/mqtt/'>mqtt</a>, <a class='category' href='/blog/categories/python/'>python</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jacklund.github.io/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez/" data-via="" data-counturl="http://jacklund.github.io/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/06/27/Zeroconf-Rocks/" title="Previous Post: Zeroconf Rocks!">&laquo; Zeroconf Rocks!</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/08/30/what-to-do/" title="Next Post: What to do?">What to do? &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/04/16/rest-by-any-other-name-dot-dot-dot/">REST by Any Other Name...</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/13/dependency-injection-and-the-yagni-principle/">Dependency Injection and the YAGNI Principle</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/14/logging-using-eventemitters-in-node-dot-js/">Logging Using EventEmitters in Node.js</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/05/inheritance-in-functional-languages/">Inheritance in Functional Languages</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon/">Using a Raspberry Pi as an iBeacon</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 115.0%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 107.5%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 115.0%'>beaglebone</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 107.5%'>beaglebone-black</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 115.0%'>beaglebone_black</a>   <a href='/blog/categories/bluetooth' style='font-size: 115.0%'>bluetooth</a>   <a href='/blog/categories/bluetooth-le' style='font-size: 122.5%'>bluetooth_le</a>   <a href='/blog/categories/bluez' style='font-size: 115.0%'>bluez</a>   <a href='/blog/categories/bonescript' style='font-size: 107.5%'>bonescript</a>   <a href='/blog/categories/bonjour' style='font-size: 107.5%'>bonjour</a>   <a href='/blog/categories/btle-js' style='font-size: 107.5%'>btle.js</a>   <a href='/blog/categories/c-' style='font-size: 115.0%'>c++</a>   <a href='/blog/categories/cobertura' style='font-size: 107.5%'>cobertura</a>   <a href='/blog/categories/dependency-injection' style='font-size: 107.5%'>dependency injection</a>   <a href='/blog/categories/documents' style='font-size: 107.5%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 130.0%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 107.5%'>eskrima</a>   <a href='/blog/categories/functional' style='font-size: 107.5%'>functional</a>   <a href='/blog/categories/gatt' style='font-size: 115.0%'>gatt</a>   <a href='/blog/categories/git' style='font-size: 115.0%'>git</a>   <a href='/blog/categories/github' style='font-size: 107.5%'>github</a>   <a href='/blog/categories/hateoas' style='font-size: 107.5%'>HATEOAS</a>   <a href='/blog/categories/hornetq' style='font-size: 107.5%'>hornetq</a>   <a href='/blog/categories/http' style='font-size: 107.5%'>HTTP</a>   <a href='/blog/categories/ibeacon' style='font-size: 107.5%'>iBeacon</a>   <a href='/blog/categories/idea' style='font-size: 107.5%'>idea</a>   <a href='/blog/categories/inheritance' style='font-size: 107.5%'>inheritance</a>   <a href='/blog/categories/java' style='font-size: 122.5%'>java</a>   <a href='/blog/categories/javascript' style='font-size: 122.5%'>javascript</a>   <a href='/blog/categories/jboss' style='font-size: 107.5%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 107.5%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 107.5%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 107.5%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 107.5%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 107.5%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 107.5%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 137.5%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 107.5%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 107.5%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 115.0%'>maven</a>   <a href='/blog/categories/mqtt' style='font-size: 107.5%'>mqtt</a>   <a href='/blog/categories/node-js' style='font-size: 160.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 107.5%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 107.5%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 115.0%'>programming</a>   <a href='/blog/categories/python' style='font-size: 107.5%'>python</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 115.0%'>raspberry-pi</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 107.5%'>raspberry_pi</a>   <a href='/blog/categories/rest' style='font-size: 107.5%'>rest</a>   <a href='/blog/categories/rest' style='font-size: 107.5%'>REST</a>   <a href='/blog/categories/resteasy' style='font-size: 107.5%'>resteasy</a>   <a href='/blog/categories/sbt' style='font-size: 115.0%'>sbt</a>   <a href='/blog/categories/scala' style='font-size: 115.0%'>scala</a>   <a href='/blog/categories/scalability' style='font-size: 107.5%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 107.5%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 107.5%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 122.5%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 107.5%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 107.5%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 107.5%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 107.5%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 115.0%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 107.5%'>windows</a>   <a href='/blog/categories/zeroconf' style='font-size: 107.5%'>zeroconf</a>   <a href='/blog/categories/zigbee' style='font-size: 107.5%'>zigbee</a>   <a href='/blog/categories/zookeeper' style='font-size: 107.5%'>zookeeper</a>   </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/jacklund">@jacklund</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jacklund',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+<section>
+	<h1>My PGP Key</h1>
+	<ul>
+		<li><a href="http://pgp.mit.edu:11371/pks/lookup?op=vindex&search=0x755E427235B39D61">From the MIT Keyserver</a></li>
+		<li><a href="/about/pgp.txt">Text file</a></li>
+	</ul>
+</section><section>
+  <h1>Other Places To Find Me</h1>
+  <ul>
+    <li><a href="https://geekli.st/jacklund">Geeklist</a></li>
+    <li><a href="http://www.pandora.com/profile/jackl0">Pandora</a></li>
+    <li><a href="http://www.linkedin.com/in/jacklund">LinkedIn</a></li>
+    <li><a href="https://plus.google.com/105150092995925691816/about">Google+</a></li>
+    <li><a href="https://alpha.app.net/jacklund">App.net</a></li>
+    <li><a href="https://www.facebook.com/jack.lund">Facebook</a></li>
+    <li><a href="https://jacklund.trovebox.com/">Trovebox</a></li>
+    <li><a href="http://jacklund.tumblr.com/">Tumblr</a></li>
+    <li><a href="http://pinterest.com/jacklund/">Pinterest</a></li>
+    <li><a href="http://www.scribd.com/jack_lund">Scribd</a></li>
+    <li><a href="http://www.shelfari.com/jacklund">Shelfari</a></li>
+    <li><a href="http://www.librarything.com/home/jacklund">LibraryThing</a></li>
+  </ul>
+</section>
+<section>
+  <h1>Share</h1>
+  <ul>
+    <li><a href="javascript:document.getElementsByTagName('body')[0].appendChild(document.createElement('script')).setAttribute('src','//geekli.st/javascript/bookmarklet/bookmarklet.js')"><img src="//geekli.st/images/assets/GeekIt_wFace.png"></a></li>
+    <li>
+      <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+      <g:plusone annotation="none"></g:plusone>
+    </li>
+  </ul>
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Jack Lund -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span> - 
+  <span class="credit">Layout by <a href="https://github.com/amelandri/darkstripes">DarkStripes</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'geekheads';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jacklund.github.io/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez/';
+        var disqus_url = 'http://jacklund.github.io/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

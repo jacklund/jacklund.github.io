@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: btle.js | Geekheads]]></title>
+  <link href="http://jacklund.github.io/blog/categories/btle-dot-js/atom.xml" rel="self"/>
+  <link href="http://jacklund.github.io/"/>
+  <updated>2014-04-16T22:28:21-05:00</updated>
+  <id>http://jacklund.github.io/</id>
+  <author>
+    <name><![CDATA[Jack Lund]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[btle.js 0.2.0 released]]></title>
+    <link href="http://jacklund.github.io/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/"/>
+    <updated>2013-10-18T23:08:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/10/18/btle-dot-js-0-dot-2-0-released</id>
+    <content type="html"><![CDATA[<p>I just (okay, a few days ago) released version 0.2.0 of <a href="https://github.com/jacklund/btle.js">btle.js</a> to
+<a href="https://npmjs.org/package/btle.js">npm</a>. This has a bunch of API changes - the <code>connect</code> method now gives you a
+<code>Device</code> object, instead of a <code>Connection</code>. All the ATT methods are now on the <code>Device</code> object, but, in addition, you can
+access all the GATT functionality by querying the device for services, which returns <code>Service</code> objects, and services for
+characteristics, which return <code>Characteristics</code> objects.</p>
+
+<p>I’m also working on <a href="https://github.com/jacklund/btle.js/wiki/API-Docs">API docs</a> for the whole thing.</p>
+]]></content>
+  </entry>
+  
+</feed>
