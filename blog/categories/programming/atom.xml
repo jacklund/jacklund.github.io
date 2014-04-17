@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: programming | Geekheads]]></title>
-  <link href="http://jacklund.github.io/blog/categories/programming/atom.xml" rel="self"/>
-  <link href="http://jacklund.github.io/"/>
-  <updated>2014-04-13T21:23:25-05:00</updated>
-  <id>http://jacklund.github.io/</id>
+  <link href="http://www.geekheads.net/blog/categories/programming/atom.xml" rel="self"/>
+  <link href="http://www.geekheads.net/"/>
+  <updated>2014-04-16T22:50:53-05:00</updated>
+  <id>http://www.geekheads.net/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Dependency Injection and the YAGNI principle]]></title>
-    <link href="http://jacklund.github.io/blog/2014/04/13/dependency-injection-and-the-yagni-principle/"/>
+    <link href="http://www.geekheads.net/blog/2014/04/13/dependency-injection-and-the-yagni-principle/"/>
     <updated>2014-04-13T10:07:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2014/04/13/dependency-injection-and-the-yagni-principle</id>
+    <id>http://www.geekheads.net/blog/2014/04/13/dependency-injection-and-the-yagni-principle</id>
     <content type="html"><![CDATA[<p>One of my new personal projects involves writing an application using <a href="http://nodejs.org">Node.js</a> and <a href="http://www.mongodb.org">MongoDB</a>. It’s going to have a <a href="http://en.wikipedia.org/wiki/Representational_state_transfer">RESTful</a> interface for the services, and MongoDB as the database (I haven’t decided about what I’m going to use for the front-end, but <a href="http://angularjs.org">Angular.js</a> is a strong contender). I had looked at using <a href="http://www.mean.io/">mean.io</a> to build it, but after playing with it for a while, it seemed to bring in too many things I wouldn’t end up needing, so I decided to build it all from scratch using <a href="https://github.com/mcavage/node-restify">Restify</a> for the RESTful services.</p>
 
 <p>I’m writing it in an <a href="http://en.wikipedia.org/wiki/Model–view–controller">MVC</a>-ish way (really, since it’s REST, it’s more like MRC - Model - Route - Controller) where the top-level module requires routing modules from whatever Javascript files are in a particular directory (<code>lib/routes</code>), and calls them as functions, passing in the Restify server instance so the routes can be set up. Each route would call a corresponding “controller”, which would bring in a corresponding “model”, and set up the functions that each route would use to do its thing. So, the question became: how do I pass the database connection down to the model?</p>
@@ -38,9 +38,9 @@
   
   <entry>
     <title type="html"><![CDATA[Beautiful Code]]></title>
-    <link href="http://jacklund.github.io/blog/2012/10/01/beautiful-code/"/>
+    <link href="http://www.geekheads.net/blog/2012/10/01/beautiful-code/"/>
     <updated>2012-10-01T21:11:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2012/10/01/beautiful-code</id>
+    <id>http://www.geekheads.net/blog/2012/10/01/beautiful-code</id>
     <content type="html"><![CDATA[<p>Programmers often talk about code being “beautiful”, but often writing “pretty” code is disparaged as being a luxury that can’t be afforded under tight schedules. The result is really ugly code that ends up being difficult to maintain, but most people don’t seem to see the correlation between “beauty” and “maintainability”.</p>
 
 <p>Experience has shown me that beautiful code and maintainable code, if not identical, are closely related. The reason, I believe, is very simple: coding is expression. What I mean by this is that, for any given problem that is trying to be solved by code, there are usually many, many different ways to go about solving it within the context of a given language and environment - there are usually many different solutions which “work”. Because of this, the choice of how to solve the problem is, all else being equal, an aesthetic choice. In other words, given a number of different ways of going about solving the given problem, one way of choosing among all the different possible solutions is to choose the one that seems the “prettiest”, that appeals to the programmers aesthetic style.</p>

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: wifi | Geekheads]]></title>
-  <link href="http://jacklund.github.io/blog/categories/wifi/atom.xml" rel="self"/>
-  <link href="http://jacklund.github.io/"/>
-  <updated>2014-04-13T21:23:25-05:00</updated>
-  <id>http://jacklund.github.io/</id>
+  <link href="http://www.geekheads.net/blog/categories/wifi/atom.xml" rel="self"/>
+  <link href="http://www.geekheads.net/"/>
+  <updated>2014-04-16T22:50:53-05:00</updated>
+  <id>http://www.geekheads.net/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[More Fun With BeagleBone Black]]></title>
-    <link href="http://jacklund.github.io/blog/2013/10/19/more-fun-with-beaglebone-black/"/>
+    <link href="http://www.geekheads.net/blog/2013/10/19/more-fun-with-beaglebone-black/"/>
     <updated>2013-10-19T21:10:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/10/19/more-fun-with-beaglebone-black</id>
+    <id>http://www.geekheads.net/blog/2013/10/19/more-fun-with-beaglebone-black</id>
     <content type="html"><![CDATA[<p>I’ve discovered that owning a BeagleBone Black (or, in my case, two) is kind of like owning one of those really, really nice
 cars that you buy but you can almost never drive because it spends so much time in the shop. It’s a lovely piece of hardware, it
 really is, but the people who created it seem to have gone to great lengths to make sure that all you can do is sit back and admire
@@ -152,9 +152,9 @@ repeatedly, saying “Bad Programmer! Bad!” over and over, because it’s exac
   
   <entry>
     <title type="html"><![CDATA[Airport Extreme]]></title>
-    <link href="http://jacklund.github.io/blog/2013/05/06/Airport-Extreme/"/>
+    <link href="http://www.geekheads.net/blog/2013/05/06/Airport-Extreme/"/>
     <updated>2013-05-06T22:05:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/05/06/Airport-Extreme</id>
+    <id>http://www.geekheads.net/blog/2013/05/06/Airport-Extreme</id>
     <content type="html"><![CDATA[<p>Had to replace my old, crappy Netgear router over the weekend - it was getting flaky, and causing my Skype calls to freak out at inopportune moments. I was thinking about going the <a href="http://en.wikipedia.org/wiki/DD-WRT">DD-WRT</a> route (if you’ll excuse the pun), but it looked like it required more of a time commitment than I am able to manage at the moment. Since almost everything we have in this house is some form of Apple product, I decided to try out the Airport Extreme.</p>
 
 <p>Man, was that thing easy to set up, especially compared to the Living Hell that is most router setups. I just went into Airport Utility on my laptop, it automagically found the router, I configured it right there, and it just frickin’ worked! Unbelievable! Admittedly, it’s a pricey router, but I think it’s worth it with the time it saved me.</p>

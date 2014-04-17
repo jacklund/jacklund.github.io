@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: resteasy | Geekheads]]></title>
-  <link href="http://jacklund.github.io/blog/categories/resteasy/atom.xml" rel="self"/>
-  <link href="http://jacklund.github.io/"/>
-  <updated>2014-04-13T21:23:25-05:00</updated>
-  <id>http://jacklund.github.io/</id>
+  <link href="http://www.geekheads.net/blog/categories/resteasy/atom.xml" rel="self"/>
+  <link href="http://www.geekheads.net/"/>
+  <updated>2014-04-16T22:50:53-05:00</updated>
+  <id>http://www.geekheads.net/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Creating RESTEasy Project with Eclipse and Maven]]></title>
-    <link href="http://jacklund.github.io/blog/2013/05/20/Creating-RESTEasy-Project-with-Eclipse-and-Maven/"/>
+    <link href="http://www.geekheads.net/blog/2013/05/20/Creating-RESTEasy-Project-with-Eclipse-and-Maven/"/>
     <updated>2013-05-20T00:00:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/05/20/Creating-RESTEasy-Project-with-Eclipse-and-Maven</id>
+    <id>http://www.geekheads.net/blog/2013/05/20/Creating-RESTEasy-Project-with-Eclipse-and-Maven</id>
     <content type="html"><![CDATA[<p>Handy safety tip: to create a RESTEasy-friendly Maven project in Eclipse, do the following:</p>
 
 <ol>

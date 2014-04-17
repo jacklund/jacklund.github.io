@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: tomcat | Geekheads]]></title>
-  <link href="http://jacklund.github.io/blog/categories/tomcat/atom.xml" rel="self"/>
-  <link href="http://jacklund.github.io/"/>
-  <updated>2014-04-13T21:23:25-05:00</updated>
-  <id>http://jacklund.github.io/</id>
+  <link href="http://www.geekheads.net/blog/categories/tomcat/atom.xml" rel="self"/>
+  <link href="http://www.geekheads.net/"/>
+  <updated>2014-04-16T22:50:53-05:00</updated>
+  <id>http://www.geekheads.net/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Rethinking Architecture]]></title>
-    <link href="http://jacklund.github.io/blog/2013/04/11/Rethinking-Architecture/"/>
+    <link href="http://www.geekheads.net/blog/2013/04/11/Rethinking-Architecture/"/>
     <updated>2013-04-11T22:30:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/04/11/Rethinking-Architecture</id>
+    <id>http://www.geekheads.net/blog/2013/04/11/Rethinking-Architecture</id>
     <content type="html"><![CDATA[<p>So, I’ve been rethinking the architecture we used with a customer, and which we are planning on using, in slightly modified form, for some in-house projects.</p>
 
 <p>The application is, basically, a cloud-based service which takes data from devices, analyzes and stores it, and presents it to the user in a web site.</p>

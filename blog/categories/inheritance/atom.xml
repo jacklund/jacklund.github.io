@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: inheritance | Geekheads]]></title>
-  <link href="http://jacklund.github.io/blog/categories/inheritance/atom.xml" rel="self"/>
-  <link href="http://jacklund.github.io/"/>
-  <updated>2014-04-13T21:23:25-05:00</updated>
-  <id>http://jacklund.github.io/</id>
+  <link href="http://www.geekheads.net/blog/categories/inheritance/atom.xml" rel="self"/>
+  <link href="http://www.geekheads.net/"/>
+  <updated>2014-04-16T22:50:53-05:00</updated>
+  <id>http://www.geekheads.net/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Inheritance in Functional Languages]]></title>
-    <link href="http://jacklund.github.io/blog/2014/01/05/inheritance-in-functional-languages/"/>
+    <link href="http://www.geekheads.net/blog/2014/01/05/inheritance-in-functional-languages/"/>
     <updated>2014-01-05T11:31:00-06:00</updated>
-    <id>http://jacklund.github.io/blog/2014/01/05/inheritance-in-functional-languages</id>
+    <id>http://www.geekheads.net/blog/2014/01/05/inheritance-in-functional-languages</id>
     <content type="html"><![CDATA[<p>There’s a tendency amongst proponents of <a href="http://en.wikipedia.org/wiki/Functional_programming">functional</a> languages, like Javascript, to consider inheritance an anachronism of older (and, by implication, worse) OO languages and OO design. One example is this <a href="http://book.mixu.net/node/ch6.html">discussion</a> by <a href="http://mixu.net">Mikito Takada</a>. This is what he says:</p>
 
 <blockquote>

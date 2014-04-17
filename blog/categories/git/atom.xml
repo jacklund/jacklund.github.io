@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: git | Geekheads]]></title>
-  <link href="http://jacklund.github.io/blog/categories/git/atom.xml" rel="self"/>
-  <link href="http://jacklund.github.io/"/>
-  <updated>2014-04-13T21:23:25-05:00</updated>
-  <id>http://jacklund.github.io/</id>
+  <link href="http://www.geekheads.net/blog/categories/git/atom.xml" rel="self"/>
+  <link href="http://www.geekheads.net/"/>
+  <updated>2014-04-16T22:50:53-05:00</updated>
+  <id>http://www.geekheads.net/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Falling in Love with Git]]></title>
-    <link href="http://jacklund.github.io/blog/2013/05/07/Falling-in-Love-with-Git/"/>
+    <link href="http://www.geekheads.net/blog/2013/05/07/Falling-in-Love-with-Git/"/>
     <updated>2013-05-07T17:00:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/05/07/Falling-in-Love-with-Git</id>
+    <id>http://www.geekheads.net/blog/2013/05/07/Falling-in-Love-with-Git</id>
     <content type="html"><![CDATA[<p>As I mentioned earlier, we’re transitioning from subversion to git, and one of the things we need to do is convert from many-projects-per-repository, which is what we had in subversion, to one-project-per-repository for git. This is partly to make things nicer, and partly because it will make <a href="http://jenkins-ci.org/">Jenkins</a> work better. So, thinking in subversion-terms, I thought I’d have to do it myself, and even tried by renaming all the files in one of the projects into the upper-level directory, removing all the other projects, committing locally, and then pushing to a new repo. Royal pain.</p>
 
 <p>And then, I came across <a href="https://help.github.com/articles/splitting-a-subpath-out-into-a-new-repository">this</a>. Oh. My. God. Git actually does the work for you. It’s so easy, you just do the <code>git filter-branch</code> command, and suddenly your project is its own repository! Then, you just change the remote repository (<code>git remote rm origin</code> followed by <code>git remote add</code> <em>new-url</em>), and Bob’s your uncle, you have a new, smaller repository.</p>
@@ -62,9 +62,9 @@ Okay, after messing around with this for some time, I’ve discovered that the a
   
   <entry>
     <title type="html"><![CDATA[Getting Jenkins on Windows Working with Git]]></title>
-    <link href="http://jacklund.github.io/blog/2013/05/06/Getting-Jenkins-on-Windows-Working-with-Git/"/>
+    <link href="http://www.geekheads.net/blog/2013/05/06/Getting-Jenkins-on-Windows-Working-with-Git/"/>
     <updated>2013-05-06T20:46:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/05/06/Getting-Jenkins-on-Windows-Working-with-Git</id>
+    <id>http://www.geekheads.net/blog/2013/05/06/Getting-Jenkins-on-Windows-Working-with-Git</id>
     <content type="html"><![CDATA[<p>We’re transitioning, as a company, from Subversion to Git, which is a Good Thing, but has its complications. One of them was getting <a href="http://jenkins-ci.org/">Jenkins</a>, which we use for <a href="http://en.wikipedia.org/wiki/Continuous_integration">continuous integration</a>, to work with our Git repositories.</p>
 
 <p>I had started out by thinking that I would have to create a user in our repository provider (we’re using <a href="http://bitbucket.org">BitBucket</a>) which would have read permisisons to our repositories, a “jenkins” user. Turns out its not the case. All you need to do for read-only access is to generate SSH keys that you register with the repository, and which Jenkins uses to clone the repository.</p>

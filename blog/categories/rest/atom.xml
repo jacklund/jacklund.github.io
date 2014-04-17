@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: rest | Geekheads]]></title>
-  <link href="http://jacklund.github.io/blog/categories/rest/atom.xml" rel="self"/>
-  <link href="http://jacklund.github.io/"/>
-  <updated>2014-04-13T21:23:25-05:00</updated>
-  <id>http://jacklund.github.io/</id>
+  <title><![CDATA[Category: REST | Geekheads]]></title>
+  <link href="http://www.geekheads.net/blog/categories/rest/atom.xml" rel="self"/>
+  <link href="http://www.geekheads.net/"/>
+  <updated>2014-04-16T22:50:53-05:00</updated>
+  <id>http://www.geekheads.net/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
     
@@ -14,68 +14,84 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Rethinking Architecture]]></title>
-    <link href="http://jacklund.github.io/blog/2013/04/11/Rethinking-Architecture/"/>
-    <updated>2013-04-11T22:30:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/04/11/Rethinking-Architecture</id>
-    <content type="html"><![CDATA[<p>So, I’ve been rethinking the architecture we used with a customer, and which we are planning on using, in slightly modified form, for some in-house projects.</p>
+    <title type="html"><![CDATA[REST By Any Other Name...]]></title>
+    <link href="http://www.geekheads.net/blog/2014/04/16/rest-by-any-other-name-dot-dot-dot/"/>
+    <updated>2014-04-16T16:53:31-05:00</updated>
+    <id>http://www.geekheads.net/blog/2014/04/16/rest-by-any-other-name-dot-dot-dot</id>
+    <content type="html"><![CDATA[<p>I’ve done quite a few interfaces which I’ve referred to as “<a href="http://en.wikipedia.org/wiki/REST">RESTful</a>”, because I’ve done what most people call “REST” - using HTTP as the transport, modeling everything as resources, and using the HTTP verbs (GET, POST, PUT, etc) to access the resources. I mostly wanted to do REST because the alternative, SOAP, was so onerous - it required translating a WSDL document to proxies, serializing and deserializing error objects, and, worst of all, was a nightmare to version.  I had read about <a href="http://en.wikipedia.org/wiki/HATEOAS">HATEOAS</a>, and had kind of thought, “Wow, that sounds…strange”, but nobody seemed to think much about it, despite the fact that <a href="http://en.wikipedia.org/wiki/Roy_Fielding">Roy Fielding</a> himself <a href="http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven">said</a>, basically, “If you ain’t doing HATEOAS, you ain’t doing REST, so stop calling it that!”. So, I remained content in the fact that I was <em>mostly</em> doing REST.</p>
 
-<p>The application is, basically, a cloud-based service which takes data from devices, analyzes and stores it, and presents it to the user in a web site.</p>
+<p>However, with my newest project, I wanted a “truly” RESTful interface, so I decided to delve into HATEOAS and see what the deal was, and whether it was worth doing. Into the rabbit hole I went, and when I came out, I finally “got” HATEOAS, and understood why Dr. Fielding was making such a big deal about it, and why it’s actually very, very important.</p>
 
-<p>We had decided, early on, to go with Java as our language of choice, both because it was what the customer was comfortable with, and because we felt like it offered the best performance/flexibility tradeoff (and, yes, performance is an issue here, especially on the data collection side).</p>
+<p>However, since everybody and their sister have attempted to explain it from the point of view of implementing it, instead I’ll try to explain it a different way, starting with a web browser.</p>
 
-<p>The pieces of our architecture include:</p>
+<p>To access resources on the web, you only need two things: the top-level URL of the site you’re trying to access, and something (the browser) which knows how to handle the various representations of things on the site. To get to a particular resource (say, a PDF file), you go to the top-level page in the site, and navigate using the hyperlinks there to where the file you want is stored. Because you understand what the links are pointing to, you know how to navigate the site to find what you need.</p>
 
-<ul>
-  <li>A <a href="https://en.wikipedia.org/wiki/Rest">RESTful</a> web service, to both collect the data and to serve as an API for apps which want to access the data</li>
-  <li>Some sort of queuing mechanism for taking the data in, and processing it on the back end asynchronously</li>
-  <li>A database of some sort for storing the readings</li>
-  <li>A website, utilizing static HTML and Javascript for accessing and presenting the data, and for managing the various assets (devices, etc)</li>
-  <li>A database (possibly the same as the previous one) for storing the website data</li>
-  <li>A notification framework for sending notifications (emails, SMS, etc) of various events from the devices</li>
-</ul>
+<p>And, you don’t have to worry about “versioning” the website - people may bookmark certain pages or resources, but if one day they get a “Not Found”, they know to just go back to the top level and navigate to the new place where the resource can be found. Simple - which is why it’s such a successful protocol.</p>
 
-<p>Now, one of the things I’ve learned about architecture (or, at least I thought I had learned) was to only use what you absolutely need, nothing more. A lean architecture is a good architecture. However, we made some decisions early on which, now, I feel like violate those principles.</p>
+<p>Now, imagine a similar thing for a network interface. Your client knows the URL for the site, and when it retrieves the root resource (“/”), it knows how to interpret the data being returned, understands that there are hyperlinks in there, and that they point to particular resources on the site, so it can navigate to the resource it’s trying to find.  It can even “bookmark” the resource (cache the location) so it can get to it directly in the future, but if it gets a “Not Found” (404), it can just return to the top level and navigate its way again.</p>
 
-<h3 id="jboss">JBoss</h3>
-<p>We opted to put the code in an app server for various reasons. We needed a Servlet engine to facilitate the web service, but we decided to use <a href="http://www.jboss.org/jbossas">JBoss AS 7</a> as the app server because we’d all had experience with it in the past, and it was being used by the customer currently. We felt like the container could manage all the “plumbing” (threads, database connections, etc), rather than dealing with it ourselves. I think that decision came more from old architectural design assumptions (“three-tiered good, two-tiered bad”, “managing resources is hard”) which are no longer really relevant.</p>
+<p>Now, the interface is no longer the protocol - the protocol is completely fixed, just like on the web. The protocol is the <em>representation of the data</em>, just like on the web. So what, you ask? What’s the big deal? All you’ve done is pushed the problem down to the representation, right? Wrong, because, unlike locations (URIs), which are going to be different from site to site, <em>representations of data can be standardized</em> just like on the web, which means that the clients accessing the data can be as well.</p>
 
-<p>However, more importantly (and I don’t mean to bash JBoss here, I think this would be true of any app server), we ended up severely limiting our “functional” scalability by using an app server. Let me explain:</p>
+<p>A concrete example: let’s say we have a fairly standard use case - an interface to a company selling something, and I want to get a list of my orders on the site. However, my client is unaware of the “API” for the server, so the client code would do an HTTP OPTIONS call at the top-level URL, which would look something like this:</p>
 
-<p>When I refer to “functional” vs. “theoretical” scalability, I’m referring to the fact that, while JBoss is certainly very scalable in theory (you can cluster the instances, and add new instances dynamically), in practice, it’s really frickin’ difficult to scale. The reason: you can’t just “add another instance”, you need to go through the hell that is cluster configuration to add a new instance, which means, literally, making on the order of a dozen changes to the stock JBoss configuration files.</p>
+<p><code>
+OPTIONS / HTTP/1.1
+Accept: application/vnd.siren+json
+</code></p>
 
-<p>To put an even finer point on it: the question you should ask yourself in terms of scalability is: if I were to get a call at 2 AM that we need to scale up because the application’s pegged, could I scale it quickly and easily, even half-asleep? The answer in this case would be a resounding “No!”.</p>
+<p>and would get the response:</p>
 
-<p>The other answer might be to use a deployment system, like <a href="http://www.opscode.com/chef/">Chef</a> or <a href="https://puppetlabs.com/">Puppet</a>, but I’ve tried putting together Puppet scripts for doing a JBoss clustered deployment, and it’s a nightmare as well.</p>
+<p><code>
+200 OK
+Allow: HEAD,GET,PUT,DELETE,OPTIONS
+Content-type: application/vnd.siren+json
+{
+  "links": [
+    { "rel": [ "self" ], "href": "http://api.foo.com/" },
+    { "rel": [ "users" ], "href": "http://api.foo.com/users" },
+    { "rel": [ "items" ], "href": "http://api.foo.com/items" },
+    { "rel": [ "orders" ], "href": "http://api.foo.com/orders" }
+  ]
+}
+</code></p>
 
-<p>A lot of this came out of a gig we had auditing another consulting company for a customer. They hired us to talk to the other company with them, because things weren’t going well and they needed a second opinion on whether they were being “took” (we said “yes, kinda”). However, the most interesting thing was that they had a very similar architecture to ours, but it was seriously slow, so they were constantly having to add in servers in the back end. The sys admin who worked there (and who was probably the smartest guy in the company, as far as I could tell), pointed out that starting up new instances was trivial, because their backend server was a simple process - no app server, no nothing. He could start it up from the command line if he wanted.</p>
+<p>(<em>Note</em>: I’m using <a href="https://github.com/kevinswiber/siren">Siren</a> for the representation example here, but, really, any standard representation would do the job).</p>
 
-<p>That’s how it all <strong><em>should</em></strong> work! It’s the Google/Facebook architecture vs. the old-school “Big Iron” approach. It was a serious “Aha!” moment for me.</p>
+<p>The code would get back a hash of <code>rel</code> -&gt; <code>href</code>, in which we would look up “orders”. The client would then do an OPTIONS on <code>http://api.foo.com/orders</code>, like so:</p>
 
-<p>So, what are we getting from using JBoss? EJBs? We are using them, but we don’t need them (they’re not on the list I mentioned above) - the web service should be our internal as well as our external API. Thread pools? They used to be complicated, but since JDK 1.5, it’s trivial. Database connection pools? Same thing. Caching? We’re using a third-party caching mechanism, so no.</p>
+<p><code>
+OPTIONS /orders HTTP/1.1
+Accept: application/vnd.siren+json
+</code></p>
 
-<p>Time to ditch JBoss.</p>
+<p>and would get the response:</p>
 
-<h3 id="hornetq">HornetQ</h3>
-<p>The queue that comes with JBoss is <a href="http://www.jboss.org/hornetq">HornetQ</a>. It’s supposedly a very fast queue, and it comes embedded in JBoss. However, there are several issues with it:</p>
+<p><code>
+200 OK
+Allow: HEAD,GET,PUT,DELETE,OPTIONS
+Content-type: application/vnd.siren+json
+{
+  "actions": [
+    { "name": "list", "method": "GET", "href": "http://api.foo.com/orders" },
+    { "name": "add", "method": "POST", "href": "http://api.foo.com/orders" },
+    { "name": "delete", "method": "DELETE", "href": "http://api.foo.com/orders" },
+  ]
+}
+</code></p>
 
-<ul>
-  <li>It, also, doesn’t functionally scale well. You can cluster it, but it’s painful, and a configuration nightmare, just like JBoss</li>
-  <li>It doesn’t handle having the queue fill up very gracefully, in my opinion. While I was doing load testing of the app, sometimes the back end would not quite be able to keep up, and when a large number of journal files ended up in the queue, it froze, and needed not just to be restarted, but to have the journal files cleared out first.</li>
-  <li>It’s not trivial swapping out a different queue in JBoss. It’s doable, but not very well documented, and it’s hard to say how JBoss would handle it.</li>
-</ul>
+<p>Now, the client knows that to get the list of orders, it just needs to do a GET on <code>http://api.foo.com/orders</code>.</p>
 
-<h3 id="spring">Spring</h3>
-<p>Another questionable architectural decision (and I can say this because I was one of the big advocates) was to use <a href="http://www.springsource.org/">Spring</a>. Now, don’t get me wrong - I <em>love</em> Spring, but it has a tendency to take over once you start using it. We had even talked about, early on, how we weren’t going to use Spring for “everything”, but we ended up using it way too much, IMHO. Plus, I think if we rearchitect everything to be in terms of standalone services, we’ll have a lot less need for that sort of configurational complexity.</p>
+<p>Notice that everything the client code needs in order to access the API are:</p>
 
-<h3 id="emphasize-the-positive">Emphasize the Positive</h3>
-<p>So, those are the things I think we should ditch. What should our architecture look like? I think we could function well with the web services being in something like <a href="http://tomcat.apache.org/">Tomcat</a> or <a href="http://www.eclipse.org/jetty/">Jetty</a>, with everything else being standalone Java services (i.e., no containers, just POJOs with a main()).</p>
+<ol>
+  <li>The list of resource names served by the server</li>
+  <li>The list of actions on the resources</li>
+  <li>A way of parsing at least one of the available representations of the data</li>
+</ol>
 
-<p>That takes care of the big pieces, but what about the glue to put it together? I was looking around for scalable, distributed queues, when I came across <a href="http://kafka.apache.org/">Kafka</a>. It’s not really a queue so much as a pub/sub framework, which you can use like a queue. However, once I started playing with it (which will be the subject of a different post), I came to the realization that it could be used for more than just the queue - it could be the communication mechanism between the services, basically a communication bus for the architecture. And, it’s functionally scalable, because you can add new server instances dynamically using <a href="http://zookeeper.apache.org/">ZooKeeper</a>. We could also reuse ZooKeeper as our own service locater service to allow us to dynamically add new services.</p>
+<p>That’s it. No method names, parameter types, or “API” in any traditional sense. Even more importantly: the only thing that needs to be versioned here is, possibly, the representation type. Everything else can move around at will - even if the client caches (“bookmarks”) the location of what it got before, if the resource gets moved, it just needs to restart the discovery process from the top to find what it needs. The client and server are <em>completely</em> decoupled.</p>
 
-<p>Now, suddenly, things are looking very different. Rather than an app server with all our code deployed on it, we would have compact, self-contained services which communicate via Kafka, find new instances via ZooKeeper, and which scale by just starting up new instances to take on the load. Doing this then implies that the web service front-end would have to be very thin - just a façade for taking in web service requests, which would then be delegated to the back-end services.</p>
-
-<p>The key would be to define the services well, so they would be small, light, decoupled, and cohesive.</p>
+<p>Now, <em>that’s</em> what I call an API.</p>
 ]]></content>
   </entry>
   

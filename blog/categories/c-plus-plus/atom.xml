@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: c++ | Geekheads]]></title>
-  <link href="http://jacklund.github.io/blog/categories/c-plus-plus/atom.xml" rel="self"/>
-  <link href="http://jacklund.github.io/"/>
-  <updated>2014-04-13T21:23:25-05:00</updated>
-  <id>http://jacklund.github.io/</id>
+  <link href="http://www.geekheads.net/blog/categories/c-plus-plus/atom.xml" rel="self"/>
+  <link href="http://www.geekheads.net/"/>
+  <updated>2014-04-16T22:50:53-05:00</updated>
+  <id>http://www.geekheads.net/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[btle.js 0.2.0 released]]></title>
-    <link href="http://jacklund.github.io/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/"/>
+    <link href="http://www.geekheads.net/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/"/>
     <updated>2013-10-18T23:08:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/10/18/btle-dot-js-0-dot-2-0-released</id>
+    <id>http://www.geekheads.net/blog/2013/10/18/btle-dot-js-0-dot-2-0-released</id>
     <content type="html"><![CDATA[<p>I just (okay, a few days ago) released version 0.2.0 of <a href="https://github.com/jacklund/btle.js">btle.js</a> to
 <a href="https://npmjs.org/package/btle.js">npm</a>. This has a bunch of API changes - the <code>connect</code> method now gives you a
 <code>Device</code> object, instead of a <code>Connection</code>. All the ATT methods are now on the <code>Device</code> object, but, in addition, you can
@@ -30,9 +30,9 @@ characteristics, which return <code>Characteristics</code> objects.</p>
   
   <entry>
     <title type="html"><![CDATA[Published Bluetooth LE Module]]></title>
-    <link href="http://jacklund.github.io/blog/2013/09/10/published-bluetooth-le-module/"/>
+    <link href="http://www.geekheads.net/blog/2013/09/10/published-bluetooth-le-module/"/>
     <updated>2013-09-10T22:31:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/09/10/published-bluetooth-le-module</id>
+    <id>http://www.geekheads.net/blog/2013/09/10/published-bluetooth-le-module</id>
     <content type="html"><![CDATA[<p>Well, I published my Node.js module for Bluetooth LE, <a href="https://github.com/jacklund/btle.js">btle.js</a> (pronounced “Beetle Juice”) to <a href="https://npmjs.org/package/btle.js">npm</a>. Even though it’s labeled version 0.1.0, it’s got most of the functionality that’s necessary for Bluetooth LE - reading attributes, writing commands and requests, and listening for notifications. I’m hoping to add more functionality over the next few weeks/months.</p>
 
 <p>The main reason I was doing this was to get my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?DCMP=sensortag&amp;HQS=sensortag-bn">TI SensorTag</a> working with my Raspberry Pi and Bluetooth LE dongle, which it now does. I’ve even got the beginnings of a Node.js module for the sensortag, <a href="https://github.com/jacklund/sensortag.js">sensortag.js</a>, which is built on top of btle.js. I’ve got everything working except the Barometric Pressure sensor readings and the Gyroscope readings.</p>

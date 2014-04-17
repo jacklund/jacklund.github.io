@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: bonescript | Geekheads]]></title>
-  <link href="http://jacklund.github.io/blog/categories/bonescript/atom.xml" rel="self"/>
-  <link href="http://jacklund.github.io/"/>
-  <updated>2014-04-13T21:23:25-05:00</updated>
-  <id>http://jacklund.github.io/</id>
+  <link href="http://www.geekheads.net/blog/categories/bonescript/atom.xml" rel="self"/>
+  <link href="http://www.geekheads.net/"/>
+  <updated>2014-04-16T22:50:53-05:00</updated>
+  <id>http://www.geekheads.net/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Fun with BeagleBone Black]]></title>
-    <link href="http://jacklund.github.io/blog/2013/09/25/fun-with-beaglebone-black/"/>
+    <link href="http://www.geekheads.net/blog/2013/09/25/fun-with-beaglebone-black/"/>
     <updated>2013-09-25T11:02:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/09/25/fun-with-beaglebone-black</id>
+    <id>http://www.geekheads.net/blog/2013/09/25/fun-with-beaglebone-black</id>
     <content type="html"><![CDATA[<p>So, I’ve decided to try to play with <a href="http://en.wikipedia.org/wiki/ZigBee">ZigBee</a>, and since I have a couple of BeagleBone Blacks hanging around doing nothing, I thought I’d try setting it up on them.</p>
 
 <p>First thing I came across was that the BBB’s seem to have issues with <a href="https://groups.google.com/forum/#!topic/beagleboard/4e2T6XH-fNM">accessing their UARTS</a>. Even via bonescript, there seem to <a href="http://stackoverflow.com/questions/17497060/node-js-script-not-setting-beaglebone-black-mux">be issues</a>.</p>

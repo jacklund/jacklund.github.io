@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Geekheads]]></title>
-  <link href="http://jacklund.github.io/atom.xml" rel="self"/>
-  <link href="http://jacklund.github.io/"/>
-  <updated>2014-04-13T21:23:25-05:00</updated>
-  <id>http://jacklund.github.io/</id>
+  <link href="http://www.geekheads.net/atom.xml" rel="self"/>
+  <link href="http://www.geekheads.net/"/>
+  <updated>2014-04-16T22:50:53-05:00</updated>
+  <id>http://www.geekheads.net/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
     
@@ -14,10 +14,109 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Dependency Injection and the YAGNI principle]]></title>
-    <link href="http://jacklund.github.io/blog/2014/04/13/dependency-injection-and-the-yagni-principle/"/>
+    <title type="html"><![CDATA[REST by Any Other Name...]]></title>
+    <link href="http://www.geekheads.net/blog/2014/04/16/rest-by-any-other-name-dot-dot-dot/"/>
+    <updated>2014-04-16T16:53:31-05:00</updated>
+    <id>http://www.geekheads.net/blog/2014/04/16/rest-by-any-other-name-dot-dot-dot</id>
+    <content type="html"><![CDATA[<p>I’ve done quite a few interfaces which I’ve referred to as “<a href="http://en.wikipedia.org/wiki/REST">RESTful</a>”, because I’ve done what most people call “REST” - using HTTP as the transport, modeling everything as resources, and using the HTTP verbs (GET, POST, PUT, etc) to access the resources. I mostly wanted to do REST because the alternative, SOAP, was so onerous - it required translating a WSDL document to proxies, serializing and deserializing error objects, and, worst of all, was a nightmare to version.  I had read about <a href="http://en.wikipedia.org/wiki/HATEOAS">HATEOAS</a>, and had kind of thought, “Wow, that sounds…strange”, but nobody seemed to think much about it, despite the fact that <a href="http://en.wikipedia.org/wiki/Roy_Fielding">Roy Fielding</a> himself <a href="http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven">said</a>, basically, “If you ain’t doing HATEOAS, you ain’t doing REST, so stop calling it that!”. So, I remained content in the fact that I was <em>mostly</em> doing REST.</p>
+
+<p>However, with my newest project, I wanted a “truly” RESTful interface, so I decided to delve into HATEOAS and see what the deal was, and whether it was worth doing. Into the rabbit hole I went, and when I came out, I finally “got” HATEOAS, and understood why Dr. Fielding was making such a big deal about it, and why it’s actually very, very important.</p>
+
+<p>However, since everybody and their sister have attempted to explain it from the point of view of implementing it, instead I’ll try to explain it a different way, starting with a web browser.</p>
+
+<p>To access resources on the web, you only need two things: the top-level URL of the site you’re trying to access, and something (the browser) which knows how to handle the various representations of things on the site. To get to a particular resource (say, a PDF file), you go to the top-level page in the site, and navigate using the hyperlinks there to where the file you want is stored. Because you understand what the links are pointing to, you know how to navigate the site to find what you need.</p>
+
+<p>And, you don’t have to worry about “versioning” the website - people may bookmark certain pages or resources, but if one day they get a “Not Found”, they know to just go back to the top level and navigate to the new place where the resource can be found. Simple - which is why it’s such a successful protocol.</p>
+
+<p>Now, imagine a similar thing for a network interface. Your client knows the URL for the site, and when it retrieves the root resource (“/”), it knows how to interpret the data being returned, understands that there are hyperlinks in there, and that they point to particular resources on the site, so it can navigate to the resource it’s trying to find.  It can even “bookmark” the resource (cache the location) so it can get to it directly in the future, but if it gets a “Not Found” (404), it can just return to the top level and navigate its way again.</p>
+
+<p>Now, the interface is no longer the protocol - the protocol is completely fixed, just like on the web. The protocol is the <em>representation of the data</em>, just like on the web. So what, you ask? What’s the big deal? All you’ve done is pushed the problem down to the representation, right? Wrong, because, unlike locations (URIs), which are going to be different from site to site, <em>representations of data can be standardized</em> just like on the web, which means that the clients accessing the data can be as well.</p>
+
+<p>A concrete example: let’s say we have a fairly standard use case - an interface to a company selling something, and I want to get a list of my orders on the site. However, my client is unaware of the “API” for the server, so the client code would do an HTTP OPTIONS call at the top-level URL, which would look something like this:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">OPTIONS / HTTP/1.1
+</span><span class="line">Accept: application/vnd.siren+json</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>and would get the response:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">200 OK
+</span><span class="line">Allow: HEAD,GET,PUT,DELETE,OPTIONS
+</span><span class="line">Content-type: application/vnd.siren+json
+</span><span class="line">{
+</span><span class="line">  "links": [
+</span><span class="line">    { "rel": [ "self" ], "href": "http://api.foo.com/" },
+</span><span class="line">    { "rel": [ "users" ], "href": "http://api.foo.com/users" },
+</span><span class="line">    { "rel": [ "items" ], "href": "http://api.foo.com/items" },
+</span><span class="line">    { "rel": [ "orders" ], "href": "http://api.foo.com/orders" }
+</span><span class="line">  ]
+</span><span class="line">}</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>(<em>Note</em>: I’m using <a href="https://github.com/kevinswiber/siren">Siren</a> for the representation example here, but, really, any standard representation would do the job).</p>
+
+<p>The code would get back a hash of <code>rel</code> -&gt; <code>href</code>, in which we would look up “orders”. The client would then do an OPTIONS on <code>http://api.foo.com/orders</code>, like so:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">OPTIONS /orders HTTP/1.1
+</span><span class="line">Accept: application/vnd.siren+json</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>and would get the response:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">200 OK
+</span><span class="line">Allow: HEAD,GET,PUT,DELETE,OPTIONS
+</span><span class="line">Content-type: application/vnd.siren+json
+</span><span class="line">{
+</span><span class="line">  "actions": [
+</span><span class="line">    { "name": "list", "method": "GET", "href": "http://api.foo.com/orders" },
+</span><span class="line">    { "name": "add", "method": "POST", "href": "http://api.foo.com/orders" },
+</span><span class="line">    { "name": "delete", "method": "DELETE", "href": "http://api.foo.com/orders" },
+</span><span class="line">  ]
+</span><span class="line">}</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Now, the client knows that to get the list of orders, it just needs to do a GET on <code>http://api.foo.com/orders</code>.</p>
+
+<p>Notice that everything the client code needs in order to access the API are:</p>
+
+<ol>
+  <li>The list of resource names served by the server</li>
+  <li>The list of actions on the resources</li>
+  <li>A way of parsing at least one of the available representations of the data</li>
+</ol>
+
+<p>That’s it. No method names, parameter types, or “API” in any traditional sense. Even more importantly: the only thing that needs to be versioned here is, possibly, the representation type. Everything else can move around at will - even if the client caches (“bookmarks”) the location of what it got before, if the resource gets moved, it just needs to restart the discovery process from the top to find what it needs. The client and server are <em>completely</em> decoupled.</p>
+
+<p>Now, <em>that’s</em> what I call an API.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Dependency Injection and the YAGNI Principle]]></title>
+    <link href="http://www.geekheads.net/blog/2014/04/13/dependency-injection-and-the-yagni-principle/"/>
     <updated>2014-04-13T10:07:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2014/04/13/dependency-injection-and-the-yagni-principle</id>
+    <id>http://www.geekheads.net/blog/2014/04/13/dependency-injection-and-the-yagni-principle</id>
     <content type="html"><![CDATA[<p>One of my new personal projects involves writing an application using <a href="http://nodejs.org">Node.js</a> and <a href="http://www.mongodb.org">MongoDB</a>. It’s going to have a <a href="http://en.wikipedia.org/wiki/Representational_state_transfer">RESTful</a> interface for the services, and MongoDB as the database (I haven’t decided about what I’m going to use for the front-end, but <a href="http://angularjs.org">Angular.js</a> is a strong contender). I had looked at using <a href="http://www.mean.io/">mean.io</a> to build it, but after playing with it for a while, it seemed to bring in too many things I wouldn’t end up needing, so I decided to build it all from scratch using <a href="https://github.com/mcavage/node-restify">Restify</a> for the RESTful services.</p>
 
 <p>I’m writing it in an <a href="http://en.wikipedia.org/wiki/Model–view–controller">MVC</a>-ish way (really, since it’s REST, it’s more like MRC - Model - Route - Controller) where the top-level module requires routing modules from whatever Javascript files are in a particular directory (<code>lib/routes</code>), and calls them as functions, passing in the Restify server instance so the routes can be set up. Each route would call a corresponding “controller”, which would bring in a corresponding “model”, and set up the functions that each route would use to do its thing. So, the question became: how do I pass the database connection down to the model?</p>
@@ -38,9 +137,9 @@
   
   <entry>
     <title type="html"><![CDATA[Logging Using EventEmitters in Node.js]]></title>
-    <link href="http://jacklund.github.io/blog/2014/01/14/logging-using-eventemitters-in-node-dot-js/"/>
+    <link href="http://www.geekheads.net/blog/2014/01/14/logging-using-eventemitters-in-node-dot-js/"/>
     <updated>2014-01-14T21:45:00-06:00</updated>
-    <id>http://jacklund.github.io/blog/2014/01/14/logging-using-eventemitters-in-node-dot-js</id>
+    <id>http://www.geekheads.net/blog/2014/01/14/logging-using-eventemitters-in-node-dot-js</id>
     <content type="html"><![CDATA[<p>I’ve been working a lot in node.js lately for a work project. Javascript as a language is an odd duck (<a href="http://en.wikipedia.org/wiki/Duck_typing#In_JavaScript">pun not intended</a>). It’s got all these incredibly powerful features - dynamic typing, inheritance-by-prototype, functions as first-class objects - but it has some really odd anachronisms, including having to use the C-style <code>for (var i = 0; i &lt; length; i++)</code> loop to iterate over arrays. Node adds a lot to the language as well, such as <a href="http://nodejs.org/api/events.html">EventEmitters</a>, which are very powerful. This afternoon I found a nifty new use for them: logging.</p>
 
 <p>One of the issues that always seems to come up is the fact that logging is one of those things that is both local and global - it’s local, in that you want to do the logging at the place where the event you’re logging occurs, but global in that you want your logging configured globally - you don’t want each and every class/module to have to “know” about logging. One consequence of this, especially with respect to testing, is that you end up having to configure loggers for your unit tests, which, in a way, makes them no longer “unit” tests at all. Optimally, what you want is a situation where you’re logging locally, but if logging hasn’t been set up by anyone, the logs just go into <code>/dev/null</code>. Basically, you want your logging to involve sending out logging “events”, which are either captured by something, or not. EventEmitters give that to you for free.</p>
@@ -89,9 +188,9 @@ module.exports.initialize = function() {
   
   <entry>
     <title type="html"><![CDATA[Inheritance in Functional Languages]]></title>
-    <link href="http://jacklund.github.io/blog/2014/01/05/inheritance-in-functional-languages/"/>
+    <link href="http://www.geekheads.net/blog/2014/01/05/inheritance-in-functional-languages/"/>
     <updated>2014-01-05T11:31:00-06:00</updated>
-    <id>http://jacklund.github.io/blog/2014/01/05/inheritance-in-functional-languages</id>
+    <id>http://www.geekheads.net/blog/2014/01/05/inheritance-in-functional-languages</id>
     <content type="html"><![CDATA[<p>There’s a tendency amongst proponents of <a href="http://en.wikipedia.org/wiki/Functional_programming">functional</a> languages, like Javascript, to consider inheritance an anachronism of older (and, by implication, worse) OO languages and OO design. One example is this <a href="http://book.mixu.net/node/ch6.html">discussion</a> by <a href="http://mixu.net">Mikito Takada</a>. This is what he says:</p>
 
 <blockquote>
@@ -165,9 +264,9 @@ module.exports.initialize = function() {
   
   <entry>
     <title type="html"><![CDATA[Using a Raspberry Pi as an iBeacon]]></title>
-    <link href="http://jacklund.github.io/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon/"/>
+    <link href="http://www.geekheads.net/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon/"/>
     <updated>2013-11-15T16:00:00-06:00</updated>
-    <id>http://jacklund.github.io/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon</id>
+    <id>http://www.geekheads.net/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon</id>
     <content type="html"><![CDATA[<p>There’s an excellent <a href="http://developer.radiusnetworks.com/2013/10/09/how-to-make-an-ibeacon-out-of-a-raspberry-pi.html">blog post by by James Nebeker and David G. Young</a> about simulating an <a href="http://en.wikipedia.org/wiki/IBeacon">iBeacon</a> using a Raspberry Pi and a bluetooth dongle. Since I already had both, I thought I’d give it a try. It worked really well, and I’ve even put together the files necessary to do it <a href="https://github.com/jacklund/piBeacon">in my GitHub repository</a>.</p>
 
 <p>You’ll need to install <a href="http://www.bluez.org/">BlueZ</a> as well for this to work. Once you get it all installed and working you can use one of the mobile iBeacon apps, such as <a href="https://itunes.apple.com/us/app/ibeacon-locate/id738709014?ls=1&amp;mt=8">iBeacon Locate</a>. Very fun to play with, and a good way to be able to develop mobile apps to access iBeacons without having to wait for them to come out.</p>
@@ -178,9 +277,9 @@ module.exports.initialize = function() {
   
   <entry>
     <title type="html"><![CDATA[More Fun With BeagleBone Black]]></title>
-    <link href="http://jacklund.github.io/blog/2013/10/19/more-fun-with-beaglebone-black/"/>
+    <link href="http://www.geekheads.net/blog/2013/10/19/more-fun-with-beaglebone-black/"/>
     <updated>2013-10-19T21:10:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/10/19/more-fun-with-beaglebone-black</id>
+    <id>http://www.geekheads.net/blog/2013/10/19/more-fun-with-beaglebone-black</id>
     <content type="html"><![CDATA[<p>I’ve discovered that owning a BeagleBone Black (or, in my case, two) is kind of like owning one of those really, really nice
 cars that you buy but you can almost never drive because it spends so much time in the shop. It’s a lovely piece of hardware, it
 really is, but the people who created it seem to have gone to great lengths to make sure that all you can do is sit back and admire
@@ -314,10 +413,10 @@ repeatedly, saying “Bad Programmer! Bad!” over and over, because it’s exac
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[btle.js 0.2.0 released]]></title>
-    <link href="http://jacklund.github.io/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/"/>
+    <title type="html"><![CDATA[btle.js 0.2.0 Released]]></title>
+    <link href="http://www.geekheads.net/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/"/>
     <updated>2013-10-18T23:08:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/10/18/btle-dot-js-0-dot-2-0-released</id>
+    <id>http://www.geekheads.net/blog/2013/10/18/btle-dot-js-0-dot-2-0-released</id>
     <content type="html"><![CDATA[<p>I just (okay, a few days ago) released version 0.2.0 of <a href="https://github.com/jacklund/btle.js">btle.js</a> to
 <a href="https://npmjs.org/package/btle.js">npm</a>. This has a bunch of API changes - the <code>connect</code> method now gives you a
 <code>Device</code> object, instead of a <code>Connection</code>. All the ATT methods are now on the <code>Device</code> object, but, in addition, you can
@@ -329,10 +428,10 @@ characteristics, which return <code>Characteristics</code> objects.</p>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Fun with BeagleBone Black]]></title>
-    <link href="http://jacklund.github.io/blog/2013/09/25/fun-with-beaglebone-black/"/>
+    <title type="html"><![CDATA[Fun With BeagleBone Black]]></title>
+    <link href="http://www.geekheads.net/blog/2013/09/25/fun-with-beaglebone-black/"/>
     <updated>2013-09-25T11:02:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/09/25/fun-with-beaglebone-black</id>
+    <id>http://www.geekheads.net/blog/2013/09/25/fun-with-beaglebone-black</id>
     <content type="html"><![CDATA[<p>So, I’ve decided to try to play with <a href="http://en.wikipedia.org/wiki/ZigBee">ZigBee</a>, and since I have a couple of BeagleBone Blacks hanging around doing nothing, I thought I’d try setting it up on them.</p>
 
 <p>First thing I came across was that the BBB’s seem to have issues with <a href="https://groups.google.com/forum/#!topic/beagleboard/4e2T6XH-fNM">accessing their UARTS</a>. Even via bonescript, there seem to <a href="http://stackoverflow.com/questions/17497060/node-js-script-not-setting-beaglebone-black-mux">be issues</a>.</p>
@@ -351,9 +450,9 @@ characteristics, which return <code>Characteristics</code> objects.</p>
   
   <entry>
     <title type="html"><![CDATA[Node.js Bit Operations]]></title>
-    <link href="http://jacklund.github.io/blog/2013/09/12/node-dot-js-bit-operations/"/>
+    <link href="http://www.geekheads.net/blog/2013/09/12/node-dot-js-bit-operations/"/>
     <updated>2013-09-12T09:07:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/09/12/node-dot-js-bit-operations</id>
+    <id>http://www.geekheads.net/blog/2013/09/12/node-dot-js-bit-operations</id>
     <content type="html"><![CDATA[<p>I was working on trying to get the barometer readings from my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?DCMP=sensortag&amp;HQS=sensortag-bn">TI SensorTag</a> using Node.js when I came across this problem. See, the <a href="http://processors.wiki.ti.com/index.php/SensorTag_User_Guide#Barometric_Pressure_Sensor_2">user’s guide</a> has two code examples for the algorithm for the pressure - one in C, and one in Java. The one in C uses primarily bit shift operations, whereas the one in Java uses <code>Math.pow()</code> to do the same thing. Naturally, I tended towards the bit shift operations since it makes the code a bit clearer as to what it’s doing (ultimately, from a performance perspective, it doesn’t matter since <code>Math.pow(2, x)</code> probably ultimately resolves to bit shifts anyway).</p>
 
 <p>However, when I did this, I kept on getting pressure values that were all over the place. When I broke it down, it looked like the “offset” and “scale” factors, which rely heavily on bit shifts, were bouncing all over the place.</p>
@@ -382,9 +481,9 @@ characteristics, which return <code>Characteristics</code> objects.</p>
   
   <entry>
     <title type="html"><![CDATA[Published Bluetooth LE Module]]></title>
-    <link href="http://jacklund.github.io/blog/2013/09/10/published-bluetooth-le-module/"/>
+    <link href="http://www.geekheads.net/blog/2013/09/10/published-bluetooth-le-module/"/>
     <updated>2013-09-10T22:31:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/09/10/published-bluetooth-le-module</id>
+    <id>http://www.geekheads.net/blog/2013/09/10/published-bluetooth-le-module</id>
     <content type="html"><![CDATA[<p>Well, I published my Node.js module for Bluetooth LE, <a href="https://github.com/jacklund/btle.js">btle.js</a> (pronounced “Beetle Juice”) to <a href="https://npmjs.org/package/btle.js">npm</a>. Even though it’s labeled version 0.1.0, it’s got most of the functionality that’s necessary for Bluetooth LE - reading attributes, writing commands and requests, and listening for notifications. I’m hoping to add more functionality over the next few weeks/months.</p>
 
 <p>The main reason I was doing this was to get my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?DCMP=sensortag&amp;HQS=sensortag-bn">TI SensorTag</a> working with my Raspberry Pi and Bluetooth LE dongle, which it now does. I’ve even got the beginnings of a Node.js module for the sensortag, <a href="https://github.com/jacklund/sensortag.js">sensortag.js</a>, which is built on top of btle.js. I’ve got everything working except the Barometric Pressure sensor readings and the Gyroscope readings.</p>
@@ -396,10 +495,10 @@ characteristics, which return <code>Characteristics</code> objects.</p>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[What to do?]]></title>
-    <link href="http://jacklund.github.io/blog/2013/08/30/what-to-do/"/>
+    <title type="html"><![CDATA[What to Do?]]></title>
+    <link href="http://www.geekheads.net/blog/2013/08/30/what-to-do/"/>
     <updated>2013-08-30T22:38:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/08/30/what-to-do</id>
+    <id>http://www.geekheads.net/blog/2013/08/30/what-to-do</id>
     <content type="html"><![CDATA[<p>So, I haven’t posted in almost 2 months. Part of that is the fact that the last two months have been very busy - work is crazy busy trying to do all the work and get more, and I’ve been busy with the family doing end-of-summer stuff. However, part of the problem is, basically, organization.</p>
 
 <p>I’m, basically, a fairly organized guy, in that I manage to prioritize things and get the high-priority things done. However, I’m also not particularly big on multi-tasking, so that, quite often, my high-priority tasks get all the attention, and all the little, lower-priority things (like this blog) get very little.</p>
@@ -428,9 +527,9 @@ characteristics, which return <code>Characteristics</code> objects.</p>
   
   <entry>
     <title type="html"><![CDATA[Got Them Bluetooth LE Bluez]]></title>
-    <link href="http://jacklund.github.io/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez/"/>
+    <link href="http://www.geekheads.net/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez/"/>
     <updated>2013-07-01T17:15:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez</id>
+    <id>http://www.geekheads.net/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez</id>
     <content type="html"><![CDATA[<p>I’m trying to get my Raspberry Pi to talk to my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?INTC=SensorTag&amp;HQS=sensortag">TI Sensortag</a> over Bluetooth LE, using an <a href="http://www.iogear.com/product/GBU521/">IOGear Bluetooth 4.0 USB adapter</a>. I chose that adapter because it is supported by Linux, and so far it works quite nicely with the Pi.</p>
 
 <p>To start with, I’d like to write something to pull the sensor data - temperature, humidity, pressure, etc - from the SensorTag and publish it over <a href="http://mqtt.org/">MQTT</a>. However, reading the data seems to be problematic.</p>
@@ -460,9 +559,9 @@ characteristics, which return <code>Characteristics</code> objects.</p>
   
   <entry>
     <title type="html"><![CDATA[Zeroconf Rocks!]]></title>
-    <link href="http://jacklund.github.io/blog/2013/06/27/Zeroconf-Rocks/"/>
+    <link href="http://www.geekheads.net/blog/2013/06/27/Zeroconf-Rocks/"/>
     <updated>2013-06-27T22:27:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/06/27/Zeroconf-Rocks</id>
+    <id>http://www.geekheads.net/blog/2013/06/27/Zeroconf-Rocks</id>
     <content type="html"><![CDATA[<p>I have a lot of computers on my network now - my laptop and desktop, my wife’s 3(!) computers, her iPad, two Linux servers and miscellaneous other devices, along with my Raspberry Pi and two BeagleBone Blacks, so managing all these was starting to be a pain. So, just on a hunch, I wanted to see if <a href="http://en.wikipedia.org/wiki/Zero-configuration_networking">Bonjour/Zeroconf/Avahi</a> could help. I did some investigation, and it turns out that you can access any machines that advertise on Zeroconf by <em>name</em>.local. Since I work predominantly on Macs, I was already pretty comfortable with the idea of dynamically finding service. When I brought up my Bonjour Browser application, however, I was surprised: My two BeagleBone Blacks were already advertising (the wrong IP address for my network, but still)!</p>
 
 <p>So, first step: set up the Raspberry Pi to do the same. Fortunately, the Internet came to the rescue, in the form of <a href="http://elinux.org/RPi_Advanced_Setup">this page</a> about setting up Zeroconf on the Pi. I just followed the instructions, and it worked.</p>
@@ -495,9 +594,9 @@ option subnet 255.255.255.0
   
   <entry>
     <title type="html"><![CDATA[Scala Is Disappointing]]></title>
-    <link href="http://jacklund.github.io/blog/2013/06/25/Scala-Is-Disappointing/"/>
+    <link href="http://www.geekheads.net/blog/2013/06/25/Scala-Is-Disappointing/"/>
     <updated>2013-06-25T00:15:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/06/25/Scala-Is-Disappointing</id>
+    <id>http://www.geekheads.net/blog/2013/06/25/Scala-Is-Disappointing</id>
     <content type="html"><![CDATA[<p>So, I’ve been playing around with Scala, and, while I’m quite impressed with the language syntax, it’s a real pain-in-the-ass to deal with. To begin with, the various versions (2.7, 2.8, 2.9., 2.10) are <a href="http://lift.la/scalas-version-fragility-make-the-enterprise">binary incompatible</a>, which is really annoying. I understand that the language is still in development, but you would think they’d have the core of the language all worked out by now.</p>
 
 <p>I understand the <a href="http://suereth.blogspot.com/2011/12/scala-fresh-is-alive.html">reasons behind it</a>: they’re still making changes to the base traits which causes all the objects to change. But, really, this is one of those things that every language (well, every language with a base class or interface) goes through. These are the things you go through, however, when you’re doing the pre-1.0 releases of the language, not 2.x; at most, you make these changes when you transition between major revisions - from 2.x to 3.0, for instance - <em>not</em> between minor revisions.</p>
@@ -516,9 +615,9 @@ option subnet 255.255.255.0
   
   <entry>
     <title type="html"><![CDATA[Scala Development Setup]]></title>
-    <link href="http://jacklund.github.io/blog/2013/06/21/Scala-Development-Setup/"/>
+    <link href="http://www.geekheads.net/blog/2013/06/21/Scala-Development-Setup/"/>
     <updated>2013-06-21T21:56:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/06/21/Scala-Development-Setup</id>
+    <id>http://www.geekheads.net/blog/2013/06/21/Scala-Development-Setup</id>
     <content type="html"><![CDATA[<p>I had this idea for doing a Scala project integrating WebSockets with <a href="http://kafka.apache.org/">Kafka</a>, so I spent a good bit of today trying out different configurations for doing Scala development. My first pass was to try <a href="http://www.jetbrains.com/idea/features/scala.html">IntellijIDEA</a> from JetBrains. I really liked their <a href="http://www.jetbrains.com/ruby/">RubyMine</a> IDE for Ruby, and people were raving about IDEA for Scala development, so I gave it a go.</p>
 
 <p>It’s actually not a bad IDE. I had some trouble navigating, but most of that was because I was so used to Eclipse. However, the big thing that was lacking was good <a href="http://www.scala-sbt.org/">sbt</a> support. Whatever project I was going to use sbt, since that seems to be the builder of choice, and the integration with IDEA seemed to be, well, not really good. You can use sbt to generate the IDEA project, but there didn’t seem to be a good way to have IDEA use the dependencies defined in the sbt build file for the code completion, which seemed to me to be a big problem.</p>
@@ -535,10 +634,10 @@ option subnet 255.255.255.0
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Eclipse with Subversion 1.8 on OS X]]></title>
-    <link href="http://jacklund.github.io/blog/2013/06/18/eclipse-with-subversion-1-dot-8-on-os-x/"/>
+    <title type="html"><![CDATA[Eclipse With Subversion 1.8 on OS X]]></title>
+    <link href="http://www.geekheads.net/blog/2013/06/18/eclipse-with-subversion-1-dot-8-on-os-x/"/>
     <updated>2013-06-18T14:14:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/06/18/eclipse-with-subversion-1-dot-8-on-os-x</id>
+    <id>http://www.geekheads.net/blog/2013/06/18/eclipse-with-subversion-1-dot-8-on-os-x</id>
     <content type="html"><![CDATA[<p>I wasted a considerable amount of time following the instructions from <a href="http://subclipse.tigris.org/wiki/JavaHL">this page</a> on how to install Subclipse on OS X, trying to get MacPorts to install the right version of Subversion (Why subversion, you may ask? Because a customer is still using it, that’s why…).</p>
 
 <p>It turns out that MacPorts doesn’t even have the 1.8 version of Subversion - it’s only got 1.7, which won’t work with the version of Subclipse I’m using. So, I had to go to <a href="http://www.wandisco.com/subversion/download#osx">WanDisco</a> and download it (after removing the MacPorts versions first), and then everything worked.</p>
@@ -547,9 +646,9 @@ option subnet 255.255.255.0
   
   <entry>
     <title type="html"><![CDATA[Moved to GitHub/Octopress]]></title>
-    <link href="http://jacklund.github.io/blog/2013/06/18/moved-to-github-slash-octopress/"/>
+    <link href="http://www.geekheads.net/blog/2013/06/18/moved-to-github-slash-octopress/"/>
     <updated>2013-06-18T10:51:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/06/18/moved-to-github-slash-octopress</id>
+    <id>http://www.geekheads.net/blog/2013/06/18/moved-to-github-slash-octopress</id>
     <content type="html"><![CDATA[<p>I finally gave up on <a href="http://www.scriptogr.am">scriptogr.am</a>. I was struggling with their syntax highlighting, even sent a message to their support. The only answer I got back was from another user (who was very helpful, but it didn’t really fix my problem). So, I’m done.</p>
 
 <p>I’m now using <a href="http://pages.github.com/">GitHub Pages</a>, which generates their pages using <a href="https://github.com/mojombo/jekyll">Jekyll</a>. I’m also using <a href="http://octopress.org/">Octopress</a> for the layout, which makes it all pretty easy (well, that is, once you go through the somewhat painful ruby setup).</p>
@@ -558,9 +657,9 @@ option subnet 255.255.255.0
   
   <entry>
     <title type="html"><![CDATA[SELinux and SSH]]></title>
-    <link href="http://jacklund.github.io/blog/2013/06/13/SELinux-and-SSH/"/>
+    <link href="http://www.geekheads.net/blog/2013/06/13/SELinux-and-SSH/"/>
     <updated>2013-06-13T13:30:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/06/13/SELinux-and-SSH</id>
+    <id>http://www.geekheads.net/blog/2013/06/13/SELinux-and-SSH</id>
     <content type="html"><![CDATA[<p>I needed to set up Jenkins so that it could run an agent on another Linux box. To do this the default way, you need to allow Jenkins to access the remote box via SSH. So, I set up the Jenkins user and the SSH keys on the remote machine, but trying to do an ssh from the Jenkins user on one machine to the other still didn’t work. After doing <code>sudo journalctl -f</code> on the remote machine, I saw the following:</p>
 
 <pre><code>Jun 13 12:41:50 m2m-linux setroubleshoot[701]: SELinux is preventing /usr/sbin/sshd from read access on the file authorized_keys. For complete SELinux messages. run sealert -l ca7b7aea-64cf-46e5-8bfa-6650ad23f55b
@@ -606,10 +705,10 @@ allow this access for now by executing:
   
   <entry>
     <title type="html"><![CDATA[Node.js]]></title>
-    <link href="http://jacklund.github.io/blog/2013/06/12/Node.js/"/>
+    <link href="http://www.geekheads.net/blog/2013/06/12/Node.js/"/>
     <updated>2013-06-12T16:10:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/06/12/Node.js</id>
-    <content type="html"><![CDATA[<p>Having my new <a href="http://jacklund.github.io/jacklund/post/beaglebone-black">BeagleBone Black</a> has made me look at the default programming environment for it, <a href="http://nodejs.org">Node.js</a>. Companies like <a href="http://www.linkedin.com">LinkedIn</a> are <a href="http://engineering.linkedin.com/nodejs/blazing-fast-nodejs-10-performance-tips-linkedin-mobile">using it</a> on the server side, which sort of surprises me. I can definitely see its uses in devices like the BeagleBone, since it has such a small footprint and minimal use of resources, but I was surprised at how many people are using it on the server side.</p>
+    <id>http://www.geekheads.net/blog/2013/06/12/Node.js</id>
+    <content type="html"><![CDATA[<p>Having my new <a href="http://www.geekheads.net/jacklund/post/beaglebone-black">BeagleBone Black</a> has made me look at the default programming environment for it, <a href="http://nodejs.org">Node.js</a>. Companies like <a href="http://www.linkedin.com">LinkedIn</a> are <a href="http://engineering.linkedin.com/nodejs/blazing-fast-nodejs-10-performance-tips-linkedin-mobile">using it</a> on the server side, which sort of surprises me. I can definitely see its uses in devices like the BeagleBone, since it has such a small footprint and minimal use of resources, but I was surprised at how many people are using it on the server side.</p>
 
 <p>It makes sense, though - as <a href="http://wiki.nginx.org/Main">Nginx</a> demonstrated, an event-driven model can eat a thread-based server’s lunch, performance-wise, under certain circumstances. What are those circumstances, though?</p>
 
@@ -622,10 +721,10 @@ allow this access for now by executing:
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Setting up NTP on BeagleBone Black]]></title>
-    <link href="http://jacklund.github.io/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black/"/>
+    <title type="html"><![CDATA[Setting Up NTP on BeagleBone Black]]></title>
+    <link href="http://www.geekheads.net/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black/"/>
     <updated>2013-06-10T11:50:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black</id>
+    <id>http://www.geekheads.net/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black</id>
     <content type="html"><![CDATA[<p>For some reason, they didn’t seem to see the need to set up the time service on the BeagleBone Blacks by default. I tried using the instructions from <a href="http://derekmolloy.ie/automatically-setting-the-beaglebone-black-time-using-ntp/">this gentleman</a>, but I had to make some modifications.</p>
 
 <ol>
@@ -703,29 +802,6 @@ allow this access for now by executing:
 <ol>
   <li>Now, reboot and see if the clock gets set correctly</li>
 </ol>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[BeagleBone Black]]></title>
-    <link href="http://jacklund.github.io/blog/2013/06/09/BeagleBone-Black/"/>
-    <updated>2013-06-09T20:00:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/06/09/BeagleBone-Black</id>
-    <content type="html"><![CDATA[<p>Got my two <a href="http://beagleboard.org/Products/BeagleBone%20Black">BeagleBone Blacks</a> from <a href="http://adafruit.com/">AdaFruit</a> on Friday. Really nice. I bought them without enclosures because, well, the enclosures were $20, and the BeagleBones themselves were only $45. The nice thing is, though, that they fit exactly into an Altoids tin, so I turned two into my enclosures. I used tin snips to cut holes for power and Ethernet, and lined them with electrical tape to insulate the board from the box. Here’s what they ended up looking like:</p>
-
-<p><img src="https://dl.dropbox.com/s/bpgc7lc5azhazw5/altoids_closed.jpg" alt="" title="Closed" /></p>
-
-<p><img src="https://dl.dropbox.com/s/d87y38ydxqtcv2q/altoids_open.jpg" alt="" title="Open" /></p>
-
-<p><img src="https://dl.dropbox.com/s/7nocbp8nnb65pwn/altoids_working.jpg" alt="" title="Running" /></p>
-
-<p>By default, they run <a href="http://www.angstrom-distribution.org/">Ångström Linux</a>. The default programming environment for them is a variant of Javascript they call <a href="http://beagleboard.org/Support/BoneScript">“Bonescript”</a>, which runs via <a href="http://nodejs.org/">Node.js</a>. However, a kind soul had put together a Python library called <a href="https://github.com/alexanderhiam/PyBBIO">PyBBIO</a>, which I downloaded and tried to install. I kept getting the following warning, however:</p>
-
-<pre><code>Warning: you seem to have a BeagleBone image which only has drivers for the PWM1 module, PWM2A and PWM2B will not be available in PyBBIO.
-You should consider updating Angstrom!
-</code></pre>
-
-<p>I tried updating the OS using <a href="http://learn.adafruit.com/beaglebone-black-installing-operating-systems/overview">these instructions</a>, however it didn’t make the problem go away. That’s when I discovered that PyBBIO <a href="https://github.com/alexanderhiam/PyBBIO/issues/18">doesn’t support the 3.8 kernel that comes with BB Blacks</a>, so it looks like I’m stuck with Javascript for the moment.</p>
 ]]></content>
   </entry>
   

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: maven | Geekheads]]></title>
-  <link href="http://jacklund.github.io/blog/categories/maven/atom.xml" rel="self"/>
-  <link href="http://jacklund.github.io/"/>
-  <updated>2014-04-13T21:23:25-05:00</updated>
-  <id>http://jacklund.github.io/</id>
+  <link href="http://www.geekheads.net/blog/categories/maven/atom.xml" rel="self"/>
+  <link href="http://www.geekheads.net/"/>
+  <updated>2014-04-16T22:50:53-05:00</updated>
+  <id>http://www.geekheads.net/</id>
   <author>
     <name><![CDATA[Jack Lund]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Scala Development Setup]]></title>
-    <link href="http://jacklund.github.io/blog/2013/06/21/Scala-Development-Setup/"/>
+    <link href="http://www.geekheads.net/blog/2013/06/21/Scala-Development-Setup/"/>
     <updated>2013-06-21T21:56:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/06/21/Scala-Development-Setup</id>
+    <id>http://www.geekheads.net/blog/2013/06/21/Scala-Development-Setup</id>
     <content type="html"><![CDATA[<p>I had this idea for doing a Scala project integrating WebSockets with <a href="http://kafka.apache.org/">Kafka</a>, so I spent a good bit of today trying out different configurations for doing Scala development. My first pass was to try <a href="http://www.jetbrains.com/idea/features/scala.html">IntellijIDEA</a> from JetBrains. I really liked their <a href="http://www.jetbrains.com/ruby/">RubyMine</a> IDE for Ruby, and people were raving about IDEA for Scala development, so I gave it a go.</p>
 
 <p>It’s actually not a bad IDE. I had some trouble navigating, but most of that was because I was so used to Eclipse. However, the big thing that was lacking was good <a href="http://www.scala-sbt.org/">sbt</a> support. Whatever project I was going to use sbt, since that seems to be the builder of choice, and the integration with IDEA seemed to be, well, not really good. You can use sbt to generate the IDEA project, but there didn’t seem to be a good way to have IDEA use the dependencies defined in the sbt build file for the code completion, which seemed to me to be a big problem.</p>
@@ -36,9 +36,9 @@
   
   <entry>
     <title type="html"><![CDATA[Creating RESTEasy Project with Eclipse and Maven]]></title>
-    <link href="http://jacklund.github.io/blog/2013/05/20/Creating-RESTEasy-Project-with-Eclipse-and-Maven/"/>
+    <link href="http://www.geekheads.net/blog/2013/05/20/Creating-RESTEasy-Project-with-Eclipse-and-Maven/"/>
     <updated>2013-05-20T00:00:00-05:00</updated>
-    <id>http://jacklund.github.io/blog/2013/05/20/Creating-RESTEasy-Project-with-Eclipse-and-Maven</id>
+    <id>http://www.geekheads.net/blog/2013/05/20/Creating-RESTEasy-Project-with-Eclipse-and-Maven</id>
     <content type="html"><![CDATA[<p>Handy safety tip: to create a RESTEasy-friendly Maven project in Eclipse, do the following:</p>
 
 <ol>
