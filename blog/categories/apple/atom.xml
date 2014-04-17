@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: apple | Geekheads]]></title>
+  <link href="http://jacklund.github.io/blog/categories/apple/atom.xml" rel="self"/>
+  <link href="http://jacklund.github.io/"/>
+  <updated>2014-04-13T21:23:25-05:00</updated>
+  <id>http://jacklund.github.io/</id>
+  <author>
+    <name><![CDATA[Jack Lund]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Using a Raspberry Pi as an iBeacon]]></title>
+    <link href="http://jacklund.github.io/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon/"/>
+    <updated>2013-11-15T16:00:00-06:00</updated>
+    <id>http://jacklund.github.io/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon</id>
+    <content type="html"><![CDATA[<p>There’s an excellent <a href="http://developer.radiusnetworks.com/2013/10/09/how-to-make-an-ibeacon-out-of-a-raspberry-pi.html">blog post by by James Nebeker and David G. Young</a> about simulating an <a href="http://en.wikipedia.org/wiki/IBeacon">iBeacon</a> using a Raspberry Pi and a bluetooth dongle. Since I already had both, I thought I’d give it a try. It worked really well, and I’ve even put together the files necessary to do it <a href="https://github.com/jacklund/piBeacon">in my GitHub repository</a>.</p>
+
+<p>You’ll need to install <a href="http://www.bluez.org/">BlueZ</a> as well for this to work. Once you get it all installed and working you can use one of the mobile iBeacon apps, such as <a href="https://itunes.apple.com/us/app/ibeacon-locate/id738709014?ls=1&amp;mt=8">iBeacon Locate</a>. Very fun to play with, and a good way to be able to develop mobile apps to access iBeacons without having to wait for them to come out.</p>
+
+<p>Also, it’s just fun to play with.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Airport Extreme]]></title>
+    <link href="http://jacklund.github.io/blog/2013/05/06/Airport-Extreme/"/>
+    <updated>2013-05-06T22:05:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/05/06/Airport-Extreme</id>
+    <content type="html"><![CDATA[<p>Had to replace my old, crappy Netgear router over the weekend - it was getting flaky, and causing my Skype calls to freak out at inopportune moments. I was thinking about going the <a href="http://en.wikipedia.org/wiki/DD-WRT">DD-WRT</a> route (if you’ll excuse the pun), but it looked like it required more of a time commitment than I am able to manage at the moment. Since almost everything we have in this house is some form of Apple product, I decided to try out the Airport Extreme.</p>
+
+<p>Man, was that thing easy to set up, especially compared to the Living Hell that is most router setups. I just went into Airport Utility on my laptop, it automagically found the router, I configured it right there, and it just frickin’ worked! Unbelievable! Admittedly, it’s a pricey router, but I think it’s worth it with the time it saved me.</p>
+
+<p>It also seems to be a <strong>lot</strong> more powerful than those underpowered Netgear POSes, which is an added benefit.</p>
+]]></content>
+  </entry>
+  
+</feed>

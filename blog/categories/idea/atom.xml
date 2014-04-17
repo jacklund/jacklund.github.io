@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: idea | Geekheads]]></title>
+  <link href="http://jacklund.github.io/blog/categories/idea/atom.xml" rel="self"/>
+  <link href="http://jacklund.github.io/"/>
+  <updated>2014-04-13T21:23:25-05:00</updated>
+  <id>http://jacklund.github.io/</id>
+  <author>
+    <name><![CDATA[Jack Lund]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Scala Development Setup]]></title>
+    <link href="http://jacklund.github.io/blog/2013/06/21/Scala-Development-Setup/"/>
+    <updated>2013-06-21T21:56:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/06/21/Scala-Development-Setup</id>
+    <content type="html"><![CDATA[<p>I had this idea for doing a Scala project integrating WebSockets with <a href="http://kafka.apache.org/">Kafka</a>, so I spent a good bit of today trying out different configurations for doing Scala development. My first pass was to try <a href="http://www.jetbrains.com/idea/features/scala.html">IntellijIDEA</a> from JetBrains. I really liked their <a href="http://www.jetbrains.com/ruby/">RubyMine</a> IDE for Ruby, and people were raving about IDEA for Scala development, so I gave it a go.</p>
+
+<p>It’s actually not a bad IDE. I had some trouble navigating, but most of that was because I was so used to Eclipse. However, the big thing that was lacking was good <a href="http://www.scala-sbt.org/">sbt</a> support. Whatever project I was going to use sbt, since that seems to be the builder of choice, and the integration with IDEA seemed to be, well, not really good. You can use sbt to generate the IDEA project, but there didn’t seem to be a good way to have IDEA use the dependencies defined in the sbt build file for the code completion, which seemed to me to be a big problem.</p>
+
+<p>So, I tried out using Eclipse (which wasn’t a stretch since I use it for my Java work), and <a href="https://github.com/typesafehub/sbteclipse">sbteclipse</a>, which is an sbt plugin for Eclipse. It worked really well! Basically, you install the plugin per the instructions, create a minimal sbt build file for the project, and then type <code>sbt eclipse</code> to generate the Eclipse configuration. The cool thing is, you can do this at any time, so if you add a dependency to the build file, just do <code>sbt eclipse</code> again, then refresh the project in Eclipse, and suddenly it has your dependency. Very nice.</p>
+
+<p>The one thing I needed to do, which I eventually found out how to do, was to have sbt use my local maven repository as one of its repositories. sbt uses <a href="http://ant.apache.org/ivy/">ivy</a> under the covers, so Maven integration is there, it just doesn’t know about all the local Maven repositories. to add it, I just had to add the following to my <code>~/.sbt/global.sbt</code> file:</p>
+
+<p><code>
+    resolvers += "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository"
+</code></p>
+
+<p>and, voila, it worked!</p>
+]]></content>
+  </entry>
+  
+</feed>

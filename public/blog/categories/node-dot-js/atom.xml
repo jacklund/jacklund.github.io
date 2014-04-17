@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: node.js | Geekheads]]></title>
+  <link href="http://jacklund.github.io/blog/categories/node-dot-js/atom.xml" rel="self"/>
+  <link href="http://jacklund.github.io/"/>
+  <updated>2014-04-16T22:28:21-05:00</updated>
+  <id>http://jacklund.github.io/</id>
+  <author>
+    <name><![CDATA[Jack Lund]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Dependency Injection and the YAGNI principle]]></title>
+    <link href="http://jacklund.github.io/blog/2014/04/13/dependency-injection-and-the-yagni-principle/"/>
+    <updated>2014-04-13T10:07:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2014/04/13/dependency-injection-and-the-yagni-principle</id>
+    <content type="html"><![CDATA[<p>One of my new personal projects involves writing an application using <a href="http://nodejs.org">Node.js</a> and <a href="http://www.mongodb.org">MongoDB</a>. It’s going to have a <a href="http://en.wikipedia.org/wiki/Representational_state_transfer">RESTful</a> interface for the services, and MongoDB as the database (I haven’t decided about what I’m going to use for the front-end, but <a href="http://angularjs.org">Angular.js</a> is a strong contender). I had looked at using <a href="http://www.mean.io/">mean.io</a> to build it, but after playing with it for a while, it seemed to bring in too many things I wouldn’t end up needing, so I decided to build it all from scratch using <a href="https://github.com/mcavage/node-restify">Restify</a> for the RESTful services.</p>
+
+<p>I’m writing it in an <a href="http://en.wikipedia.org/wiki/Model–view–controller">MVC</a>-ish way (really, since it’s REST, it’s more like MRC - Model - Route - Controller) where the top-level module requires routing modules from whatever Javascript files are in a particular directory (<code>lib/routes</code>), and calls them as functions, passing in the Restify server instance so the routes can be set up. Each route would call a corresponding “controller”, which would bring in a corresponding “model”, and set up the functions that each route would use to do its thing. So, the question became: how do I pass the database connection down to the model?</p>
+
+<p>When I looked at how mean.io does things, I noticed that they use a dependency injection package called “<a href="https://github.com/idottv/dependable">dependable</a>”. The way it works is that you create a “container” using dependable, and register dependencies in it, then the module that needs it would grab the container and read the dependencies out of it.</p>
+
+<p>First of all, this <em>isn’t</em> dependency injection, because the module needing the dependencies has to actively retrieve the dependencies from a container, rather than having them <em>injected</em> (hence the term “dependency <em>injection</em>”). Of course, it doesn’t really matter what you call it, the package performs the basic function well - removing the coupling between the module creating the dependency and the module using it. However, I question whether it makes sense for the mean.io stack to use it in this case, for the simple reason that I believe this is a case where coupling is fine, in that the top-level module is already coupled to the routing modules, which are coupled to the controllers, which are coupled to the models, so pretending that they don’t know anything about one another is kind of silly.</p>
+
+<p>This speaks to another issue I’ve seen a lot of (especially in the Java world), which is a lack of understanding of the role <a href="http://en.wikipedia.org/wiki/You_aren't_gonna_need_it">YAGNI</a> (“You Ain’t Gonna Need It”) should play in programming.</p>
+
+<p>One of the most egregious examples of this (which I’ve been guilty of myself) is the idea, in Java, that any class which is a dependency of another class should have an interface which the depending class uses as a proxy for it. In other words, if I have a class <code>A</code> which contains class <code>B</code>, I feel like I have to create a <code>BInterface</code> interface which <code>A</code> really contains, but which is implemented using <code>B</code>. The idea behind this is: what if, some day, I create a new class <code>C</code> which implements <code>BInterface</code>, but with a different implementation. Then, I don’t have to change <code>A</code>’s declaration, I just change where it creates <code>B</code> to create <code>C</code>.</p>
+
+<p>This is fundamentally the same idea as the one where you have to dependency inject everything - you want everything to be perfectly flexible, so you don’t have to make changes when the implementation changes. However, the hidden expense here is that you now have twice as many classes/modules that you have to manage. Admittedly, half of them are interfaces, so they don’t do much, but it’s still adding a lot of complexity where it isn’t needed, because, chances are, YAGNI. And, in those places where you do need it, creating a new interface is trivial (especially in something like Eclipse), so you can do it then.</p>
+
+<p>Flexibility <em>always</em> comes with a cost. The key to a good design is knowing where to add flexibility, and where not to. In the case of my Node.js code, I decided to pass the database connection through the route, simply because I think it’s fine that the top-level module understands that the routes might need to pass it down to their dependencies - that’s what having it as a parameter <em>means</em> - either “I’m going to need it”, or “one of my children will need it”. Either way, it doesn’t make the design any less clean, and, if something changes where I <em>do</em> need dependency injection, well, I can always add it later. YAGNI.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Logging Using EventEmitters in Node.js]]></title>
+    <link href="http://jacklund.github.io/blog/2014/01/14/logging-using-eventemitters-in-node-dot-js/"/>
+    <updated>2014-01-14T21:45:00-06:00</updated>
+    <id>http://jacklund.github.io/blog/2014/01/14/logging-using-eventemitters-in-node-dot-js</id>
+    <content type="html"><![CDATA[<p>I’ve been working a lot in node.js lately for a work project. Javascript as a language is an odd duck (<a href="http://en.wikipedia.org/wiki/Duck_typing#In_JavaScript">pun not intended</a>). It’s got all these incredibly powerful features - dynamic typing, inheritance-by-prototype, functions as first-class objects - but it has some really odd anachronisms, including having to use the C-style <code>for (var i = 0; i &lt; length; i++)</code> loop to iterate over arrays. Node adds a lot to the language as well, such as <a href="http://nodejs.org/api/events.html">EventEmitters</a>, which are very powerful. This afternoon I found a nifty new use for them: logging.</p>
+
+<p>One of the issues that always seems to come up is the fact that logging is one of those things that is both local and global - it’s local, in that you want to do the logging at the place where the event you’re logging occurs, but global in that you want your logging configured globally - you don’t want each and every class/module to have to “know” about logging. One consequence of this, especially with respect to testing, is that you end up having to configure loggers for your unit tests, which, in a way, makes them no longer “unit” tests at all. Optimally, what you want is a situation where you’re logging locally, but if logging hasn’t been set up by anyone, the logs just go into <code>/dev/null</code>. Basically, you want your logging to involve sending out logging “events”, which are either captured by something, or not. EventEmitters give that to you for free.</p>
+
+<p>All EventEmitters are, for those of you unfamiliar with them (but familiar with OO terminology) are an implementation of the <a href="http://en.wikipedia.org/wiki/Observer_pattern">observer pattern</a>, but a really lightweight and easy to use one. I won’t go into details on how it works, if you’re interested, look at the docs (or, even better, check out <a href="https://github.com/hij1nx/EventEmitter2">eventemitter2</a>, which adds wildcards and namespaces to it). What I want to talk about is how to leverage it to make logging nicer.</p>
+
+<p>For instance, if you have a logging package that you’re using (I’m using <a href="https://github.com/flatiron/winston">winston</a>), you just create a module containing a class that is an <code>EventEmitter</code>:</p>
+
+<pre><code>var EventEmitter = require('events').EventEmitter;
+var util = require('util');
+
+function LogEmitter() {
+  EventEmitter.call(this);
+}
+
+util.inherit(LogEmitter, EventEmitter);
+</code></pre>
+
+<p>Then, create an instance of your emitter, and you make your logging method emit an event:</p>
+
+<pre><code>var logEmitter = new LogEmitter();
+
+module.exports.log = function(level, message) {
+  logEmitter.emit('logging', level, message);
+}
+</code></pre>
+
+<p>This just emits a <code>logging</code> event when <code>log()</code> is called, passing the parameters along.</p>
+
+<p>Finally, you also have something listening if someone initializes logging:</p>
+
+<pre><code>var initialized = false;
+module.exports.initialize = function() {
+  if (!initialized) {
+    initialized = true;
+    logEmitter.on('logging', function(level, message) {
+      // Log the message through your logging package here
+    });
+  }
+}
+</code></pre>
+
+<p>Then, you’re good to go. Just distribute <code>logging.log()</code> calls throughout your code. If something in the code calls <code>logging.initialize()</code>, great, your messages get logged. If not (like, say, in a unit test), the messages go into the bitbucket.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Inheritance in Functional Languages]]></title>
+    <link href="http://jacklund.github.io/blog/2014/01/05/inheritance-in-functional-languages/"/>
+    <updated>2014-01-05T11:31:00-06:00</updated>
+    <id>http://jacklund.github.io/blog/2014/01/05/inheritance-in-functional-languages</id>
+    <content type="html"><![CDATA[<p>There’s a tendency amongst proponents of <a href="http://en.wikipedia.org/wiki/Functional_programming">functional</a> languages, like Javascript, to consider inheritance an anachronism of older (and, by implication, worse) OO languages and OO design. One example is this <a href="http://book.mixu.net/node/ch6.html">discussion</a> by <a href="http://mixu.net">Mikito Takada</a>. This is what he says:</p>
+
+<blockquote>
+  <p>I think classical inheritance is in most cases an antipattern in Javascript. Why?</p>
+</blockquote>
+
+<blockquote>
+  <p>There are two reasons to have inheritance:</p>
+</blockquote>
+
+<blockquote>
+  <ol>
+    <li>to support polymorphism in languages that do not have dynamic typing, like C++. The class acts as an interface specification for a type. This provides the benefit of being able to replace one class with another (such as a function that operates on a Shape that can accept subclasses like Circle). However, Javascript doesn’t require you to do this: the only thing that matters is that a method or property can be looked up when called/accessed.</li>
+    <li>to reuse code. Here the theory is that you can reuse code by having a hierarchy of items that go from an abstract implementation to a more specific one, and you can thus define multiple subclasses in terms of a parent class. This is sometimes useful, but not that often.</li>
+  </ol>
+</blockquote>
+
+<blockquote>
+  <p>The disadvantages of inheritance are:</p>
+</blockquote>
+
+<blockquote>
+  <ol>
+    <li>Nonstandard, hidden implementations of classical inheritance. Javascript doesn’t have a builtin way to define class inheritance, so people invent their own ones. These implementations are similar to each other, but differ in subtle ways.</li>
+    <li>Deep inheritance trees. Subclasses are aware of the implementation details of their superclasses, which means that you need to understand both. What you see in the code is not what you get: instead, parts of an implementation are defined in the subclass and the rest are defined piecemeal in the inheritance tree. The implementation is thus sprinkled over multiple files, and you have to mentally recombine those to understand the actual behavior.</li>
+  </ol>
+</blockquote>
+
+<blockquote>
+  <p>I favor composition over inheritance:</p>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>Composition - Functionality of an object is made up of an aggregate of different classes by containing instances of other objects.</li>
+    <li>Inheritance - Functionality of an object is made up of it’s own functionality plus functionality from its parent classes.</li>
+  </ul>
+</blockquote>
+
+<p>Now, I don’t disagree with him in principle here - inheritance <em>can</em> be an anti-pattern when overused, which it is, even in the world of OO languages (I’ve even seen it implemented, and then overused, in C, which, well, you’ve really got to see to believe). However, that being said, I think what concerns me about this quote in particular, and the corresponding attitude amongst those in the function-programming community in general, concerns a basic misunderstanding of what inheritance (“classical” or prototypical) is, and a further misunderstanding of one of the fundamental ideas behind software design.</p>
+
+<h2 id="what-is-inheritance-for">What is Inheritance For?</h2>
+<p>To begin with, we need to distinguish clearly between interface inheritance and implementation inheritance, because they are very different things. Interface inheritance is about defining a contract for an interface - no sharing of implementation is involved at all. It’s basically how you achieve both polymorphism and a well-defined interface in statically-typed languages. Since it doesn’t share any code, talking about “composition vs. inheritance” or “code reuse” really has nothing to do with it. What most such discussions are really talking about is implementation inheritance.</p>
+
+<p>The question then becomes: what is implementation-type inheritance for? After all, it’s fairly trivial to see that you can achieve the same thing with composition or, in languages that support it, mixins. Why have it at all? The answer has to do with one of the fundamental ideas behind the design of anything: communication.</p>
+
+<h2 id="design-is-communication">Design is Communication</h2>
+<p>In his book <a href="http://en.wikipedia.org/wiki/The_Design_of_Everyday_Things"><em>The Design of Everyday Things</em></a> (which, IMHO, should be required reading for any software developer), Donald Norman gives an example of the design of a door, and what it communicates to those who want to use the door. If the door swings only one way, then placing a pull handle on the side that opens in and a push plate on the side that opens out communicates, almost at a subconscious level, what the person approaching the door needs to do in order to open the door.</p>
+
+<p>Similarly, the software we write should be communicating something about its use to the next developer who reads it. That developer, if we do our job right, should have an almost intuitive understanding of how to use or modify the code with very little effort. What does this have to do with inheritance? Glad you asked.</p>
+
+<p>On a superficial level, what inheritance does is communicate what classes belong to a particular group (the classical “is-a” test for inheritance). But, what inheritance <em>really</em> communicates, and what differentiates it from composition, is that it tells you what behavior is <em>required</em> for a class to be a particular thing. In other words, <em>inheritance communicates the required behavior for a class, whereas composition communicates optional behavior</em>.</p>
+
+<p>To see this, imagine that you have to write a custom implementation for some third-party framework which you’ve never seen the code for before. It already has classes that have other implementations for the same sort of thing you’re trying to accomplish, so you crack one of them open to see how they did it. You immediately notice that, in this one implementation, they’re passing in a reference to another class and using it in their implementation. Would your immediate conclusion (before looking at anything else) be that you would need to also use that same class in your implementation, or would you think that it’s probably just being used by this particular implementation? In other words, would you think this was required behavior for any class trying to implement this type of class, or would you think it was optional? What if you saw that it was being inherited instead of being composed?</p>
+
+<p>As another example (and, really, the one that brought this to my attention in the first place), I’m attempting to write a <a href="">DAO</a> framework in Node.js for a set of applications my company is building. This framework would have different implementations depending on what underlying data store was being used. However, one of the things I wanted it to be able to do is to read from an in-memory cache, if one is provided, before going to the data store. This is behavior I wanted to be part of the framework and any DAO class within it. The question becomes, should I use inheritance or composition? In my opinion, using composition would be a mistake, because it would communicate that this is optional behavior that might not be used by some implementations, whereas I want it to be used by all. Hence, I would use inheritance.</p>
+
+<p>This sort of thing, this ability to communicate the functionality of code intuitively, is the difference, IMHO, between well-designed code (i.e., code that takes little or no effort to modify or augment) and badly-designed code (i.e. code that is a pain to modify, and that you have to read through extensively to use).</p>
+
+<h2 id="when-not-to-use-inheritance">When Not To Use Inheritance</h2>
+<p>Mixu is very much right when he talks about the misuse of inheritance - people have been using it inappropriately for pretty much the entire time it’s been available. One anti-pattern for inheritance is, of course, using it for code reuse between classes which have no real connection to each other. Another is to use it as a dumping ground for common behavior - this is typically seen when you have a base class that exists for valid reasons, but then lazy programmers use it to add common functionality which should be extracted into a composed or utility class. Those are all valid anti-patterns of inheritance use.</p>
+
+<p>However, the reverse case is also true - it is an anti-pattern to use composition where inheritance is called for. The “code smell” for inappropriate composition is when you see the same boilerplate code around the use of a particular composed class in a bunch of classes doing the same thing - a sure sign of using composition where inheritance is required.</p>
+
+<p>I am also concerned where he says that he uses inheritance, “but not that often”. That would imply, to me, that either he almost never writes polymorphic code, or if he does, the code almost never shares behavior. In my experience, polymorphic classes often <em>do</em> share behavior, at least at some level, and so for a developer to say he doesn’t use inheritance very often implies to me that he might be either unconsciously writing a lot of boilerplate code, or making his code bend over backwards in order to avoid using the dreaded inheritance. Either way, I’m sceptical.</p>
+
+<h2 id="inheritance-in-javascript">Inheritance in Javascript</h2>
+<p>That being said, I think Mixu has a very good point about the design of Javascript inheritance - it sucks. It’s shoddy, it invites, as he says, nonstandard implementations, and is error-prone. Even Node.js’ solution - <code>util.inherits()</code> - is kludgey at best. It should have been made a keyword in the language so that, again, it’s clear what’s going on, rather than having to hunt around for certain coding structures which imply it. However, that’s a problem with Javascript, not inheritance.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[btle.js 0.2.0 released]]></title>
+    <link href="http://jacklund.github.io/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/"/>
+    <updated>2013-10-18T23:08:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/10/18/btle-dot-js-0-dot-2-0-released</id>
+    <content type="html"><![CDATA[<p>I just (okay, a few days ago) released version 0.2.0 of <a href="https://github.com/jacklund/btle.js">btle.js</a> to
+<a href="https://npmjs.org/package/btle.js">npm</a>. This has a bunch of API changes - the <code>connect</code> method now gives you a
+<code>Device</code> object, instead of a <code>Connection</code>. All the ATT methods are now on the <code>Device</code> object, but, in addition, you can
+access all the GATT functionality by querying the device for services, which returns <code>Service</code> objects, and services for
+characteristics, which return <code>Characteristics</code> objects.</p>
+
+<p>I’m also working on <a href="https://github.com/jacklund/btle.js/wiki/API-Docs">API docs</a> for the whole thing.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Fun with BeagleBone Black]]></title>
+    <link href="http://jacklund.github.io/blog/2013/09/25/fun-with-beaglebone-black/"/>
+    <updated>2013-09-25T11:02:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/09/25/fun-with-beaglebone-black</id>
+    <content type="html"><![CDATA[<p>So, I’ve decided to try to play with <a href="http://en.wikipedia.org/wiki/ZigBee">ZigBee</a>, and since I have a couple of BeagleBone Blacks hanging around doing nothing, I thought I’d try setting it up on them.</p>
+
+<p>First thing I came across was that the BBB’s seem to have issues with <a href="https://groups.google.com/forum/#!topic/beagleboard/4e2T6XH-fNM">accessing their UARTS</a>. Even via bonescript, there seem to <a href="http://stackoverflow.com/questions/17497060/node-js-script-not-setting-beaglebone-black-mux">be issues</a>.</p>
+
+<p>So, first thing I did was to upgrade to the latest firmware, and then do <code>opkg update</code> followed by <code>opkg upgrade</code> to get all the latest stuff. However, when I tried to run a bonescript program (the one from <a href="http://stackoverflow.com/questions/17497060/node-js-script-not-setting-beaglebone-black-mux">here</a>), I got <code>module bonescript not found</code>!!!. WTF?</p>
+
+<p>Since I had seen in the <a href="http://beagleboard.org/Support/BoneScript/pinMode/">bonescript docs</a> that the <code>pinmode</code> call doesn’t really work until bonescript 0.2.3, I figured I’d be smart and just try to upgrade to the latest npm version of bonescript.</p>
+
+<p>Long story short: bad idea. I had to go through all sorts of hell to make the npm install work (including editing the node-gyp configuration file to avoid a bug in the python version check), I finally got bonescript 0.2.3 working. So, I tried my test program and…the network connection died. Every time I ran the program, the same thing happened.</p>
+
+<p>Turns out, this is an <a href="https://github.com/jadonk/bonescript/issues/51">issue with the latest bonescript</a>. So, I ended up having to back down to the previous version of bonescript via opkg. Once I investigated the <code>module bonescript not found</code> issue, it turned out that, for some reason, the bonescript module in <code>/usr/lib/node_modules</code> wasn’t getting written, so I had to do a <code>opkg remove bonescript</code> followed by <code>opkg install bonescript</code> to make it all work.</p>
+
+<p>All this, and I haven’t even tried to get the XBee stuff working yet. Oy.</p>
+]]></content>
+  </entry>
+  
+</feed>

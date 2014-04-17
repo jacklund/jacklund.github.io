@@ -1,1 +1,935 @@
-My Octopress Page is coming soon &hellip;
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Geekheads</title>
+  <meta name="author" content="Jack Lund">
+
+  
+  <meta name="description" content="One of my new personal projects involves writing an application using Node.js and MongoDB. It’s going to have a RESTful interface for the services, &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jacklund.github.io/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Geekheads" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <!--
+  <div id="logo">
+  	<div id="logoLeft">{</div>
+  	<div id="logoText">GH</div>
+  	<div id="logoRight">}</div>
+  	<div class="clear"></div>
+  </div> -->
+  <h1><a href="/">Geekheads</a></h1>
+  
+    <h2>Geeks are people, too. Sort of.</h2>
+  
+  <div class="clear"></div>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jacklund.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2014/04/13/dependency-injection-and-the-yagni-principle/">Dependency Injection and the YAGNI Principle</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-13T10:07:00-05:00" pubdate data-updated="true">Apr 13<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>One of my new personal projects involves writing an application using <a href="http://nodejs.org">Node.js</a> and <a href="http://www.mongodb.org">MongoDB</a>. It’s going to have a <a href="http://en.wikipedia.org/wiki/Representational_state_transfer">RESTful</a> interface for the services, and MongoDB as the database (I haven’t decided about what I’m going to use for the front-end, but <a href="http://angularjs.org">Angular.js</a> is a strong contender). I had looked at using <a href="http://www.mean.io/">mean.io</a> to build it, but after playing with it for a while, it seemed to bring in too many things I wouldn’t end up needing, so I decided to build it all from scratch using <a href="https://github.com/mcavage/node-restify">Restify</a> for the RESTful services.</p>
+
+<p>I’m writing it in an <a href="http://en.wikipedia.org/wiki/Model–view–controller">MVC</a>-ish way (really, since it’s REST, it’s more like MRC - Model - Route - Controller) where the top-level module requires routing modules from whatever Javascript files are in a particular directory (<code>lib/routes</code>), and calls them as functions, passing in the Restify server instance so the routes can be set up. Each route would call a corresponding “controller”, which would bring in a corresponding “model”, and set up the functions that each route would use to do its thing. So, the question became: how do I pass the database connection down to the model?</p>
+
+<p>When I looked at how mean.io does things, I noticed that they use a dependency injection package called “<a href="https://github.com/idottv/dependable">dependable</a>”. The way it works is that you create a “container” using dependable, and register dependencies in it, then the module that needs it would grab the container and read the dependencies out of it.</p>
+
+<p>First of all, this <em>isn’t</em> dependency injection, because the module needing the dependencies has to actively retrieve the dependencies from a container, rather than having them <em>injected</em> (hence the term “dependency <em>injection</em>”). Of course, it doesn’t really matter what you call it, the package performs the basic function well - removing the coupling between the module creating the dependency and the module using it. However, I question whether it makes sense for the mean.io stack to use it in this case, for the simple reason that I believe this is a case where coupling is fine, in that the top-level module is already coupled to the routing modules, which are coupled to the controllers, which are coupled to the models, so pretending that they don’t know anything about one another is kind of silly.</p>
+
+<p>This speaks to another issue I’ve seen a lot of (especially in the Java world), which is a lack of understanding of the role <a href="http://en.wikipedia.org/wiki/You_aren't_gonna_need_it">YAGNI</a> (“You Ain’t Gonna Need It”) should play in programming.</p>
+
+<p>One of the most egregious examples of this (which I’ve been guilty of myself) is the idea, in Java, that any class which is a dependency of another class should have an interface which the depending class uses as a proxy for it. In other words, if I have a class <code>A</code> which contains class <code>B</code>, I feel like I have to create a <code>BInterface</code> interface which <code>A</code> really contains, but which is implemented using <code>B</code>. The idea behind this is: what if, some day, I create a new class <code>C</code> which implements <code>BInterface</code>, but with a different implementation. Then, I don’t have to change <code>A</code>’s declaration, I just change where it creates <code>B</code> to create <code>C</code>.</p>
+
+<p>This is fundamentally the same idea as the one where you have to dependency inject everything - you want everything to be perfectly flexible, so you don’t have to make changes when the implementation changes. However, the hidden expense here is that you now have twice as many classes/modules that you have to manage. Admittedly, half of them are interfaces, so they don’t do much, but it’s still adding a lot of complexity where it isn’t needed, because, chances are, YAGNI. And, in those places where you do need it, creating a new interface is trivial (especially in something like Eclipse), so you can do it then.</p>
+
+<p>Flexibility <em>always</em> comes with a cost. The key to a good design is knowing where to add flexibility, and where not to. In the case of my Node.js code, I decided to pass the database connection through the route, simply because I think it’s fine that the top-level module understands that the routes might need to pass it down to their dependencies - that’s what having it as a parameter <em>means</em> - either “I’m going to need it”, or “one of my children will need it”. Either way, it doesn’t make the design any less clean, and, if something changes where I <em>do</em> need dependency injection, well, I can always add it later. YAGNI.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2014/01/14/logging-using-eventemitters-in-node-dot-js/">Logging Using EventEmitters in Node.js</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-14T21:45:00-06:00" pubdate data-updated="true">Jan 14<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I’ve been working a lot in node.js lately for a work project. Javascript as a language is an odd duck (<a href="http://en.wikipedia.org/wiki/Duck_typing#In_JavaScript">pun not intended</a>). It’s got all these incredibly powerful features - dynamic typing, inheritance-by-prototype, functions as first-class objects - but it has some really odd anachronisms, including having to use the C-style <code>for (var i = 0; i &lt; length; i++)</code> loop to iterate over arrays. Node adds a lot to the language as well, such as <a href="http://nodejs.org/api/events.html">EventEmitters</a>, which are very powerful. This afternoon I found a nifty new use for them: logging.</p>
+
+<p>One of the issues that always seems to come up is the fact that logging is one of those things that is both local and global - it’s local, in that you want to do the logging at the place where the event you’re logging occurs, but global in that you want your logging configured globally - you don’t want each and every class/module to have to “know” about logging. One consequence of this, especially with respect to testing, is that you end up having to configure loggers for your unit tests, which, in a way, makes them no longer “unit” tests at all. Optimally, what you want is a situation where you’re logging locally, but if logging hasn’t been set up by anyone, the logs just go into <code>/dev/null</code>. Basically, you want your logging to involve sending out logging “events”, which are either captured by something, or not. EventEmitters give that to you for free.</p>
+
+<p>All EventEmitters are, for those of you unfamiliar with them (but familiar with OO terminology) are an implementation of the <a href="http://en.wikipedia.org/wiki/Observer_pattern">observer pattern</a>, but a really lightweight and easy to use one. I won’t go into details on how it works, if you’re interested, look at the docs (or, even better, check out <a href="https://github.com/hij1nx/EventEmitter2">eventemitter2</a>, which adds wildcards and namespaces to it). What I want to talk about is how to leverage it to make logging nicer.</p>
+
+<p>For instance, if you have a logging package that you’re using (I’m using <a href="https://github.com/flatiron/winston">winston</a>), you just create a module containing a class that is an <code>EventEmitter</code>:</p>
+
+<pre><code>var EventEmitter = require('events').EventEmitter;
+var util = require('util');
+
+function LogEmitter() {
+  EventEmitter.call(this);
+}
+
+util.inherit(LogEmitter, EventEmitter);
+</code></pre>
+
+<p>Then, create an instance of your emitter, and you make your logging method emit an event:</p>
+
+<pre><code>var logEmitter = new LogEmitter();
+
+module.exports.log = function(level, message) {
+  logEmitter.emit('logging', level, message);
+}
+</code></pre>
+
+<p>This just emits a <code>logging</code> event when <code>log()</code> is called, passing the parameters along.</p>
+
+<p>Finally, you also have something listening if someone initializes logging:</p>
+
+<pre><code>var initialized = false;
+module.exports.initialize = function() {
+  if (!initialized) {
+    initialized = true;
+    logEmitter.on('logging', function(level, message) {
+      // Log the message through your logging package here
+    });
+  }
+}
+</code></pre>
+
+<p>Then, you’re good to go. Just distribute <code>logging.log()</code> calls throughout your code. If something in the code calls <code>logging.initialize()</code>, great, your messages get logged. If not (like, say, in a unit test), the messages go into the bitbucket.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2014/01/05/inheritance-in-functional-languages/">Inheritance in Functional Languages</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-05T11:31:00-06:00" pubdate data-updated="true">Jan 5<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>There’s a tendency amongst proponents of <a href="http://en.wikipedia.org/wiki/Functional_programming">functional</a> languages, like Javascript, to consider inheritance an anachronism of older (and, by implication, worse) OO languages and OO design. One example is this <a href="http://book.mixu.net/node/ch6.html">discussion</a> by <a href="http://mixu.net">Mikito Takada</a>. This is what he says:</p>
+
+<blockquote>
+  <p>I think classical inheritance is in most cases an antipattern in Javascript. Why?</p>
+</blockquote>
+
+<blockquote>
+  <p>There are two reasons to have inheritance:</p>
+</blockquote>
+
+<blockquote>
+  <ol>
+    <li>to support polymorphism in languages that do not have dynamic typing, like C++. The class acts as an interface specification for a type. This provides the benefit of being able to replace one class with another (such as a function that operates on a Shape that can accept subclasses like Circle). However, Javascript doesn’t require you to do this: the only thing that matters is that a method or property can be looked up when called/accessed.</li>
+    <li>to reuse code. Here the theory is that you can reuse code by having a hierarchy of items that go from an abstract implementation to a more specific one, and you can thus define multiple subclasses in terms of a parent class. This is sometimes useful, but not that often.</li>
+  </ol>
+</blockquote>
+
+<blockquote>
+  <p>The disadvantages of inheritance are:</p>
+</blockquote>
+
+<blockquote>
+  <ol>
+    <li>Nonstandard, hidden implementations of classical inheritance. Javascript doesn’t have a builtin way to define class inheritance, so people invent their own ones. These implementations are similar to each other, but differ in subtle ways.</li>
+    <li>Deep inheritance trees. Subclasses are aware of the implementation details of their superclasses, which means that you need to understand both. What you see in the code is not what you get: instead, parts of an implementation are defined in the subclass and the rest are defined piecemeal in the inheritance tree. The implementation is thus sprinkled over multiple files, and you have to mentally recombine those to understand the actual behavior.</li>
+  </ol>
+</blockquote>
+
+<blockquote>
+  <p>I favor composition over inheritance:</p>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>Composition - Functionality of an object is made up of an aggregate of different classes by containing instances of other objects.</li>
+    <li>Inheritance - Functionality of an object is made up of it’s own functionality plus functionality from its parent classes.</li>
+  </ul>
+</blockquote>
+
+<p>Now, I don’t disagree with him in principle here - inheritance <em>can</em> be an anti-pattern when overused, which it is, even in the world of OO languages (I’ve even seen it implemented, and then overused, in C, which, well, you’ve really got to see to believe). However, that being said, I think what concerns me about this quote in particular, and the corresponding attitude amongst those in the function-programming community in general, concerns a basic misunderstanding of what inheritance (“classical” or prototypical) is, and a further misunderstanding of one of the fundamental ideas behind software design.</p>
+
+<h2 id="what-is-inheritance-for">What is Inheritance For?</h2>
+<p>To begin with, we need to distinguish clearly between interface inheritance and implementation inheritance, because they are very different things. Interface inheritance is about defining a contract for an interface - no sharing of implementation is involved at all. It’s basically how you achieve both polymorphism and a well-defined interface in statically-typed languages. Since it doesn’t share any code, talking about “composition vs. inheritance” or “code reuse” really has nothing to do with it. What most such discussions are really talking about is implementation inheritance.</p>
+
+<p>The question then becomes: what is implementation-type inheritance for? After all, it’s fairly trivial to see that you can achieve the same thing with composition or, in languages that support it, mixins. Why have it at all? The answer has to do with one of the fundamental ideas behind the design of anything: communication.</p>
+
+<h2 id="design-is-communication">Design is Communication</h2>
+<p>In his book <a href="http://en.wikipedia.org/wiki/The_Design_of_Everyday_Things"><em>The Design of Everyday Things</em></a> (which, IMHO, should be required reading for any software developer), Donald Norman gives an example of the design of a door, and what it communicates to those who want to use the door. If the door swings only one way, then placing a pull handle on the side that opens in and a push plate on the side that opens out communicates, almost at a subconscious level, what the person approaching the door needs to do in order to open the door.</p>
+
+<p>Similarly, the software we write should be communicating something about its use to the next developer who reads it. That developer, if we do our job right, should have an almost intuitive understanding of how to use or modify the code with very little effort. What does this have to do with inheritance? Glad you asked.</p>
+
+<p>On a superficial level, what inheritance does is communicate what classes belong to a particular group (the classical “is-a” test for inheritance). But, what inheritance <em>really</em> communicates, and what differentiates it from composition, is that it tells you what behavior is <em>required</em> for a class to be a particular thing. In other words, <em>inheritance communicates the required behavior for a class, whereas composition communicates optional behavior</em>.</p>
+
+<p>To see this, imagine that you have to write a custom implementation for some third-party framework which you’ve never seen the code for before. It already has classes that have other implementations for the same sort of thing you’re trying to accomplish, so you crack one of them open to see how they did it. You immediately notice that, in this one implementation, they’re passing in a reference to another class and using it in their implementation. Would your immediate conclusion (before looking at anything else) be that you would need to also use that same class in your implementation, or would you think that it’s probably just being used by this particular implementation? In other words, would you think this was required behavior for any class trying to implement this type of class, or would you think it was optional? What if you saw that it was being inherited instead of being composed?</p>
+
+<p>As another example (and, really, the one that brought this to my attention in the first place), I’m attempting to write a <a href="">DAO</a> framework in Node.js for a set of applications my company is building. This framework would have different implementations depending on what underlying data store was being used. However, one of the things I wanted it to be able to do is to read from an in-memory cache, if one is provided, before going to the data store. This is behavior I wanted to be part of the framework and any DAO class within it. The question becomes, should I use inheritance or composition? In my opinion, using composition would be a mistake, because it would communicate that this is optional behavior that might not be used by some implementations, whereas I want it to be used by all. Hence, I would use inheritance.</p>
+
+<p>This sort of thing, this ability to communicate the functionality of code intuitively, is the difference, IMHO, between well-designed code (i.e., code that takes little or no effort to modify or augment) and badly-designed code (i.e. code that is a pain to modify, and that you have to read through extensively to use).</p>
+
+<h2 id="when-not-to-use-inheritance">When Not To Use Inheritance</h2>
+<p>Mixu is very much right when he talks about the misuse of inheritance - people have been using it inappropriately for pretty much the entire time it’s been available. One anti-pattern for inheritance is, of course, using it for code reuse between classes which have no real connection to each other. Another is to use it as a dumping ground for common behavior - this is typically seen when you have a base class that exists for valid reasons, but then lazy programmers use it to add common functionality which should be extracted into a composed or utility class. Those are all valid anti-patterns of inheritance use.</p>
+
+<p>However, the reverse case is also true - it is an anti-pattern to use composition where inheritance is called for. The “code smell” for inappropriate composition is when you see the same boilerplate code around the use of a particular composed class in a bunch of classes doing the same thing - a sure sign of using composition where inheritance is required.</p>
+
+<p>I am also concerned where he says that he uses inheritance, “but not that often”. That would imply, to me, that either he almost never writes polymorphic code, or if he does, the code almost never shares behavior. In my experience, polymorphic classes often <em>do</em> share behavior, at least at some level, and so for a developer to say he doesn’t use inheritance very often implies to me that he might be either unconsciously writing a lot of boilerplate code, or making his code bend over backwards in order to avoid using the dreaded inheritance. Either way, I’m sceptical.</p>
+
+<h2 id="inheritance-in-javascript">Inheritance in Javascript</h2>
+<p>That being said, I think Mixu has a very good point about the design of Javascript inheritance - it sucks. It’s shoddy, it invites, as he says, nonstandard implementations, and is error-prone. Even Node.js’ solution - <code>util.inherits()</code> - is kludgey at best. It should have been made a keyword in the language so that, again, it’s clear what’s going on, rather than having to hunt around for certain coding structures which imply it. However, that’s a problem with Javascript, not inheritance.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon/">Using a Raspberry Pi as an iBeacon</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-15T16:00:00-06:00" pubdate data-updated="true">Nov 15<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>There’s an excellent <a href="http://developer.radiusnetworks.com/2013/10/09/how-to-make-an-ibeacon-out-of-a-raspberry-pi.html">blog post by by James Nebeker and David G. Young</a> about simulating an <a href="http://en.wikipedia.org/wiki/IBeacon">iBeacon</a> using a Raspberry Pi and a bluetooth dongle. Since I already had both, I thought I’d give it a try. It worked really well, and I’ve even put together the files necessary to do it <a href="https://github.com/jacklund/piBeacon">in my GitHub repository</a>.</p>
+
+<p>You’ll need to install <a href="http://www.bluez.org/">BlueZ</a> as well for this to work. Once you get it all installed and working you can use one of the mobile iBeacon apps, such as <a href="https://itunes.apple.com/us/app/ibeacon-locate/id738709014?ls=1&amp;mt=8">iBeacon Locate</a>. Very fun to play with, and a good way to be able to develop mobile apps to access iBeacons without having to wait for them to come out.</p>
+
+<p>Also, it’s just fun to play with.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/10/19/more-fun-with-beaglebone-black/">More Fun With BeagleBone Black</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-19T21:10:00-05:00" pubdate data-updated="true">Oct 19<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I’ve discovered that owning a BeagleBone Black (or, in my case, two) is kind of like owning one of those really, really nice
+cars that you buy but you can almost never drive because it spends so much time in the shop. It’s a lovely piece of hardware, it
+really is, but the people who created it seem to have gone to great lengths to make sure that all you can do is sit back and admire
+it, because you certainly won’t be able to do anything useful with it.</p>
+
+<p>My next foray into BBB craziness was attempting to get a wifi dongle to work with it, so I don’t have to constantly hook it up
+to my wireless adapter. Should be easy, right? Of course not, this is the BeagleBone Black we’re talking about. <em>Nothing</em> is easy.</p>
+
+<p>I bought the <a href="http://www.edimax.com/en/produce_detail.php?pd_id=347&amp;pl1_id=1">Edimax EW-7811-UN</a>, which is recommended for BeagleBones,
+Raspberry Pi’s, and the BBB. Unfortunately, what I didn’t realize is that, while it <em>used</em> to work with the BBB, some OS changes were
+made to it so that it takes a lot of wrangling to get it to work, if you can get it to work at all (I couldn’t).</p>
+
+<p>First of all, it seems that, at some point, the drivers weren’t really available, so you would have to build them yourselves. I think
+the drivers are available now, but I went ahead and compiled the drivers per
+<a href="http://www.codealpha.net/864/how-to-set-up-a-rtl8192cu-on-the-beaglebone-black-bbb/">these instructions</a>.
+The next hurdle was getting it to work with <a href="https://connman.net/">connman</a>, the connection manager, which is, basically,
+almost completely undocumented - Fun! (<strong><em>Note to developers everywhere:</em></strong> in the words of an former boss - “if it ain’t documented,
+it doesn’t exist”).</p>
+
+<p>However, from what I can gather, <code>connman</code> uses <a href="http://hostap.epitest.fi/wpa_supplicant/">wpa_supplicant</a> for the WPA transactions
+(if you’re using WPA, which, um, you should be). So, after fiddling around for a while, here’s what my <code>/var/lib/connman/settings</code>
+file looks like:</p>
+
+<pre><code>[global]
+OfflineMode=false
+
+[Wired]
+Enable=true
+
+[WiFi]
+Enable=true
+</code></pre>
+
+<p>And here’s my <code>/var/lib/connman/wifi.config</code> file:</p>
+
+<pre><code>[service_home]
+Type=wifi
+Name=my_ssid
+Security = wpa2-psk
+Passphrase=my_encrypted_passphrase
+</code></pre>
+
+<p>where <code>my_ssid</code> is my SSID name, and <code>my_encrypted_passphrase</code> is the result of running <code>wpa_passphrase &lt;ssid&gt; &lt;password&gt;</code>.</p>
+
+<p>Finally, my <code>/etc/wpa_supplicant.conf</code> - I’m running WPA2-Personal on my wireless router, so this is, as far as I can tell, the
+way you set up <code>wpa_supplicant</code>:</p>
+
+<pre><code>ctrl_interface=/var/run/wpa_supplicant
+ctrl_interface_group=0
+update_config=1
+
+network={
+        ssid="my_ssid"
+        #psk=my_encrypted_passphrase
+        psk="my_unencrypted_passphrase"
+        key_mgmt=WPA-PSK
+        proto=RSN
+        pairwise=CCMP TKIP
+        group=CCMP TKIP
+}
+</code></pre>
+
+<p>Now, just getting to this point took a lot of tweaking and messing around with various settings. However, it’s still not connecting.
+It’s finding the access point, and even getting its MAC address, but it’s unable to authenticate. Here’s what happens when I run
+<code>wpa_supplicant</code> manually in debug mode:</p>
+
+<pre><code># wpa_supplicant -iwlan0 -c/etc/wpa_supplicant.conf -d
+  (irrelevant parts omitted)
+wlan0: New scan results available
+wlan0: Selecting BSS from priority group 0
+wlan0: 0: 5c:96:xx:xx:xx:83 ssid='my_ssid' wpa_ie_len=0 rsn_ie_len=20 caps=0x11 level=87
+wlan0:    selected based on RSN IE
+wlan0:    selected BSS 5c:96:xx:xx:xx:83 ssid='my_ssid'
+wlan0: Request association: reassociate: 0  selected: 5c:96:xx:xx:xx:83  bssid: 00:00:00:00:00:00  pending: 00:00:00:00:00:00  wpa_state: SCANNING
+wlan0: Trying to associate with 5c:96:xx:xx:xx:83 (SSID='my_ssid' freq=2462 MHz)
+wlan0: Cancelling scan request
+wlan0: WPA: clearing own WPA/RSN IE
+wlan0: Automatic auth_alg selection: 0x1
+RSN: PMKSA cache search - network_ctx=(nil) try_opportunistic=0
+RSN: Search for BSSID 5c:96:xx:xx:xx:83
+RSN: No PMKSA cache entry found
+wlan0: RSN: using IEEE 802.11i/D9.0
+wlan0: WPA: Selected cipher suites: group 16 pairwise 16 key_mgmt 2 proto 2
+wlan0: WPA: clearing AP WPA IE
+WPA: set AP RSN IE - hexdump(len=22): 30 14 01 00 00 0f ac 04 01 00 00 0f ac 04 01 00 00 0f ac 02 00 00
+wlan0: WPA: using GTK CCMP
+wlan0: WPA: using PTK CCMP
+wlan0: WPA: using KEY_MGMT WPA-PSK
+WPA: Set own WPA IE default - hexdump(len=22): 30 14 01 00 00 0f ac 04 01 00 00 0f ac 04 01 00 00 0f ac 02 00 00
+wlan0: No keys have been configured - skip key clearing
+wlan0: State: SCANNING -&gt; ASSOCIATING
+wpa_driver_wext_set_operstate: operstate 0-&gt;0 (DORMANT)
+netlink: Operstate: linkmode=-1, operstate=5
+Limit connection to BSSID 5c:96:xx:xx:xx:83 freq=2462 MHz based on scan results (bssid_set=0)
+wpa_driver_wext_associate
+wpa_driver_wext_set_drop_unencrypted
+wpa_driver_wext_set_psk
+wlan0: Setting authentication timeout: 10 sec 0 usec
+EAPOL: External notification - EAP success=0
+EAPOL: Supplicant port status: Unauthorized
+EAPOL: External notification - EAP fail=0
+EAPOL: Supplicant port status: Unauthorized
+EAPOL: External notification - portControl=Auto
+EAPOL: Supplicant port status: Unauthorized
+RSN: Ignored PMKID candidate without preauth flag
+</code></pre>
+
+<p>and basically it cycles through this over and over. Now, I’m sure this all means something to whoever wrote this code, but to me
+there’s absoutely nothing helpful here. it’s written for someone to try to debug the program, not to help someone troubleshoot
+a problem with their setup. And, yet, this is, as far as I can tell, the only troubleshooting tool these fine folks have seen
+fit to provide. Nice.</p>
+
+<p>So, after wading through all this garbage, and trying a bunch of different things, I finally gleaned (with absolutely no help
+from whoever wrote this crappy software, thank you very much!) that it’s failing authentication. Why? Who knows. Really, there’s
+a special circle of hell for people who write error messages like this for their users to have to decode. When you get there,
+you spend eternity debugging Windows NT BSOD error messages.</p>
+
+<p>So, I tried looking up the incredibly clear message <code>EAPOL: Supplicant port status: Unauthorized</code>. Now, there are a number of posts that
+imply that you need to have <code>eth0</code> disconnected in order for this to work (which makes absolutely no sense to me whatsover -
+since when are you only able to connect to one network interface at a time?), but doing that seems to make no difference. I’ve also
+seen a lot of descriptions of procedures people use to get this to work that are the technological equivalent of holding a dead
+chicken over the machine and praying. This didn’t work for me either (well, okay, I didn’t try the chicken…yet).</p>
+
+<p>Which brings up my gripe: why is this so $@%^!&amp;@ hard? Why do you have to go through this hell to just connect to a wireless access
+point - something that they do in the Mac and Windows worlds all the time? Would it be so bleeping hard to just spit out some relatively
+helpful messages - something along the lines of “authentication failed”, or even “bad passphrase”? Something.</p>
+
+<p>If you are guilty of writing software like this, do me a favor: go to the mirror, grab yourself by the collar and slap yourself
+repeatedly, saying “Bad Programmer! Bad!” over and over, because it’s exactly what I’d be doing if I were there with you.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/">btle.js 0.2.0 Released</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-18T23:08:00-05:00" pubdate data-updated="true">Oct 18<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I just (okay, a few days ago) released version 0.2.0 of <a href="https://github.com/jacklund/btle.js">btle.js</a> to
+<a href="https://npmjs.org/package/btle.js">npm</a>. This has a bunch of API changes - the <code>connect</code> method now gives you a
+<code>Device</code> object, instead of a <code>Connection</code>. All the ATT methods are now on the <code>Device</code> object, but, in addition, you can
+access all the GATT functionality by querying the device for services, which returns <code>Service</code> objects, and services for
+characteristics, which return <code>Characteristics</code> objects.</p>
+
+<p>I’m also working on <a href="https://github.com/jacklund/btle.js/wiki/API-Docs">API docs</a> for the whole thing.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/09/25/fun-with-beaglebone-black/">Fun With BeagleBone Black</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-25T11:02:00-05:00" pubdate data-updated="true">Sep 25<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So, I’ve decided to try to play with <a href="http://en.wikipedia.org/wiki/ZigBee">ZigBee</a>, and since I have a couple of BeagleBone Blacks hanging around doing nothing, I thought I’d try setting it up on them.</p>
+
+<p>First thing I came across was that the BBB’s seem to have issues with <a href="https://groups.google.com/forum/#!topic/beagleboard/4e2T6XH-fNM">accessing their UARTS</a>. Even via bonescript, there seem to <a href="http://stackoverflow.com/questions/17497060/node-js-script-not-setting-beaglebone-black-mux">be issues</a>.</p>
+
+<p>So, first thing I did was to upgrade to the latest firmware, and then do <code>opkg update</code> followed by <code>opkg upgrade</code> to get all the latest stuff. However, when I tried to run a bonescript program (the one from <a href="http://stackoverflow.com/questions/17497060/node-js-script-not-setting-beaglebone-black-mux">here</a>), I got <code>module bonescript not found</code>!!!. WTF?</p>
+
+<p>Since I had seen in the <a href="http://beagleboard.org/Support/BoneScript/pinMode/">bonescript docs</a> that the <code>pinmode</code> call doesn’t really work until bonescript 0.2.3, I figured I’d be smart and just try to upgrade to the latest npm version of bonescript.</p>
+
+<p>Long story short: bad idea. I had to go through all sorts of hell to make the npm install work (including editing the node-gyp configuration file to avoid a bug in the python version check), I finally got bonescript 0.2.3 working. So, I tried my test program and…the network connection died. Every time I ran the program, the same thing happened.</p>
+
+<p>Turns out, this is an <a href="https://github.com/jadonk/bonescript/issues/51">issue with the latest bonescript</a>. So, I ended up having to back down to the previous version of bonescript via opkg. Once I investigated the <code>module bonescript not found</code> issue, it turned out that, for some reason, the bonescript module in <code>/usr/lib/node_modules</code> wasn’t getting written, so I had to do a <code>opkg remove bonescript</code> followed by <code>opkg install bonescript</code> to make it all work.</p>
+
+<p>All this, and I haven’t even tried to get the XBee stuff working yet. Oy.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/09/12/node-dot-js-bit-operations/">Node.js Bit Operations</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-12T09:07:00-05:00" pubdate data-updated="true">Sep 12<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I was working on trying to get the barometer readings from my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?DCMP=sensortag&amp;HQS=sensortag-bn">TI SensorTag</a> using Node.js when I came across this problem. See, the <a href="http://processors.wiki.ti.com/index.php/SensorTag_User_Guide#Barometric_Pressure_Sensor_2">user’s guide</a> has two code examples for the algorithm for the pressure - one in C, and one in Java. The one in C uses primarily bit shift operations, whereas the one in Java uses <code>Math.pow()</code> to do the same thing. Naturally, I tended towards the bit shift operations since it makes the code a bit clearer as to what it’s doing (ultimately, from a performance perspective, it doesn’t matter since <code>Math.pow(2, x)</code> probably ultimately resolves to bit shifts anyway).</p>
+
+<p>However, when I did this, I kept on getting pressure values that were all over the place. When I broke it down, it looked like the “offset” and “scale” factors, which rely heavily on bit shifts, were bouncing all over the place.</p>
+
+<p>So, I did some looking, and discovered that, although Node.js stores all its variables as 64-bit floating point numbers, when it comes to bit operations, it does those as 32-bit numbers. A quick test showed that this is true:</p>
+
+<pre><code>&gt; a = Math.pow(2, 31)-1
+2147483647
+&gt; a &gt;&gt; 10
+2097151
+&gt; a = Math.pow(2, 32) -1
+4294967295
+&gt; a &gt;&gt; 10
+-1
+&gt; a &gt;&gt; 2
+-1
+</code></pre>
+
+<p>Notice the sharp transition once you hit that 32-bit border. What that meant was that any time I was doing bit operations, if the value I was operating on was less than 2^32, I got the right answer, otherwise I got garbage. Fun.</p>
+
+<p>So, when I switched to the Java algorithm (modified, of course, because they seem to have forgotten to divide those values by 100 at the end) everything worked.</p>
+
+<p>Good. To. Know.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/09/10/published-bluetooth-le-module/">Published Bluetooth LE Module</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-10T22:31:00-05:00" pubdate data-updated="true">Sep 10<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Well, I published my Node.js module for Bluetooth LE, <a href="https://github.com/jacklund/btle.js">btle.js</a> (pronounced “Beetle Juice”) to <a href="https://npmjs.org/package/btle.js">npm</a>. Even though it’s labeled version 0.1.0, it’s got most of the functionality that’s necessary for Bluetooth LE - reading attributes, writing commands and requests, and listening for notifications. I’m hoping to add more functionality over the next few weeks/months.</p>
+
+<p>The main reason I was doing this was to get my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?DCMP=sensortag&amp;HQS=sensortag-bn">TI SensorTag</a> working with my Raspberry Pi and Bluetooth LE dongle, which it now does. I’ve even got the beginnings of a Node.js module for the sensortag, <a href="https://github.com/jacklund/sensortag.js">sensortag.js</a>, which is built on top of btle.js. I’ve got everything working except the Barometric Pressure sensor readings and the Gyroscope readings.</p>
+
+<p>The nice thing about btle.js is that it’s purely native C++ code, talking directly to the Linux Bluetooth stack - it’s not having to shell out to run gatttool, for instance, which is pretty nice.</p>
+
+<p>For anyone wanting to write some Bluetooth LE code for Linux in a non-Node.js environment, I extracted the low-level I/O code from the <a href="http://www.bluez.org/">Bluez</a> project, removing the dependency on glib so that it’s a true, low-level Linux I/O package. The higher-level code is dependant on <a href="https://github.com/joyent/libuv">libuv</a>, of course - I couldn’t figure out any good way to separate them - but it shouldn’t be too difficult to extract what you need from there as well.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/08/30/what-to-do/">What to Do?</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-30T22:38:00-05:00" pubdate data-updated="true">Aug 30<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So, I haven’t posted in almost 2 months. Part of that is the fact that the last two months have been very busy - work is crazy busy trying to do all the work and get more, and I’ve been busy with the family doing end-of-summer stuff. However, part of the problem is, basically, organization.</p>
+
+<p>I’m, basically, a fairly organized guy, in that I manage to prioritize things and get the high-priority things done. However, I’m also not particularly big on multi-tasking, so that, quite often, my high-priority tasks get all the attention, and all the little, lower-priority things (like this blog) get very little.</p>
+
+<p>One thing I’m constantly searching for is a tool to help me manage all my projects, personal and professional. I’ve tried every todo list/organizational tool out there. Some I stick with for months at a time, others go away almost instantly, but I’ve never found one that’s quite right.</p>
+
+<p>The problem is that none of them work the way I work, or organize things the way my mind organizes things, so whenever I use them, there’s always this cognitive dissonance going on, which gets worse and worse over time until…I find suddenly that I haven’t used it in a while, and everything’s out of date.</p>
+
+<p>I think part of the problem is that every one I’ve tried is basically designed like a todo list on steroids - lots of bells and whistles, but at the end of the day, it’s just a list of things to get done. Unfortunately, that’s not how things work with me. Projects very rarely gel into discrete things to do, at least none but the most trivial of projects. For me, a project is fairly amorphous until I’m working on it, and the things to do suddenly appear to me - but by that time, I’m either doing them or about to do them. I very rarely need to keep track of them at that point - usually, at that point, they’re fairly obvious.</p>
+
+<p>What’s worse, a task list is actually detrimental to my usual creative process. There’s nothing that can strangle creativity faster than having a laundry list of tasks to complete. What I need is not “Do A then B then C” but “Here’s what I was thinking the direction might be. Does that make sense now, or should I take it in another direction?”</p>
+
+<p>For me, the difficulty lies in keeping track of all the projects, primarily, keeping track of where I am with the project, and when it was I last did something on it, and finally, my thoughts on the project - where I think I’ll be going next with it. In a way, it’s really more like notes to my future self about where my present self left things, rather than a set of todos.</p>
+
+<p>Anyway, writing this down has helped me figure out at least a minimal set of requirements:</p>
+
+<ol>
+  <li>I need something which will keep track of my projects</li>
+  <li>Within the projects, I need some place to keep notes on the project, both notes about what I’m doing, and also a way to talk about where I think the project could go</li>
+  <li>I also need a way of capturing what things, in a general sense, that I think need to be done. These aren’t necessarily tasks so much as general ideas about what I think might need to be done.</li>
+</ol>
+
+<p>The more I think about this, the more it seems like I need something GitHub-ish. For example, I just found <a href="http://www.lullabot.com/blog/article/managing-projects-github">this post</a> about managing projects with GitHub, and, while they’re talking mainly development projects, maybe there’s a way to leverage GitHub for my other projects, too.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/2/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/04/13/dependency-injection-and-the-yagni-principle/">Dependency Injection and the YAGNI principle</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/14/logging-using-eventemitters-in-node-dot-js/">Logging Using EventEmitters in Node.js</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/05/inheritance-in-functional-languages/">Inheritance in Functional Languages</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon/">Using a Raspberry Pi as an iBeacon</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/19/more-fun-with-beaglebone-black/">More Fun With BeagleBone Black</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 115.0%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 107.5%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 115.0%'>beaglebone</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 107.5%'>beaglebone-black</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 115.0%'>beaglebone_black</a>   <a href='/blog/categories/bluetooth' style='font-size: 115.0%'>bluetooth</a>   <a href='/blog/categories/bluetooth-le' style='font-size: 122.5%'>bluetooth_le</a>   <a href='/blog/categories/bluez' style='font-size: 115.0%'>bluez</a>   <a href='/blog/categories/bonescript' style='font-size: 107.5%'>bonescript</a>   <a href='/blog/categories/bonjour' style='font-size: 107.5%'>bonjour</a>   <a href='/blog/categories/btle-js' style='font-size: 107.5%'>btle.js</a>   <a href='/blog/categories/c-' style='font-size: 115.0%'>c++</a>   <a href='/blog/categories/cobertura' style='font-size: 107.5%'>cobertura</a>   <a href='/blog/categories/dependency-injection' style='font-size: 107.5%'>dependency injection</a>   <a href='/blog/categories/documents' style='font-size: 107.5%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 130.0%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 107.5%'>eskrima</a>   <a href='/blog/categories/functional' style='font-size: 107.5%'>functional</a>   <a href='/blog/categories/gatt' style='font-size: 115.0%'>gatt</a>   <a href='/blog/categories/git' style='font-size: 115.0%'>git</a>   <a href='/blog/categories/github' style='font-size: 107.5%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 107.5%'>hornetq</a>   <a href='/blog/categories/ibeacon' style='font-size: 107.5%'>iBeacon</a>   <a href='/blog/categories/idea' style='font-size: 107.5%'>idea</a>   <a href='/blog/categories/inheritance' style='font-size: 107.5%'>inheritance</a>   <a href='/blog/categories/java' style='font-size: 122.5%'>java</a>   <a href='/blog/categories/javascript' style='font-size: 122.5%'>javascript</a>   <a href='/blog/categories/jboss' style='font-size: 107.5%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 107.5%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 107.5%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 107.5%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 107.5%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 107.5%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 107.5%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 137.5%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 107.5%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 107.5%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 115.0%'>maven</a>   <a href='/blog/categories/mqtt' style='font-size: 107.5%'>mqtt</a>   <a href='/blog/categories/node-js' style='font-size: 160.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 107.5%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 107.5%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 115.0%'>programming</a>   <a href='/blog/categories/python' style='font-size: 107.5%'>python</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 115.0%'>raspberry-pi</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 107.5%'>raspberry_pi</a>   <a href='/blog/categories/rest' style='font-size: 107.5%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 107.5%'>resteasy</a>   <a href='/blog/categories/sbt' style='font-size: 115.0%'>sbt</a>   <a href='/blog/categories/scala' style='font-size: 115.0%'>scala</a>   <a href='/blog/categories/scalability' style='font-size: 107.5%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 107.5%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 107.5%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 122.5%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 107.5%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 107.5%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 107.5%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 107.5%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 115.0%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 107.5%'>windows</a>   <a href='/blog/categories/zeroconf' style='font-size: 107.5%'>zeroconf</a>   <a href='/blog/categories/zigbee' style='font-size: 107.5%'>zigbee</a>   <a href='/blog/categories/zookeeper' style='font-size: 107.5%'>zookeeper</a>   </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/jacklund">@jacklund</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jacklund',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+<section>
+	<h1>My PGP Key</h1>
+	<ul>
+		<li><a href="http://pgp.mit.edu:11371/pks/lookup?op=vindex&search=0x755E427235B39D61">From the MIT Keyserver</a></li>
+		<li><a href="/about/pgp.txt">Text file</a></li>
+	</ul>
+</section><section>
+  <h1>Other Places To Find Me</h1>
+  <ul>
+    <li><a href="https://geekli.st/jacklund">Geeklist</a></li>
+    <li><a href="http://www.pandora.com/profile/jackl0">Pandora</a></li>
+    <li><a href="http://www.linkedin.com/in/jacklund">LinkedIn</a></li>
+    <li><a href="https://plus.google.com/105150092995925691816/about">Google+</a></li>
+    <li><a href="https://alpha.app.net/jacklund">App.net</a></li>
+    <li><a href="https://www.facebook.com/jack.lund">Facebook</a></li>
+    <li><a href="https://jacklund.trovebox.com/">Trovebox</a></li>
+    <li><a href="http://jacklund.tumblr.com/">Tumblr</a></li>
+    <li><a href="http://pinterest.com/jacklund/">Pinterest</a></li>
+    <li><a href="http://www.scribd.com/jack_lund">Scribd</a></li>
+    <li><a href="http://www.shelfari.com/jacklund">Shelfari</a></li>
+    <li><a href="http://www.librarything.com/home/jacklund">LibraryThing</a></li>
+  </ul>
+</section>
+<section>
+  <h1>Share</h1>
+  <ul>
+    <li><a href="javascript:document.getElementsByTagName('body')[0].appendChild(document.createElement('script')).setAttribute('src','//geekli.st/javascript/bookmarklet/bookmarklet.js')"><img src="//geekli.st/images/assets/GeekIt_wFace.png"></a></li>
+    <li>
+      <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+      <g:plusone annotation="none"></g:plusone>
+    </li>
+  </ul>
+</section>
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Jack Lund -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span> - 
+  <span class="credit">Layout by <a href="https://github.com/amelandri/darkstripes">DarkStripes</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'geekheads';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

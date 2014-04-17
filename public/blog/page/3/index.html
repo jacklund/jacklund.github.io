@@ -1,0 +1,838 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Geekheads</title>
+  <meta name="author" content="Jack Lund">
+
+  
+  <meta name="description" content="Got my two BeagleBone Blacks from AdaFruit on Friday. Really nice. I bought them without enclosures because, well, the enclosures were $20, and the &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jacklund.github.io/blog/page/3">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Geekheads" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <!--
+  <div id="logo">
+  	<div id="logoLeft">{</div>
+  	<div id="logoText">GH</div>
+  	<div id="logoRight">}</div>
+  	<div class="clear"></div>
+  </div> -->
+  <h1><a href="/">Geekheads</a></h1>
+  
+    <h2>Geeks are people, too. Sort of.</h2>
+  
+  <div class="clear"></div>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jacklund.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/09/BeagleBone-Black/">BeagleBone Black</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-09T20:00:00-05:00" pubdate data-updated="true">Jun 9<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Got my two <a href="http://beagleboard.org/Products/BeagleBone%20Black">BeagleBone Blacks</a> from <a href="http://adafruit.com/">AdaFruit</a> on Friday. Really nice. I bought them without enclosures because, well, the enclosures were $20, and the BeagleBones themselves were only $45. The nice thing is, though, that they fit exactly into an Altoids tin, so I turned two into my enclosures. I used tin snips to cut holes for power and Ethernet, and lined them with electrical tape to insulate the board from the box. Here’s what they ended up looking like:</p>
+
+<p><img src="https://dl.dropbox.com/s/bpgc7lc5azhazw5/altoids_closed.jpg" alt="" title="Closed" /></p>
+
+<p><img src="https://dl.dropbox.com/s/d87y38ydxqtcv2q/altoids_open.jpg" alt="" title="Open" /></p>
+
+<p><img src="https://dl.dropbox.com/s/7nocbp8nnb65pwn/altoids_working.jpg" alt="" title="Running" /></p>
+
+<p>By default, they run <a href="http://www.angstrom-distribution.org/">Ångström Linux</a>. The default programming environment for them is a variant of Javascript they call <a href="http://beagleboard.org/Support/BoneScript">“Bonescript”</a>, which runs via <a href="http://nodejs.org/">Node.js</a>. However, a kind soul had put together a Python library called <a href="https://github.com/alexanderhiam/PyBBIO">PyBBIO</a>, which I downloaded and tried to install. I kept getting the following warning, however:</p>
+
+<pre><code>Warning: you seem to have a BeagleBone image which only has drivers for the PWM1 module, PWM2A and PWM2B will not be available in PyBBIO.
+You should consider updating Angstrom!
+</code></pre>
+
+<p>I tried updating the OS using <a href="http://learn.adafruit.com/beaglebone-black-installing-operating-systems/overview">these instructions</a>, however it didn’t make the problem go away. That’s when I discovered that PyBBIO <a href="https://github.com/alexanderhiam/PyBBIO/issues/18">doesn’t support the 3.8 kernel that comes with BB Blacks</a>, so it looks like I’m stuck with Javascript for the moment.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/30/I-Hate-LaTeX/">I Hate LaTeX</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-30T11:30:00-05:00" pubdate data-updated="true">May 30<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>No, I really do. It’s not hyperbole. I hate it.</p>
+
+<p>It’s frickin’ 2013, people. We should not have to deal with languages that look like this:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+</pre></td><td class="code"><pre><code class="latex"><span class="line"><span class="k">\renewcommand</span><span class="nb">{</span><span class="k">\href</span><span class="nb">}</span>[2]<span class="nb">{</span>#2<span class="k">\footnote</span><span class="nb">{</span><span class="k">\url</span><span class="nb">{</span>#1<span class="nb">}}}</span>
+</span><span class="line"><span class="s">$</span><span class="nb">endif</span><span class="s">$</span>
+</span><span class="line"><span class="s">$</span><span class="nb">if</span><span class="o">(</span><span class="nb">strikeout</span><span class="o">)</span><span class="s">$</span>
+</span><span class="line"><span class="k">\usepackage</span><span class="na">[normalem]</span><span class="nb">{</span>ulem<span class="nb">}</span>
+</span><span class="line"><span class="c">% avoid problems with \sout in headers with hyperref:</span>
+</span><span class="line"><span class="k">\pdfstringdefDisableCommands</span><span class="nb">{</span><span class="k">\renewcommand</span><span class="nb">{</span><span class="k">\sout</span><span class="nb">}{}}</span>
+</span><span class="line"><span class="s">$</span><span class="nb">endif</span><span class="s">$</span>
+</span><span class="line"><span class="k">\setlength</span><span class="nb">{</span><span class="k">\parindent</span><span class="nb">}{</span>0pt<span class="nb">}</span>
+</span><span class="line"><span class="k">\setlength</span><span class="nb">{</span><span class="k">\parskip</span><span class="nb">}{</span>6pt plus 2pt minus 1pt<span class="nb">}</span>
+</span><span class="line"><span class="k">\setlength</span><span class="nb">{</span><span class="k">\emergencystretch</span><span class="nb">}{</span>3em<span class="nb">}</span>  <span class="c">% prevent overfull lines</span>
+</span><span class="line"><span class="s">$</span><span class="nb">if</span><span class="o">(</span><span class="nb">numbersections</span><span class="o">)</span><span class="s">$</span>
+</span><span class="line"><span class="k">\setcounter</span><span class="nb">{</span>secnumdepth<span class="nb">}{</span>5<span class="nb">}</span>
+</span><span class="line"><span class="s">$</span><span class="nb">else</span><span class="s">$</span>
+</span><span class="line"><span class="k">\setcounter</span><span class="nb">{</span>secnumdepth<span class="nb">}{</span>0<span class="nb">}</span>
+</span><span class="line"><span class="s">$</span><span class="nb">endif</span><span class="s">$</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>and parsers that give errors like this:</p>
+
+<pre><code>paragraph ended before Gin@iii was completed.
+</code></pre>
+
+<p>The reason I’m even messing with this is that I want a way to convert <a href="http://daringfireball.net/projects/markdown/">markdown</a> to PDF. Should be easy, right?</p>
+
+<p>Guess again. Just about everything either converts from markdown to HTML, then to PDF, which renders pretty badly, or from markdown to LaTeX to PDF, which renders rather nicely. Except, in order to tweak it (like adding a logo to the title) you have to hack LaTeX. Ugh.</p>
+
+<p>One of the most flexible converters, <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>, which, don’t get me wrong, is a very nice package, requires you to tweak a <code>default.latex</code> file to modify the default format, hence my problem: I just spent around an hour and a half just trying to get a frickin’ logo on the cover page where I want it (there’s a LaTeX package called “titlepic” which puts it where <em>it</em> wants, but if you want it elsewhere, you’re SOL).</p>
+
+<p>Again, it’s 2013 and document creation shouldn’t be frickin’ rocket science! The whole point of writing in markdown is that we don’t want to have to mess with complex document formats. I should be able to take a markdown document, pass it into a converter, give it some options in a syntax that doesn’t look like 80’s-era gobbledygook, and get a decent-looking document out the other end.</p>
+
+<p><em>facepalm</em></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/20/Creating-RESTEasy-Project-with-Eclipse-and-Maven/">Creating RESTEasy Project With Eclipse and Maven</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-20T00:00:00-05:00" pubdate data-updated="true">May 20<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Handy safety tip: to create a RESTEasy-friendly Maven project in Eclipse, do the following:</p>
+
+<ol>
+  <li>Create the project as a simple Maven project</li>
+  <li>In the project Properties -&gt; Project Facets, make the project faceted, and select “Dynamic Web Module” (you may get a NullPointerException, but it doesn’t seem to matter). Under “Further Configuration…”, point the WebApp directory to be <code>src/main/webapp</code>, and have it create the <code>web.xml</code> file.</li>
+  <li>Under “Web Content Settings”, set the Context root</li>
+  <li>Under “Deployment Assembly”, select “Add…”, select “Java Build Path Entries”, and select “Maven Dependencies”. It should put them in <code>WEB-INF/lib</code>.</li>
+  <li>Add the code and the dependencies to the <code>pom.xml</code>. Make sure to add the RESTEasy stuff to the <code>web.xml</code> file.</li>
+</ol>
+
+<p>You should be able to deploy it from Eclipse into Tomcat without any issues</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/12/TI-SensorTag/">TI SensorTag</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-12T19:20:00-05:00" pubdate data-updated="true">May 12<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I got my <a href="http://processors.wiki.ti.com/index.php/Bluetooth_SensorTag">TI Bluetooth SensorTag</a> Friday, and played with it some over the weekend. It’s pretty nice. It’s basically a small device with a bunch of embedded sensors on it - accelerometer, gyroscope, ambient temp, IR temp (see below), humidity, barometric pressure, and a couple of buttons on it. It’s very small, and communicates over <a href="http://en.wikipedia.org/wiki/Bluetooth_low_energy">Bluetooth 4 LE</a>. You can download an iOS app for viewing the data, so my daughters and I played with it some. Pretty cool. There’s a <a href="http://blog.makezine.com/2013/04/18/teardown-of-the-ti-sensortag">teardown of it</a> at MAKE magazine, and even a <a href="http://mike.saunby.net/2013/04/raspberry-pi-and-ti-cc2541-sensortag.html">Raspberry Pi</a> project to interface with it. W00t!!!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/07/Falling-in-Love-with-Git/">Falling in Love With Git</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-07T17:00:00-05:00" pubdate data-updated="true">May 7<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>As I mentioned earlier, we’re transitioning from subversion to git, and one of the things we need to do is convert from many-projects-per-repository, which is what we had in subversion, to one-project-per-repository for git. This is partly to make things nicer, and partly because it will make <a href="http://jenkins-ci.org/">Jenkins</a> work better. So, thinking in subversion-terms, I thought I’d have to do it myself, and even tried by renaming all the files in one of the projects into the upper-level directory, removing all the other projects, committing locally, and then pushing to a new repo. Royal pain.</p>
+
+<p>And then, I came across <a href="https://help.github.com/articles/splitting-a-subpath-out-into-a-new-repository">this</a>. Oh. My. God. Git actually does the work for you. It’s so easy, you just do the <code>git filter-branch</code> command, and suddenly your project is its own repository! Then, you just change the remote repository (<code>git remote rm origin</code> followed by <code>git remote add</code> <em>new-url</em>), and Bob’s your uncle, you have a new, smaller repository.</p>
+
+<p>I mean, seriously? That is AWESOME!</p>
+
+<p>So, to be explicit, here’s the series of commands:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="nv">$ </span>git clone repo-url
+</span><span class="line"><span class="nv">$ </span><span class="nb">cd </span>repo
+</span><span class="line"><span class="nv">$ </span>git filter-branch --prune-empty --subdirectory-filter subdir-name master
+</span><span class="line"><span class="nv">$ </span>git remote rm origin
+</span><span class="line"><span class="nv">$ </span>git remote add new-repo-url
+</span><span class="line"><span class="nv">$ </span>git push -u origin --all --tags
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Updated 05/12/2013</strong>
+Okay, after messing around with this for some time, I’ve discovered that the above doesn’t work quite right, because the pathnames in the commits are wrong - instead of being <em>subdir-name</em><code>/src/foo/Bar.java</code>, it ends up being <code>src/foo/Bar.java</code>, which doesn’t work. So, instead of trying to pull each subdirectory into their own repository, I’m taking the existing repository, with a bunch of subdirs, including the ones I’m interested in, and simply using <code>git filter-branch</code> to get rid of the ones I’m not interested in, as well as update the tags. So, here’s what I’ve got now, which seems to work well:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="c"># Get a list of the directories I&#39;m not interested in</span>
+</span><span class="line"><span class="nv">$ excludes</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> <span class="nv">$*</span> | tr <span class="s2">&quot; &quot;</span> <span class="s2">&quot;|&quot;</span><span class="sb">`</span>
+</span><span class="line"><span class="nv">$ files</span><span class="o">=</span><span class="sb">`</span>ls | egrep -v <span class="nv">$excludes</span> | tr <span class="s2">&quot;\\n&quot;</span> <span class="s2">&quot; &quot;</span><span class="sb">`</span>
+</span><span class="line"><span class="c"># Disconnect from remote for safety</span>
+</span><span class="line"><span class="nv">$ </span>git remote rm origin
+</span><span class="line"><span class="c"># Get rid of all tags that don&#39;t fit my pattern</span>
+</span><span class="line"><span class="nv">$ </span>git tag -l | grep -v <span class="nv">$pattern</span> | xargs git tag -d
+</span><span class="line"><span class="c"># Prune the directories I&#39;m not interested in</span>
+</span><span class="line"><span class="nv">$ </span>git filter-branch --tag-name-filter cat --prune-empty <span class="se">\</span>
+</span><span class="line">    --tree-filter <span class="s2">&quot;rm -rf ${files}&quot;</span> -- --all
+</span><span class="line"><span class="c"># Reset the indexes</span>
+</span><span class="line"><span class="nv">$ </span>git reset --hard
+</span><span class="line"><span class="c"># Get rid of obsolete references in the logs</span>
+</span><span class="line"><span class="nv">$ </span>git <span class="k">for</span>-each-ref --format<span class="o">=</span><span class="s2">&quot;%(refname)&quot;</span> refs/original/ | <span class="se">\</span>
+</span><span class="line">    xargs -n 1 git update-ref -d
+</span><span class="line"><span class="nv">$ </span>git reflog expire --expire<span class="o">=</span>now --all
+</span><span class="line"><span class="nv">$ </span>git gc --aggressive --prune<span class="o">=</span>now
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/06/Airport-Extreme/">Airport Extreme</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-06T22:05:00-05:00" pubdate data-updated="true">May 6<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Had to replace my old, crappy Netgear router over the weekend - it was getting flaky, and causing my Skype calls to freak out at inopportune moments. I was thinking about going the <a href="http://en.wikipedia.org/wiki/DD-WRT">DD-WRT</a> route (if you’ll excuse the pun), but it looked like it required more of a time commitment than I am able to manage at the moment. Since almost everything we have in this house is some form of Apple product, I decided to try out the Airport Extreme.</p>
+
+<p>Man, was that thing easy to set up, especially compared to the Living Hell that is most router setups. I just went into Airport Utility on my laptop, it automagically found the router, I configured it right there, and it just frickin’ worked! Unbelievable! Admittedly, it’s a pricey router, but I think it’s worth it with the time it saved me.</p>
+
+<p>It also seems to be a <strong>lot</strong> more powerful than those underpowered Netgear POSes, which is an added benefit.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/06/VerifyError-with-JDK-7/">VerifyError With JDK 7</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-06T21:43:00-05:00" pubdate data-updated="true">May 6<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>We had been using nothing higher than JDK 6 with our project up until now, but when I built a new build machine using Fedora 18, JDK 7 was our only real option (okay, that and JDK 5). However, once I got things building using ant, I got the following cryptic error in the unit tests:</p>
+
+<pre><code>java.lang.VerifyError: Expecting a stackmap frame at branch target 41 in method com.m2mci.correlation.CorrelationId.equals(Ljava/lang/Object;)Z at offset 24
+</code></pre>
+
+<p>After some <a href="http://www.javacraft.org/2012/07/cobertura-with-jdk7.html">digging</a>, I found out that the kind folks at Oracle/Sun had changed the bytecode in JDK 7 such that there was a verifier frame now included where there wasn’t before. This is fine as long as everything knows about this, but we’ve been using <a href="http://cobertura.sourceforge.net/">Cobertura</a> for code coverage, which instruments the bytecode, and which apparently doesn’t know about the fancy new verifier stack frame. What’s worse, they don’t seem (from what I can tell from their website) to have any interest in adding it any time soon.</p>
+
+<p>So, what to do? Our two alternatives are a) drop Cobertura, or b) include the JVM argument <code>-XX:-UseSplitVerifier</code> every time we run our code. To me, the former seems the better way to go, especially since we’re not really <em>using</em> code coverage right now (we probably should, but for now, we’re not).</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/06/Getting-Jenkins-on-Windows-Working-with-Git/">Getting Jenkins on Windows Working With Git</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-06T20:46:00-05:00" pubdate data-updated="true">May 6<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>We’re transitioning, as a company, from Subversion to Git, which is a Good Thing, but has its complications. One of them was getting <a href="http://jenkins-ci.org/">Jenkins</a>, which we use for <a href="http://en.wikipedia.org/wiki/Continuous_integration">continuous integration</a>, to work with our Git repositories.</p>
+
+<p>I had started out by thinking that I would have to create a user in our repository provider (we’re using <a href="http://bitbucket.org">BitBucket</a>) which would have read permisisons to our repositories, a “jenkins” user. Turns out its not the case. All you need to do for read-only access is to generate SSH keys that you register with the repository, and which Jenkins uses to clone the repository.</p>
+
+<p>On Linux, this would be trivial. On Windows, of course, very little is trivial.</p>
+
+<p>So, following <a href="http://computercamp.cdwilson.us/jenkins-git-clone-via-ssh-on-windows-7-x64">this guide</a>(with some modifications) I managed it this way:</p>
+
+<ol>
+  <li>Install <a href="http://git-scm.com/downloads">Git</a></li>
+  <li>Generate the new SSH keys on my local machine using <code>ssh-keygen</code>. Make sure to specify a file <strong>other</strong> than the default (unless you like the idea of overwriting any existing keys you might have).</li>
+  <li>Install the public key in the repository. In BitBucket, you do this under the account settings for the user or group who owns the repositories. Do it at the user/group level, not at the repository level (unless you want separate keys for each repository). Just cut and paste the contents of the public key to the web page, and click “Add”</li>
+  <li>Install <a href="http://technet.microsoft.com/en-us/sysinternals/bb896649.aspx">PsTools</a> (<em>Note</em>: the link given in the guide mentioned above didn’t work for me). Extract the zip file wherever you want (I put mine in the root dir)</li>
+  <li>Run the following in a command shell <em>running as administrator</em>: <code>\PsTools\PsExec.exe -i -s cmd.exe</code> (<em>Note:</em> the guide says use a normal shell, but that will fail the first time, because it tries to instal something that needs Admin privileges). To do this, find the command shell icon in the menu, right-click, and select <em>Run as Administrator…</em>.</li>
+  <li>Do <code>echo %USERPROFILE%</code> in the shell to find out where the system user (and, hence, Jenkins) runs from as its home directory. Mine turned out to be <code>C:\Windows\system32\config\systemprofile</code>. YMMV.</li>
+  <li>Make a folder named <code>.ssh</code> in that home directory</li>
+  <li>Copy the keys (private and public) to the Windows machine in the <code>.ssh</code> folder</li>
+  <li>Run <code>"C:\Program Files(x86)\Git\bin\ssh.exe" -T git@bitbucket.org</code> (<em>Note:</em> the location of git on your install may be different than mine). When you get the usual “unknown host” warning, type “yes” to get the server key in your known_hosts file</li>
+  <li>Finally, test git by doing a <code>git ls-remote git@bitbucket.org:repo.git HEAD</code></li>
+</ol>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/04/11/Rethinking-Architecture/">Rethinking Architecture</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-11T22:30:00-05:00" pubdate data-updated="true">Apr 11<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So, I’ve been rethinking the architecture we used with a customer, and which we are planning on using, in slightly modified form, for some in-house projects.</p>
+
+<p>The application is, basically, a cloud-based service which takes data from devices, analyzes and stores it, and presents it to the user in a web site.</p>
+
+<p>We had decided, early on, to go with Java as our language of choice, both because it was what the customer was comfortable with, and because we felt like it offered the best performance/flexibility tradeoff (and, yes, performance is an issue here, especially on the data collection side).</p>
+
+<p>The pieces of our architecture include:</p>
+
+<ul>
+  <li>A <a href="https://en.wikipedia.org/wiki/Rest">RESTful</a> web service, to both collect the data and to serve as an API for apps which want to access the data</li>
+  <li>Some sort of queuing mechanism for taking the data in, and processing it on the back end asynchronously</li>
+  <li>A database of some sort for storing the readings</li>
+  <li>A website, utilizing static HTML and Javascript for accessing and presenting the data, and for managing the various assets (devices, etc)</li>
+  <li>A database (possibly the same as the previous one) for storing the website data</li>
+  <li>A notification framework for sending notifications (emails, SMS, etc) of various events from the devices</li>
+</ul>
+
+<p>Now, one of the things I’ve learned about architecture (or, at least I thought I had learned) was to only use what you absolutely need, nothing more. A lean architecture is a good architecture. However, we made some decisions early on which, now, I feel like violate those principles.</p>
+
+<h3 id="jboss">JBoss</h3>
+<p>We opted to put the code in an app server for various reasons. We needed a Servlet engine to facilitate the web service, but we decided to use <a href="http://www.jboss.org/jbossas">JBoss AS 7</a> as the app server because we’d all had experience with it in the past, and it was being used by the customer currently. We felt like the container could manage all the “plumbing” (threads, database connections, etc), rather than dealing with it ourselves. I think that decision came more from old architectural design assumptions (“three-tiered good, two-tiered bad”, “managing resources is hard”) which are no longer really relevant.</p>
+
+<p>However, more importantly (and I don’t mean to bash JBoss here, I think this would be true of any app server), we ended up severely limiting our “functional” scalability by using an app server. Let me explain:</p>
+
+<p>When I refer to “functional” vs. “theoretical” scalability, I’m referring to the fact that, while JBoss is certainly very scalable in theory (you can cluster the instances, and add new instances dynamically), in practice, it’s really frickin’ difficult to scale. The reason: you can’t just “add another instance”, you need to go through the hell that is cluster configuration to add a new instance, which means, literally, making on the order of a dozen changes to the stock JBoss configuration files.</p>
+
+<p>To put an even finer point on it: the question you should ask yourself in terms of scalability is: if I were to get a call at 2 AM that we need to scale up because the application’s pegged, could I scale it quickly and easily, even half-asleep? The answer in this case would be a resounding “No!”.</p>
+
+<p>The other answer might be to use a deployment system, like <a href="http://www.opscode.com/chef/">Chef</a> or <a href="https://puppetlabs.com/">Puppet</a>, but I’ve tried putting together Puppet scripts for doing a JBoss clustered deployment, and it’s a nightmare as well.</p>
+
+<p>A lot of this came out of a gig we had auditing another consulting company for a customer. They hired us to talk to the other company with them, because things weren’t going well and they needed a second opinion on whether they were being “took” (we said “yes, kinda”). However, the most interesting thing was that they had a very similar architecture to ours, but it was seriously slow, so they were constantly having to add in servers in the back end. The sys admin who worked there (and who was probably the smartest guy in the company, as far as I could tell), pointed out that starting up new instances was trivial, because their backend server was a simple process - no app server, no nothing. He could start it up from the command line if he wanted.</p>
+
+<p>That’s how it all <strong><em>should</em></strong> work! It’s the Google/Facebook architecture vs. the old-school “Big Iron” approach. It was a serious “Aha!” moment for me.</p>
+
+<p>So, what are we getting from using JBoss? EJBs? We are using them, but we don’t need them (they’re not on the list I mentioned above) - the web service should be our internal as well as our external API. Thread pools? They used to be complicated, but since JDK 1.5, it’s trivial. Database connection pools? Same thing. Caching? We’re using a third-party caching mechanism, so no.</p>
+
+<p>Time to ditch JBoss.</p>
+
+<h3 id="hornetq">HornetQ</h3>
+<p>The queue that comes with JBoss is <a href="http://www.jboss.org/hornetq">HornetQ</a>. It’s supposedly a very fast queue, and it comes embedded in JBoss. However, there are several issues with it:</p>
+
+<ul>
+  <li>It, also, doesn’t functionally scale well. You can cluster it, but it’s painful, and a configuration nightmare, just like JBoss</li>
+  <li>It doesn’t handle having the queue fill up very gracefully, in my opinion. While I was doing load testing of the app, sometimes the back end would not quite be able to keep up, and when a large number of journal files ended up in the queue, it froze, and needed not just to be restarted, but to have the journal files cleared out first.</li>
+  <li>It’s not trivial swapping out a different queue in JBoss. It’s doable, but not very well documented, and it’s hard to say how JBoss would handle it.</li>
+</ul>
+
+<h3 id="spring">Spring</h3>
+<p>Another questionable architectural decision (and I can say this because I was one of the big advocates) was to use <a href="http://www.springsource.org/">Spring</a>. Now, don’t get me wrong - I <em>love</em> Spring, but it has a tendency to take over once you start using it. We had even talked about, early on, how we weren’t going to use Spring for “everything”, but we ended up using it way too much, IMHO. Plus, I think if we rearchitect everything to be in terms of standalone services, we’ll have a lot less need for that sort of configurational complexity.</p>
+
+<h3 id="emphasize-the-positive">Emphasize the Positive</h3>
+<p>So, those are the things I think we should ditch. What should our architecture look like? I think we could function well with the web services being in something like <a href="http://tomcat.apache.org/">Tomcat</a> or <a href="http://www.eclipse.org/jetty/">Jetty</a>, with everything else being standalone Java services (i.e., no containers, just POJOs with a main()).</p>
+
+<p>That takes care of the big pieces, but what about the glue to put it together? I was looking around for scalable, distributed queues, when I came across <a href="http://kafka.apache.org/">Kafka</a>. It’s not really a queue so much as a pub/sub framework, which you can use like a queue. However, once I started playing with it (which will be the subject of a different post), I came to the realization that it could be used for more than just the queue - it could be the communication mechanism between the services, basically a communication bus for the architecture. And, it’s functionally scalable, because you can add new server instances dynamically using <a href="http://zookeeper.apache.org/">ZooKeeper</a>. We could also reuse ZooKeeper as our own service locater service to allow us to dynamically add new services.</p>
+
+<p>Now, suddenly, things are looking very different. Rather than an app server with all our code deployed on it, we would have compact, self-contained services which communicate via Kafka, find new instances via ZooKeeper, and which scale by just starting up new instances to take on the load. Doing this then implies that the web service front-end would have to be very thin - just a façade for taking in web service requests, which would then be delegated to the back-end services.</p>
+
+<p>The key would be to define the services well, so they would be small, light, decoupled, and cohesive.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/04/11/Bad-Blogger%21-Bad%21/">Bad Blogger! Bad!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-11T09:00:00-05:00" pubdate data-updated="true">Apr 11<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>It’s been over a year since I last used <a href="http://scriptogr.am">scriptogr.am</a>. Mostly I haven’t had much time to actually post - work has been rather intense, but in a good way. :-)</p>
+
+<p>Recently, I’ve been looking around for blog solutions, and I keep coming back to this.  I’ve been getting more and more into using <a href="http://daringfireball.net/projects/markdown/">Markdown</a>, and <a href="http://fletcherpenney.net/multimarkdown/">MultiMarkdown</a> for lots of things, from note taking to creating documents. I’ll try to put together another post about that sometime soon. However, for blogging, I wanted to use Markdown, so I looked at <a href="http://jekyllrb.com/">jekyll</a>, which is what <a href="http://pages.github.com/">github pages</a> uses, but it kind of requires some work in terms of setting up the templates, css, etc (although there is a <a href="http://jekyllbootstrap.com/">Jekyll Bootstrap</a> project which helps a lot), and, being the lazy (not to mention busy) guy I am, I decided it was too much work after futzing with it for a couple of hours.</p>
+
+<p>This seems to be the most painless solution, so I’m going with it.</p>
+
+<p>Code blocks seem to be handled relatively well:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Foo</span> <span class="o">{</span>
+</span><span class="line">  <span class="kd">private</span> <span class="kt">int</span> <span class="n">bar</span><span class="o">;</span>
+</span><span class="line">
+</span><span class="line">  <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getBar</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">    <span class="k">return</span> <span class="n">bar</span><span class="o">;</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>So, I’ll stick with this, for now.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/4/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/2/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/04/16/rest-by-any-other-name-dot-dot-dot/">REST by Any Other Name&#8230;</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/13/dependency-injection-and-the-yagni-principle/">Dependency Injection and the YAGNI Principle</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/14/logging-using-eventemitters-in-node-dot-js/">Logging Using EventEmitters in Node.js</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/05/inheritance-in-functional-languages/">Inheritance in Functional Languages</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon/">Using a Raspberry Pi as an iBeacon</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 115.0%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 107.5%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 115.0%'>beaglebone</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 107.5%'>beaglebone-black</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 115.0%'>beaglebone_black</a>   <a href='/blog/categories/bluetooth' style='font-size: 115.0%'>bluetooth</a>   <a href='/blog/categories/bluetooth-le' style='font-size: 122.5%'>bluetooth_le</a>   <a href='/blog/categories/bluez' style='font-size: 115.0%'>bluez</a>   <a href='/blog/categories/bonescript' style='font-size: 107.5%'>bonescript</a>   <a href='/blog/categories/bonjour' style='font-size: 107.5%'>bonjour</a>   <a href='/blog/categories/btle-js' style='font-size: 107.5%'>btle.js</a>   <a href='/blog/categories/c-' style='font-size: 115.0%'>c++</a>   <a href='/blog/categories/cobertura' style='font-size: 107.5%'>cobertura</a>   <a href='/blog/categories/dependency-injection' style='font-size: 107.5%'>dependency injection</a>   <a href='/blog/categories/documents' style='font-size: 107.5%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 130.0%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 107.5%'>eskrima</a>   <a href='/blog/categories/functional' style='font-size: 107.5%'>functional</a>   <a href='/blog/categories/gatt' style='font-size: 115.0%'>gatt</a>   <a href='/blog/categories/git' style='font-size: 115.0%'>git</a>   <a href='/blog/categories/github' style='font-size: 107.5%'>github</a>   <a href='/blog/categories/hateoas' style='font-size: 107.5%'>HATEOAS</a>   <a href='/blog/categories/hornetq' style='font-size: 107.5%'>hornetq</a>   <a href='/blog/categories/http' style='font-size: 107.5%'>HTTP</a>   <a href='/blog/categories/ibeacon' style='font-size: 107.5%'>iBeacon</a>   <a href='/blog/categories/idea' style='font-size: 107.5%'>idea</a>   <a href='/blog/categories/inheritance' style='font-size: 107.5%'>inheritance</a>   <a href='/blog/categories/java' style='font-size: 122.5%'>java</a>   <a href='/blog/categories/javascript' style='font-size: 122.5%'>javascript</a>   <a href='/blog/categories/jboss' style='font-size: 107.5%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 107.5%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 107.5%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 107.5%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 107.5%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 107.5%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 107.5%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 137.5%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 107.5%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 107.5%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 115.0%'>maven</a>   <a href='/blog/categories/mqtt' style='font-size: 107.5%'>mqtt</a>   <a href='/blog/categories/node-js' style='font-size: 160.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 107.5%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 107.5%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 115.0%'>programming</a>   <a href='/blog/categories/python' style='font-size: 107.5%'>python</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 115.0%'>raspberry-pi</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 107.5%'>raspberry_pi</a>   <a href='/blog/categories/rest' style='font-size: 107.5%'>rest</a>   <a href='/blog/categories/rest' style='font-size: 107.5%'>REST</a>   <a href='/blog/categories/resteasy' style='font-size: 107.5%'>resteasy</a>   <a href='/blog/categories/sbt' style='font-size: 115.0%'>sbt</a>   <a href='/blog/categories/scala' style='font-size: 115.0%'>scala</a>   <a href='/blog/categories/scalability' style='font-size: 107.5%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 107.5%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 107.5%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 122.5%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 107.5%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 107.5%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 107.5%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 107.5%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 115.0%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 107.5%'>windows</a>   <a href='/blog/categories/zeroconf' style='font-size: 107.5%'>zeroconf</a>   <a href='/blog/categories/zigbee' style='font-size: 107.5%'>zigbee</a>   <a href='/blog/categories/zookeeper' style='font-size: 107.5%'>zookeeper</a>   </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/jacklund">@jacklund</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jacklund',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+<section>
+	<h1>My PGP Key</h1>
+	<ul>
+		<li><a href="http://pgp.mit.edu:11371/pks/lookup?op=vindex&search=0x755E427235B39D61">From the MIT Keyserver</a></li>
+		<li><a href="/about/pgp.txt">Text file</a></li>
+	</ul>
+</section><section>
+  <h1>Other Places To Find Me</h1>
+  <ul>
+    <li><a href="https://geekli.st/jacklund">Geeklist</a></li>
+    <li><a href="http://www.pandora.com/profile/jackl0">Pandora</a></li>
+    <li><a href="http://www.linkedin.com/in/jacklund">LinkedIn</a></li>
+    <li><a href="https://plus.google.com/105150092995925691816/about">Google+</a></li>
+    <li><a href="https://alpha.app.net/jacklund">App.net</a></li>
+    <li><a href="https://www.facebook.com/jack.lund">Facebook</a></li>
+    <li><a href="https://jacklund.trovebox.com/">Trovebox</a></li>
+    <li><a href="http://jacklund.tumblr.com/">Tumblr</a></li>
+    <li><a href="http://pinterest.com/jacklund/">Pinterest</a></li>
+    <li><a href="http://www.scribd.com/jack_lund">Scribd</a></li>
+    <li><a href="http://www.shelfari.com/jacklund">Shelfari</a></li>
+    <li><a href="http://www.librarything.com/home/jacklund">LibraryThing</a></li>
+  </ul>
+</section>
+<section>
+  <h1>Share</h1>
+  <ul>
+    <li><a href="javascript:document.getElementsByTagName('body')[0].appendChild(document.createElement('script')).setAttribute('src','//geekli.st/javascript/bookmarklet/bookmarklet.js')"><img src="//geekli.st/images/assets/GeekIt_wFace.png"></a></li>
+    <li>
+      <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+      <g:plusone annotation="none"></g:plusone>
+    </li>
+  </ul>
+</section>
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Jack Lund -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span> - 
+  <span class="credit">Layout by <a href="https://github.com/amelandri/darkstripes">DarkStripes</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'geekheads';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

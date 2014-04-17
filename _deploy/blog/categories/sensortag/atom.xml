@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: sensortag | Geekheads]]></title>
+  <link href="http://jacklund.github.io/blog/categories/sensortag/atom.xml" rel="self"/>
+  <link href="http://jacklund.github.io/"/>
+  <updated>2014-04-16T22:28:21-05:00</updated>
+  <id>http://jacklund.github.io/</id>
+  <author>
+    <name><![CDATA[Jack Lund]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Node.js Bit Operations]]></title>
+    <link href="http://jacklund.github.io/blog/2013/09/12/node-dot-js-bit-operations/"/>
+    <updated>2013-09-12T09:07:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/09/12/node-dot-js-bit-operations</id>
+    <content type="html"><![CDATA[<p>I was working on trying to get the barometer readings from my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?DCMP=sensortag&amp;HQS=sensortag-bn">TI SensorTag</a> using Node.js when I came across this problem. See, the <a href="http://processors.wiki.ti.com/index.php/SensorTag_User_Guide#Barometric_Pressure_Sensor_2">user’s guide</a> has two code examples for the algorithm for the pressure - one in C, and one in Java. The one in C uses primarily bit shift operations, whereas the one in Java uses <code>Math.pow()</code> to do the same thing. Naturally, I tended towards the bit shift operations since it makes the code a bit clearer as to what it’s doing (ultimately, from a performance perspective, it doesn’t matter since <code>Math.pow(2, x)</code> probably ultimately resolves to bit shifts anyway).</p>
+
+<p>However, when I did this, I kept on getting pressure values that were all over the place. When I broke it down, it looked like the “offset” and “scale” factors, which rely heavily on bit shifts, were bouncing all over the place.</p>
+
+<p>So, I did some looking, and discovered that, although Node.js stores all its variables as 64-bit floating point numbers, when it comes to bit operations, it does those as 32-bit numbers. A quick test showed that this is true:</p>
+
+<pre><code>&gt; a = Math.pow(2, 31)-1
+2147483647
+&gt; a &gt;&gt; 10
+2097151
+&gt; a = Math.pow(2, 32) -1
+4294967295
+&gt; a &gt;&gt; 10
+-1
+&gt; a &gt;&gt; 2
+-1
+</code></pre>
+
+<p>Notice the sharp transition once you hit that 32-bit border. What that meant was that any time I was doing bit operations, if the value I was operating on was less than 2^32, I got the right answer, otherwise I got garbage. Fun.</p>
+
+<p>So, when I switched to the Java algorithm (modified, of course, because they seem to have forgotten to divide those values by 100 at the end) everything worked.</p>
+
+<p>Good. To. Know.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Published Bluetooth LE Module]]></title>
+    <link href="http://jacklund.github.io/blog/2013/09/10/published-bluetooth-le-module/"/>
+    <updated>2013-09-10T22:31:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/09/10/published-bluetooth-le-module</id>
+    <content type="html"><![CDATA[<p>Well, I published my Node.js module for Bluetooth LE, <a href="https://github.com/jacklund/btle.js">btle.js</a> (pronounced “Beetle Juice”) to <a href="https://npmjs.org/package/btle.js">npm</a>. Even though it’s labeled version 0.1.0, it’s got most of the functionality that’s necessary for Bluetooth LE - reading attributes, writing commands and requests, and listening for notifications. I’m hoping to add more functionality over the next few weeks/months.</p>
+
+<p>The main reason I was doing this was to get my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?DCMP=sensortag&amp;HQS=sensortag-bn">TI SensorTag</a> working with my Raspberry Pi and Bluetooth LE dongle, which it now does. I’ve even got the beginnings of a Node.js module for the sensortag, <a href="https://github.com/jacklund/sensortag.js">sensortag.js</a>, which is built on top of btle.js. I’ve got everything working except the Barometric Pressure sensor readings and the Gyroscope readings.</p>
+
+<p>The nice thing about btle.js is that it’s purely native C++ code, talking directly to the Linux Bluetooth stack - it’s not having to shell out to run gatttool, for instance, which is pretty nice.</p>
+
+<p>For anyone wanting to write some Bluetooth LE code for Linux in a non-Node.js environment, I extracted the low-level I/O code from the <a href="http://www.bluez.org/">Bluez</a> project, removing the dependency on glib so that it’s a true, low-level Linux I/O package. The higher-level code is dependant on <a href="https://github.com/joyent/libuv">libuv</a>, of course - I couldn’t figure out any good way to separate them - but it shouldn’t be too difficult to extract what you need from there as well.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[TI SensorTag]]></title>
+    <link href="http://jacklund.github.io/blog/2013/05/12/TI-SensorTag/"/>
+    <updated>2013-05-12T19:20:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/05/12/TI-SensorTag</id>
+    <content type="html"><![CDATA[<p>I got my <a href="http://processors.wiki.ti.com/index.php/Bluetooth_SensorTag">TI Bluetooth SensorTag</a> Friday, and played with it some over the weekend. It’s pretty nice. It’s basically a small device with a bunch of embedded sensors on it - accelerometer, gyroscope, ambient temp, IR temp (see below), humidity, barometric pressure, and a couple of buttons on it. It’s very small, and communicates over <a href="http://en.wikipedia.org/wiki/Bluetooth_low_energy">Bluetooth 4 LE</a>. You can download an iOS app for viewing the data, so my daughters and I played with it some. Pretty cool. There’s a <a href="http://blog.makezine.com/2013/04/18/teardown-of-the-ti-sensortag">teardown of it</a> at MAKE magazine, and even a <a href="http://mike.saunby.net/2013/04/raspberry-pi-and-ti-cc2541-sensortag.html">Raspberry Pi</a> project to interface with it. W00t!!!</p>
+]]></content>
+  </entry>
+  
+</feed>

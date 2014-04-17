@@ -1,0 +1,386 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Inheritance in Functional Languages - Geekheads</title>
+  <meta name="author" content="Jack Lund">
+
+  
+  <meta name="description" content="There’s a tendency amongst proponents of functional languages, like Javascript, to consider inheritance an anachronism of older (and, by implication &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jacklund.github.io/blog/2014/01/05/inheritance-in-functional-languages/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Geekheads" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <!--
+  <div id="logo">
+  	<div id="logoLeft">{</div>
+  	<div id="logoText">GH</div>
+  	<div id="logoRight">}</div>
+  	<div class="clear"></div>
+  </div> -->
+  <h1><a href="/">Geekheads</a></h1>
+  
+    <h2>Geeks are people, too. Sort of.</h2>
+  
+  <div class="clear"></div>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jacklund.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+        <h1 class="entry-title">Inheritance in Functional Languages</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-05T11:31:00-06:00" pubdate data-updated="true">Jan 5<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>There’s a tendency amongst proponents of <a href="http://en.wikipedia.org/wiki/Functional_programming">functional</a> languages, like Javascript, to consider inheritance an anachronism of older (and, by implication, worse) OO languages and OO design. One example is this <a href="http://book.mixu.net/node/ch6.html">discussion</a> by <a href="http://mixu.net">Mikito Takada</a>. This is what he says:</p>
+
+<blockquote>
+  <p>I think classical inheritance is in most cases an antipattern in Javascript. Why?</p>
+</blockquote>
+
+<blockquote>
+  <p>There are two reasons to have inheritance:</p>
+</blockquote>
+
+<blockquote>
+  <ol>
+    <li>to support polymorphism in languages that do not have dynamic typing, like C++. The class acts as an interface specification for a type. This provides the benefit of being able to replace one class with another (such as a function that operates on a Shape that can accept subclasses like Circle). However, Javascript doesn’t require you to do this: the only thing that matters is that a method or property can be looked up when called/accessed.</li>
+    <li>to reuse code. Here the theory is that you can reuse code by having a hierarchy of items that go from an abstract implementation to a more specific one, and you can thus define multiple subclasses in terms of a parent class. This is sometimes useful, but not that often.</li>
+  </ol>
+</blockquote>
+
+<blockquote>
+  <p>The disadvantages of inheritance are:</p>
+</blockquote>
+
+<blockquote>
+  <ol>
+    <li>Nonstandard, hidden implementations of classical inheritance. Javascript doesn’t have a builtin way to define class inheritance, so people invent their own ones. These implementations are similar to each other, but differ in subtle ways.</li>
+    <li>Deep inheritance trees. Subclasses are aware of the implementation details of their superclasses, which means that you need to understand both. What you see in the code is not what you get: instead, parts of an implementation are defined in the subclass and the rest are defined piecemeal in the inheritance tree. The implementation is thus sprinkled over multiple files, and you have to mentally recombine those to understand the actual behavior.</li>
+  </ol>
+</blockquote>
+
+<blockquote>
+  <p>I favor composition over inheritance:</p>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>Composition - Functionality of an object is made up of an aggregate of different classes by containing instances of other objects.</li>
+    <li>Inheritance - Functionality of an object is made up of it’s own functionality plus functionality from its parent classes.</li>
+  </ul>
+</blockquote>
+
+<p>Now, I don’t disagree with him in principle here - inheritance <em>can</em> be an anti-pattern when overused, which it is, even in the world of OO languages (I’ve even seen it implemented, and then overused, in C, which, well, you’ve really got to see to believe). However, that being said, I think what concerns me about this quote in particular, and the corresponding attitude amongst those in the function-programming community in general, concerns a basic misunderstanding of what inheritance (“classical” or prototypical) is, and a further misunderstanding of one of the fundamental ideas behind software design.</p>
+
+<h2 id="what-is-inheritance-for">What is Inheritance For?</h2>
+<p>To begin with, we need to distinguish clearly between interface inheritance and implementation inheritance, because they are very different things. Interface inheritance is about defining a contract for an interface - no sharing of implementation is involved at all. It’s basically how you achieve both polymorphism and a well-defined interface in statically-typed languages. Since it doesn’t share any code, talking about “composition vs. inheritance” or “code reuse” really has nothing to do with it. What most such discussions are really talking about is implementation inheritance.</p>
+
+<p>The question then becomes: what is implementation-type inheritance for? After all, it’s fairly trivial to see that you can achieve the same thing with composition or, in languages that support it, mixins. Why have it at all? The answer has to do with one of the fundamental ideas behind the design of anything: communication.</p>
+
+<h2 id="design-is-communication">Design is Communication</h2>
+<p>In his book <a href="http://en.wikipedia.org/wiki/The_Design_of_Everyday_Things"><em>The Design of Everyday Things</em></a> (which, IMHO, should be required reading for any software developer), Donald Norman gives an example of the design of a door, and what it communicates to those who want to use the door. If the door swings only one way, then placing a pull handle on the side that opens in and a push plate on the side that opens out communicates, almost at a subconscious level, what the person approaching the door needs to do in order to open the door.</p>
+
+<p>Similarly, the software we write should be communicating something about its use to the next developer who reads it. That developer, if we do our job right, should have an almost intuitive understanding of how to use or modify the code with very little effort. What does this have to do with inheritance? Glad you asked.</p>
+
+<p>On a superficial level, what inheritance does is communicate what classes belong to a particular group (the classical “is-a” test for inheritance). But, what inheritance <em>really</em> communicates, and what differentiates it from composition, is that it tells you what behavior is <em>required</em> for a class to be a particular thing. In other words, <em>inheritance communicates the required behavior for a class, whereas composition communicates optional behavior</em>.</p>
+
+<p>To see this, imagine that you have to write a custom implementation for some third-party framework which you’ve never seen the code for before. It already has classes that have other implementations for the same sort of thing you’re trying to accomplish, so you crack one of them open to see how they did it. You immediately notice that, in this one implementation, they’re passing in a reference to another class and using it in their implementation. Would your immediate conclusion (before looking at anything else) be that you would need to also use that same class in your implementation, or would you think that it’s probably just being used by this particular implementation? In other words, would you think this was required behavior for any class trying to implement this type of class, or would you think it was optional? What if you saw that it was being inherited instead of being composed?</p>
+
+<p>As another example (and, really, the one that brought this to my attention in the first place), I’m attempting to write a <a href="">DAO</a> framework in Node.js for a set of applications my company is building. This framework would have different implementations depending on what underlying data store was being used. However, one of the things I wanted it to be able to do is to read from an in-memory cache, if one is provided, before going to the data store. This is behavior I wanted to be part of the framework and any DAO class within it. The question becomes, should I use inheritance or composition? In my opinion, using composition would be a mistake, because it would communicate that this is optional behavior that might not be used by some implementations, whereas I want it to be used by all. Hence, I would use inheritance.</p>
+
+<p>This sort of thing, this ability to communicate the functionality of code intuitively, is the difference, IMHO, between well-designed code (i.e., code that takes little or no effort to modify or augment) and badly-designed code (i.e. code that is a pain to modify, and that you have to read through extensively to use).</p>
+
+<h2 id="when-not-to-use-inheritance">When Not To Use Inheritance</h2>
+<p>Mixu is very much right when he talks about the misuse of inheritance - people have been using it inappropriately for pretty much the entire time it’s been available. One anti-pattern for inheritance is, of course, using it for code reuse between classes which have no real connection to each other. Another is to use it as a dumping ground for common behavior - this is typically seen when you have a base class that exists for valid reasons, but then lazy programmers use it to add common functionality which should be extracted into a composed or utility class. Those are all valid anti-patterns of inheritance use.</p>
+
+<p>However, the reverse case is also true - it is an anti-pattern to use composition where inheritance is called for. The “code smell” for inappropriate composition is when you see the same boilerplate code around the use of a particular composed class in a bunch of classes doing the same thing - a sure sign of using composition where inheritance is required.</p>
+
+<p>I am also concerned where he says that he uses inheritance, “but not that often”. That would imply, to me, that either he almost never writes polymorphic code, or if he does, the code almost never shares behavior. In my experience, polymorphic classes often <em>do</em> share behavior, at least at some level, and so for a developer to say he doesn’t use inheritance very often implies to me that he might be either unconsciously writing a lot of boilerplate code, or making his code bend over backwards in order to avoid using the dreaded inheritance. Either way, I’m sceptical.</p>
+
+<h2 id="inheritance-in-javascript">Inheritance in Javascript</h2>
+<p>That being said, I think Mixu has a very good point about the design of Javascript inheritance - it sucks. It’s shoddy, it invites, as he says, nonstandard implementations, and is error-prone. Even Node.js’ solution - <code>util.inherits()</code> - is kludgey at best. It should have been made a keyword in the language so that, again, it’s clear what’s going on, rather than having to hunt around for certain coding structures which imply it. However, that’s a problem with Javascript, not inheritance.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jack Lund</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-05T11:31:00-06:00" pubdate data-updated="true">Jan 5<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/functional/'>functional</a>, <a class='category' href='/blog/categories/inheritance/'>inheritance</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/node-dot-js/'>node.js</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jacklund.github.io/blog/2014/01/05/inheritance-in-functional-languages/" data-via="" data-counturl="http://jacklund.github.io/blog/2014/01/05/inheritance-in-functional-languages/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left articlenav" href="/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon/" title="Previous Post: Using a Raspberry Pi as an iBeacon">&laquo; Using a Raspberry Pi as an iBeacon</a>
+      
+      
+        <a class="basic-alignment right articlenav" href="/blog/2014/01/14/logging-using-eventemitters-in-node-dot-js/" title="Next Post: Logging Using EventEmitters in Node.js">Logging Using EventEmitters in Node.js &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/04/13/dependency-injection-and-the-yagni-principle/">Dependency Injection and the YAGNI principle</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/14/logging-using-eventemitters-in-node-dot-js/">Logging Using EventEmitters in Node.js</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/05/inheritance-in-functional-languages/">Inheritance in Functional Languages</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon/">Using a Raspberry Pi as an iBeacon</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/19/more-fun-with-beaglebone-black/">More Fun With BeagleBone Black</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+    <ul id="category-list"><a href='/blog/categories/apple' style='font-size: 115.0%'>apple</a>   <a href='/blog/categories/architecture' style='font-size: 107.5%'>architecture</a>   <a href='/blog/categories/beaglebone' style='font-size: 115.0%'>beaglebone</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 107.5%'>beaglebone-black</a>   <a href='/blog/categories/beaglebone-black' style='font-size: 115.0%'>beaglebone_black</a>   <a href='/blog/categories/bluetooth' style='font-size: 115.0%'>bluetooth</a>   <a href='/blog/categories/bluetooth-le' style='font-size: 122.5%'>bluetooth_le</a>   <a href='/blog/categories/bluez' style='font-size: 115.0%'>bluez</a>   <a href='/blog/categories/bonescript' style='font-size: 107.5%'>bonescript</a>   <a href='/blog/categories/bonjour' style='font-size: 107.5%'>bonjour</a>   <a href='/blog/categories/btle-js' style='font-size: 107.5%'>btle.js</a>   <a href='/blog/categories/c-' style='font-size: 115.0%'>c++</a>   <a href='/blog/categories/cobertura' style='font-size: 107.5%'>cobertura</a>   <a href='/blog/categories/dependency-injection' style='font-size: 107.5%'>dependency injection</a>   <a href='/blog/categories/documents' style='font-size: 107.5%'>documents</a>   <a href='/blog/categories/eclipse' style='font-size: 130.0%'>eclipse</a>   <a href='/blog/categories/eskrima' style='font-size: 107.5%'>eskrima</a>   <a href='/blog/categories/functional' style='font-size: 107.5%'>functional</a>   <a href='/blog/categories/gatt' style='font-size: 115.0%'>gatt</a>   <a href='/blog/categories/git' style='font-size: 115.0%'>git</a>   <a href='/blog/categories/github' style='font-size: 107.5%'>github</a>   <a href='/blog/categories/hornetq' style='font-size: 107.5%'>hornetq</a>   <a href='/blog/categories/ibeacon' style='font-size: 107.5%'>iBeacon</a>   <a href='/blog/categories/idea' style='font-size: 107.5%'>idea</a>   <a href='/blog/categories/inheritance' style='font-size: 107.5%'>inheritance</a>   <a href='/blog/categories/java' style='font-size: 122.5%'>java</a>   <a href='/blog/categories/javascript' style='font-size: 122.5%'>javascript</a>   <a href='/blog/categories/jboss' style='font-size: 107.5%'>jboss</a>   <a href='/blog/categories/jdk7' style='font-size: 107.5%'>jdk7</a>   <a href='/blog/categories/jekyll' style='font-size: 107.5%'>jekyll</a>   <a href='/blog/categories/jenkins' style='font-size: 107.5%'>jenkins</a>   <a href='/blog/categories/jetty' style='font-size: 107.5%'>jetty</a>   <a href='/blog/categories/kafka' style='font-size: 107.5%'>kafka</a>   <a href='/blog/categories/latex' style='font-size: 107.5%'>latex</a>   <a href='/blog/categories/linux' style='font-size: 137.5%'>linux</a>   <a href='/blog/categories/markdown' style='font-size: 107.5%'>markdown</a>   <a href='/blog/categories/martial-arts' style='font-size: 107.5%'>martial_arts</a>   <a href='/blog/categories/maven' style='font-size: 115.0%'>maven</a>   <a href='/blog/categories/mqtt' style='font-size: 107.5%'>mqtt</a>   <a href='/blog/categories/node-js' style='font-size: 160.0%'>node.js</a>   <a href='/blog/categories/osx' style='font-size: 107.5%'>osx</a>   <a href='/blog/categories/pandoc' style='font-size: 107.5%'>pandoc</a>   <a href='/blog/categories/programming' style='font-size: 115.0%'>programming</a>   <a href='/blog/categories/python' style='font-size: 107.5%'>python</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 115.0%'>raspberry-pi</a>   <a href='/blog/categories/raspberry-pi' style='font-size: 107.5%'>raspberry_pi</a>   <a href='/blog/categories/rest' style='font-size: 107.5%'>rest</a>   <a href='/blog/categories/resteasy' style='font-size: 107.5%'>resteasy</a>   <a href='/blog/categories/sbt' style='font-size: 115.0%'>sbt</a>   <a href='/blog/categories/scala' style='font-size: 115.0%'>scala</a>   <a href='/blog/categories/scalability' style='font-size: 107.5%'>scalability</a>   <a href='/blog/categories/scriptogr-am' style='font-size: 107.5%'>scriptogr.am</a>   <a href='/blog/categories/selinux' style='font-size: 107.5%'>selinux</a>   <a href='/blog/categories/sensortag' style='font-size: 122.5%'>sensortag</a>   <a href='/blog/categories/spring' style='font-size: 107.5%'>spring</a>   <a href='/blog/categories/ssh' style='font-size: 107.5%'>ssh</a>   <a href='/blog/categories/subversion' style='font-size: 107.5%'>subversion</a>   <a href='/blog/categories/tomcat' style='font-size: 107.5%'>tomcat</a>   <a href='/blog/categories/wifi' style='font-size: 115.0%'>wifi</a>   <a href='/blog/categories/windows' style='font-size: 107.5%'>windows</a>   <a href='/blog/categories/zeroconf' style='font-size: 107.5%'>zeroconf</a>   <a href='/blog/categories/zigbee' style='font-size: 107.5%'>zigbee</a>   <a href='/blog/categories/zookeeper' style='font-size: 107.5%'>zookeeper</a>   </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/jacklund">@jacklund</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jacklund',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+<section>
+	<h1>My PGP Key</h1>
+	<ul>
+		<li><a href="http://pgp.mit.edu:11371/pks/lookup?op=vindex&search=0x755E427235B39D61">From the MIT Keyserver</a></li>
+		<li><a href="/about/pgp.txt">Text file</a></li>
+	</ul>
+</section><section>
+  <h1>Other Places To Find Me</h1>
+  <ul>
+    <li><a href="https://geekli.st/jacklund">Geeklist</a></li>
+    <li><a href="http://www.pandora.com/profile/jackl0">Pandora</a></li>
+    <li><a href="http://www.linkedin.com/in/jacklund">LinkedIn</a></li>
+    <li><a href="https://plus.google.com/105150092995925691816/about">Google+</a></li>
+    <li><a href="https://alpha.app.net/jacklund">App.net</a></li>
+    <li><a href="https://www.facebook.com/jack.lund">Facebook</a></li>
+    <li><a href="https://jacklund.trovebox.com/">Trovebox</a></li>
+    <li><a href="http://jacklund.tumblr.com/">Tumblr</a></li>
+    <li><a href="http://pinterest.com/jacklund/">Pinterest</a></li>
+    <li><a href="http://www.scribd.com/jack_lund">Scribd</a></li>
+    <li><a href="http://www.shelfari.com/jacklund">Shelfari</a></li>
+    <li><a href="http://www.librarything.com/home/jacklund">LibraryThing</a></li>
+  </ul>
+</section>
+<section>
+  <h1>Share</h1>
+  <ul>
+    <li><a href="javascript:document.getElementsByTagName('body')[0].appendChild(document.createElement('script')).setAttribute('src','//geekli.st/javascript/bookmarklet/bookmarklet.js')"><img src="//geekli.st/images/assets/GeekIt_wFace.png"></a></li>
+    <li>
+      <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+      <g:plusone annotation="none"></g:plusone>
+    </li>
+  </ul>
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Jack Lund -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span> - 
+  <span class="credit">Layout by <a href="https://github.com/amelandri/darkstripes">DarkStripes</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'geekheads';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jacklund.github.io/blog/2014/01/05/inheritance-in-functional-languages/';
+        var disqus_url = 'http://jacklund.github.io/blog/2014/01/05/inheritance-in-functional-languages/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,732 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Geekheads]]></title>
+  <link href="http://jacklund.github.io/atom.xml" rel="self"/>
+  <link href="http://jacklund.github.io/"/>
+  <updated>2014-04-13T21:23:25-05:00</updated>
+  <id>http://jacklund.github.io/</id>
+  <author>
+    <name><![CDATA[Jack Lund]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Dependency Injection and the YAGNI principle]]></title>
+    <link href="http://jacklund.github.io/blog/2014/04/13/dependency-injection-and-the-yagni-principle/"/>
+    <updated>2014-04-13T10:07:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2014/04/13/dependency-injection-and-the-yagni-principle</id>
+    <content type="html"><![CDATA[<p>One of my new personal projects involves writing an application using <a href="http://nodejs.org">Node.js</a> and <a href="http://www.mongodb.org">MongoDB</a>. It’s going to have a <a href="http://en.wikipedia.org/wiki/Representational_state_transfer">RESTful</a> interface for the services, and MongoDB as the database (I haven’t decided about what I’m going to use for the front-end, but <a href="http://angularjs.org">Angular.js</a> is a strong contender). I had looked at using <a href="http://www.mean.io/">mean.io</a> to build it, but after playing with it for a while, it seemed to bring in too many things I wouldn’t end up needing, so I decided to build it all from scratch using <a href="https://github.com/mcavage/node-restify">Restify</a> for the RESTful services.</p>
+
+<p>I’m writing it in an <a href="http://en.wikipedia.org/wiki/Model–view–controller">MVC</a>-ish way (really, since it’s REST, it’s more like MRC - Model - Route - Controller) where the top-level module requires routing modules from whatever Javascript files are in a particular directory (<code>lib/routes</code>), and calls them as functions, passing in the Restify server instance so the routes can be set up. Each route would call a corresponding “controller”, which would bring in a corresponding “model”, and set up the functions that each route would use to do its thing. So, the question became: how do I pass the database connection down to the model?</p>
+
+<p>When I looked at how mean.io does things, I noticed that they use a dependency injection package called “<a href="https://github.com/idottv/dependable">dependable</a>”. The way it works is that you create a “container” using dependable, and register dependencies in it, then the module that needs it would grab the container and read the dependencies out of it.</p>
+
+<p>First of all, this <em>isn’t</em> dependency injection, because the module needing the dependencies has to actively retrieve the dependencies from a container, rather than having them <em>injected</em> (hence the term “dependency <em>injection</em>”). Of course, it doesn’t really matter what you call it, the package performs the basic function well - removing the coupling between the module creating the dependency and the module using it. However, I question whether it makes sense for the mean.io stack to use it in this case, for the simple reason that I believe this is a case where coupling is fine, in that the top-level module is already coupled to the routing modules, which are coupled to the controllers, which are coupled to the models, so pretending that they don’t know anything about one another is kind of silly.</p>
+
+<p>This speaks to another issue I’ve seen a lot of (especially in the Java world), which is a lack of understanding of the role <a href="http://en.wikipedia.org/wiki/You_aren't_gonna_need_it">YAGNI</a> (“You Ain’t Gonna Need It”) should play in programming.</p>
+
+<p>One of the most egregious examples of this (which I’ve been guilty of myself) is the idea, in Java, that any class which is a dependency of another class should have an interface which the depending class uses as a proxy for it. In other words, if I have a class <code>A</code> which contains class <code>B</code>, I feel like I have to create a <code>BInterface</code> interface which <code>A</code> really contains, but which is implemented using <code>B</code>. The idea behind this is: what if, some day, I create a new class <code>C</code> which implements <code>BInterface</code>, but with a different implementation. Then, I don’t have to change <code>A</code>’s declaration, I just change where it creates <code>B</code> to create <code>C</code>.</p>
+
+<p>This is fundamentally the same idea as the one where you have to dependency inject everything - you want everything to be perfectly flexible, so you don’t have to make changes when the implementation changes. However, the hidden expense here is that you now have twice as many classes/modules that you have to manage. Admittedly, half of them are interfaces, so they don’t do much, but it’s still adding a lot of complexity where it isn’t needed, because, chances are, YAGNI. And, in those places where you do need it, creating a new interface is trivial (especially in something like Eclipse), so you can do it then.</p>
+
+<p>Flexibility <em>always</em> comes with a cost. The key to a good design is knowing where to add flexibility, and where not to. In the case of my Node.js code, I decided to pass the database connection through the route, simply because I think it’s fine that the top-level module understands that the routes might need to pass it down to their dependencies - that’s what having it as a parameter <em>means</em> - either “I’m going to need it”, or “one of my children will need it”. Either way, it doesn’t make the design any less clean, and, if something changes where I <em>do</em> need dependency injection, well, I can always add it later. YAGNI.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Logging Using EventEmitters in Node.js]]></title>
+    <link href="http://jacklund.github.io/blog/2014/01/14/logging-using-eventemitters-in-node-dot-js/"/>
+    <updated>2014-01-14T21:45:00-06:00</updated>
+    <id>http://jacklund.github.io/blog/2014/01/14/logging-using-eventemitters-in-node-dot-js</id>
+    <content type="html"><![CDATA[<p>I’ve been working a lot in node.js lately for a work project. Javascript as a language is an odd duck (<a href="http://en.wikipedia.org/wiki/Duck_typing#In_JavaScript">pun not intended</a>). It’s got all these incredibly powerful features - dynamic typing, inheritance-by-prototype, functions as first-class objects - but it has some really odd anachronisms, including having to use the C-style <code>for (var i = 0; i &lt; length; i++)</code> loop to iterate over arrays. Node adds a lot to the language as well, such as <a href="http://nodejs.org/api/events.html">EventEmitters</a>, which are very powerful. This afternoon I found a nifty new use for them: logging.</p>
+
+<p>One of the issues that always seems to come up is the fact that logging is one of those things that is both local and global - it’s local, in that you want to do the logging at the place where the event you’re logging occurs, but global in that you want your logging configured globally - you don’t want each and every class/module to have to “know” about logging. One consequence of this, especially with respect to testing, is that you end up having to configure loggers for your unit tests, which, in a way, makes them no longer “unit” tests at all. Optimally, what you want is a situation where you’re logging locally, but if logging hasn’t been set up by anyone, the logs just go into <code>/dev/null</code>. Basically, you want your logging to involve sending out logging “events”, which are either captured by something, or not. EventEmitters give that to you for free.</p>
+
+<p>All EventEmitters are, for those of you unfamiliar with them (but familiar with OO terminology) are an implementation of the <a href="http://en.wikipedia.org/wiki/Observer_pattern">observer pattern</a>, but a really lightweight and easy to use one. I won’t go into details on how it works, if you’re interested, look at the docs (or, even better, check out <a href="https://github.com/hij1nx/EventEmitter2">eventemitter2</a>, which adds wildcards and namespaces to it). What I want to talk about is how to leverage it to make logging nicer.</p>
+
+<p>For instance, if you have a logging package that you’re using (I’m using <a href="https://github.com/flatiron/winston">winston</a>), you just create a module containing a class that is an <code>EventEmitter</code>:</p>
+
+<pre><code>var EventEmitter = require('events').EventEmitter;
+var util = require('util');
+
+function LogEmitter() {
+  EventEmitter.call(this);
+}
+
+util.inherit(LogEmitter, EventEmitter);
+</code></pre>
+
+<p>Then, create an instance of your emitter, and you make your logging method emit an event:</p>
+
+<pre><code>var logEmitter = new LogEmitter();
+
+module.exports.log = function(level, message) {
+  logEmitter.emit('logging', level, message);
+}
+</code></pre>
+
+<p>This just emits a <code>logging</code> event when <code>log()</code> is called, passing the parameters along.</p>
+
+<p>Finally, you also have something listening if someone initializes logging:</p>
+
+<pre><code>var initialized = false;
+module.exports.initialize = function() {
+  if (!initialized) {
+    initialized = true;
+    logEmitter.on('logging', function(level, message) {
+      // Log the message through your logging package here
+    });
+  }
+}
+</code></pre>
+
+<p>Then, you’re good to go. Just distribute <code>logging.log()</code> calls throughout your code. If something in the code calls <code>logging.initialize()</code>, great, your messages get logged. If not (like, say, in a unit test), the messages go into the bitbucket.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Inheritance in Functional Languages]]></title>
+    <link href="http://jacklund.github.io/blog/2014/01/05/inheritance-in-functional-languages/"/>
+    <updated>2014-01-05T11:31:00-06:00</updated>
+    <id>http://jacklund.github.io/blog/2014/01/05/inheritance-in-functional-languages</id>
+    <content type="html"><![CDATA[<p>There’s a tendency amongst proponents of <a href="http://en.wikipedia.org/wiki/Functional_programming">functional</a> languages, like Javascript, to consider inheritance an anachronism of older (and, by implication, worse) OO languages and OO design. One example is this <a href="http://book.mixu.net/node/ch6.html">discussion</a> by <a href="http://mixu.net">Mikito Takada</a>. This is what he says:</p>
+
+<blockquote>
+  <p>I think classical inheritance is in most cases an antipattern in Javascript. Why?</p>
+</blockquote>
+
+<blockquote>
+  <p>There are two reasons to have inheritance:</p>
+</blockquote>
+
+<blockquote>
+  <ol>
+    <li>to support polymorphism in languages that do not have dynamic typing, like C++. The class acts as an interface specification for a type. This provides the benefit of being able to replace one class with another (such as a function that operates on a Shape that can accept subclasses like Circle). However, Javascript doesn’t require you to do this: the only thing that matters is that a method or property can be looked up when called/accessed.</li>
+    <li>to reuse code. Here the theory is that you can reuse code by having a hierarchy of items that go from an abstract implementation to a more specific one, and you can thus define multiple subclasses in terms of a parent class. This is sometimes useful, but not that often.</li>
+  </ol>
+</blockquote>
+
+<blockquote>
+  <p>The disadvantages of inheritance are:</p>
+</blockquote>
+
+<blockquote>
+  <ol>
+    <li>Nonstandard, hidden implementations of classical inheritance. Javascript doesn’t have a builtin way to define class inheritance, so people invent their own ones. These implementations are similar to each other, but differ in subtle ways.</li>
+    <li>Deep inheritance trees. Subclasses are aware of the implementation details of their superclasses, which means that you need to understand both. What you see in the code is not what you get: instead, parts of an implementation are defined in the subclass and the rest are defined piecemeal in the inheritance tree. The implementation is thus sprinkled over multiple files, and you have to mentally recombine those to understand the actual behavior.</li>
+  </ol>
+</blockquote>
+
+<blockquote>
+  <p>I favor composition over inheritance:</p>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>Composition - Functionality of an object is made up of an aggregate of different classes by containing instances of other objects.</li>
+    <li>Inheritance - Functionality of an object is made up of it’s own functionality plus functionality from its parent classes.</li>
+  </ul>
+</blockquote>
+
+<p>Now, I don’t disagree with him in principle here - inheritance <em>can</em> be an anti-pattern when overused, which it is, even in the world of OO languages (I’ve even seen it implemented, and then overused, in C, which, well, you’ve really got to see to believe). However, that being said, I think what concerns me about this quote in particular, and the corresponding attitude amongst those in the function-programming community in general, concerns a basic misunderstanding of what inheritance (“classical” or prototypical) is, and a further misunderstanding of one of the fundamental ideas behind software design.</p>
+
+<h2 id="what-is-inheritance-for">What is Inheritance For?</h2>
+<p>To begin with, we need to distinguish clearly between interface inheritance and implementation inheritance, because they are very different things. Interface inheritance is about defining a contract for an interface - no sharing of implementation is involved at all. It’s basically how you achieve both polymorphism and a well-defined interface in statically-typed languages. Since it doesn’t share any code, talking about “composition vs. inheritance” or “code reuse” really has nothing to do with it. What most such discussions are really talking about is implementation inheritance.</p>
+
+<p>The question then becomes: what is implementation-type inheritance for? After all, it’s fairly trivial to see that you can achieve the same thing with composition or, in languages that support it, mixins. Why have it at all? The answer has to do with one of the fundamental ideas behind the design of anything: communication.</p>
+
+<h2 id="design-is-communication">Design is Communication</h2>
+<p>In his book <a href="http://en.wikipedia.org/wiki/The_Design_of_Everyday_Things"><em>The Design of Everyday Things</em></a> (which, IMHO, should be required reading for any software developer), Donald Norman gives an example of the design of a door, and what it communicates to those who want to use the door. If the door swings only one way, then placing a pull handle on the side that opens in and a push plate on the side that opens out communicates, almost at a subconscious level, what the person approaching the door needs to do in order to open the door.</p>
+
+<p>Similarly, the software we write should be communicating something about its use to the next developer who reads it. That developer, if we do our job right, should have an almost intuitive understanding of how to use or modify the code with very little effort. What does this have to do with inheritance? Glad you asked.</p>
+
+<p>On a superficial level, what inheritance does is communicate what classes belong to a particular group (the classical “is-a” test for inheritance). But, what inheritance <em>really</em> communicates, and what differentiates it from composition, is that it tells you what behavior is <em>required</em> for a class to be a particular thing. In other words, <em>inheritance communicates the required behavior for a class, whereas composition communicates optional behavior</em>.</p>
+
+<p>To see this, imagine that you have to write a custom implementation for some third-party framework which you’ve never seen the code for before. It already has classes that have other implementations for the same sort of thing you’re trying to accomplish, so you crack one of them open to see how they did it. You immediately notice that, in this one implementation, they’re passing in a reference to another class and using it in their implementation. Would your immediate conclusion (before looking at anything else) be that you would need to also use that same class in your implementation, or would you think that it’s probably just being used by this particular implementation? In other words, would you think this was required behavior for any class trying to implement this type of class, or would you think it was optional? What if you saw that it was being inherited instead of being composed?</p>
+
+<p>As another example (and, really, the one that brought this to my attention in the first place), I’m attempting to write a <a href="">DAO</a> framework in Node.js for a set of applications my company is building. This framework would have different implementations depending on what underlying data store was being used. However, one of the things I wanted it to be able to do is to read from an in-memory cache, if one is provided, before going to the data store. This is behavior I wanted to be part of the framework and any DAO class within it. The question becomes, should I use inheritance or composition? In my opinion, using composition would be a mistake, because it would communicate that this is optional behavior that might not be used by some implementations, whereas I want it to be used by all. Hence, I would use inheritance.</p>
+
+<p>This sort of thing, this ability to communicate the functionality of code intuitively, is the difference, IMHO, between well-designed code (i.e., code that takes little or no effort to modify or augment) and badly-designed code (i.e. code that is a pain to modify, and that you have to read through extensively to use).</p>
+
+<h2 id="when-not-to-use-inheritance">When Not To Use Inheritance</h2>
+<p>Mixu is very much right when he talks about the misuse of inheritance - people have been using it inappropriately for pretty much the entire time it’s been available. One anti-pattern for inheritance is, of course, using it for code reuse between classes which have no real connection to each other. Another is to use it as a dumping ground for common behavior - this is typically seen when you have a base class that exists for valid reasons, but then lazy programmers use it to add common functionality which should be extracted into a composed or utility class. Those are all valid anti-patterns of inheritance use.</p>
+
+<p>However, the reverse case is also true - it is an anti-pattern to use composition where inheritance is called for. The “code smell” for inappropriate composition is when you see the same boilerplate code around the use of a particular composed class in a bunch of classes doing the same thing - a sure sign of using composition where inheritance is required.</p>
+
+<p>I am also concerned where he says that he uses inheritance, “but not that often”. That would imply, to me, that either he almost never writes polymorphic code, or if he does, the code almost never shares behavior. In my experience, polymorphic classes often <em>do</em> share behavior, at least at some level, and so for a developer to say he doesn’t use inheritance very often implies to me that he might be either unconsciously writing a lot of boilerplate code, or making his code bend over backwards in order to avoid using the dreaded inheritance. Either way, I’m sceptical.</p>
+
+<h2 id="inheritance-in-javascript">Inheritance in Javascript</h2>
+<p>That being said, I think Mixu has a very good point about the design of Javascript inheritance - it sucks. It’s shoddy, it invites, as he says, nonstandard implementations, and is error-prone. Even Node.js’ solution - <code>util.inherits()</code> - is kludgey at best. It should have been made a keyword in the language so that, again, it’s clear what’s going on, rather than having to hunt around for certain coding structures which imply it. However, that’s a problem with Javascript, not inheritance.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Using a Raspberry Pi as an iBeacon]]></title>
+    <link href="http://jacklund.github.io/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon/"/>
+    <updated>2013-11-15T16:00:00-06:00</updated>
+    <id>http://jacklund.github.io/blog/2013/11/15/using-a-raspberry-pi-as-an-ibeacon</id>
+    <content type="html"><![CDATA[<p>There’s an excellent <a href="http://developer.radiusnetworks.com/2013/10/09/how-to-make-an-ibeacon-out-of-a-raspberry-pi.html">blog post by by James Nebeker and David G. Young</a> about simulating an <a href="http://en.wikipedia.org/wiki/IBeacon">iBeacon</a> using a Raspberry Pi and a bluetooth dongle. Since I already had both, I thought I’d give it a try. It worked really well, and I’ve even put together the files necessary to do it <a href="https://github.com/jacklund/piBeacon">in my GitHub repository</a>.</p>
+
+<p>You’ll need to install <a href="http://www.bluez.org/">BlueZ</a> as well for this to work. Once you get it all installed and working you can use one of the mobile iBeacon apps, such as <a href="https://itunes.apple.com/us/app/ibeacon-locate/id738709014?ls=1&amp;mt=8">iBeacon Locate</a>. Very fun to play with, and a good way to be able to develop mobile apps to access iBeacons without having to wait for them to come out.</p>
+
+<p>Also, it’s just fun to play with.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[More Fun With BeagleBone Black]]></title>
+    <link href="http://jacklund.github.io/blog/2013/10/19/more-fun-with-beaglebone-black/"/>
+    <updated>2013-10-19T21:10:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/10/19/more-fun-with-beaglebone-black</id>
+    <content type="html"><![CDATA[<p>I’ve discovered that owning a BeagleBone Black (or, in my case, two) is kind of like owning one of those really, really nice
+cars that you buy but you can almost never drive because it spends so much time in the shop. It’s a lovely piece of hardware, it
+really is, but the people who created it seem to have gone to great lengths to make sure that all you can do is sit back and admire
+it, because you certainly won’t be able to do anything useful with it.</p>
+
+<p>My next foray into BBB craziness was attempting to get a wifi dongle to work with it, so I don’t have to constantly hook it up
+to my wireless adapter. Should be easy, right? Of course not, this is the BeagleBone Black we’re talking about. <em>Nothing</em> is easy.</p>
+
+<p>I bought the <a href="http://www.edimax.com/en/produce_detail.php?pd_id=347&amp;pl1_id=1">Edimax EW-7811-UN</a>, which is recommended for BeagleBones,
+Raspberry Pi’s, and the BBB. Unfortunately, what I didn’t realize is that, while it <em>used</em> to work with the BBB, some OS changes were
+made to it so that it takes a lot of wrangling to get it to work, if you can get it to work at all (I couldn’t).</p>
+
+<p>First of all, it seems that, at some point, the drivers weren’t really available, so you would have to build them yourselves. I think
+the drivers are available now, but I went ahead and compiled the drivers per
+<a href="http://www.codealpha.net/864/how-to-set-up-a-rtl8192cu-on-the-beaglebone-black-bbb/">these instructions</a>.
+The next hurdle was getting it to work with <a href="https://connman.net/">connman</a>, the connection manager, which is, basically,
+almost completely undocumented - Fun! (<strong><em>Note to developers everywhere:</em></strong> in the words of an former boss - “if it ain’t documented,
+it doesn’t exist”).</p>
+
+<p>However, from what I can gather, <code>connman</code> uses <a href="http://hostap.epitest.fi/wpa_supplicant/">wpa_supplicant</a> for the WPA transactions
+(if you’re using WPA, which, um, you should be). So, after fiddling around for a while, here’s what my <code>/var/lib/connman/settings</code>
+file looks like:</p>
+
+<pre><code>[global]
+OfflineMode=false
+
+[Wired]
+Enable=true
+
+[WiFi]
+Enable=true
+</code></pre>
+
+<p>And here’s my <code>/var/lib/connman/wifi.config</code> file:</p>
+
+<pre><code>[service_home]
+Type=wifi
+Name=my_ssid
+Security = wpa2-psk
+Passphrase=my_encrypted_passphrase
+</code></pre>
+
+<p>where <code>my_ssid</code> is my SSID name, and <code>my_encrypted_passphrase</code> is the result of running <code>wpa_passphrase &lt;ssid&gt; &lt;password&gt;</code>.</p>
+
+<p>Finally, my <code>/etc/wpa_supplicant.conf</code> - I’m running WPA2-Personal on my wireless router, so this is, as far as I can tell, the
+way you set up <code>wpa_supplicant</code>:</p>
+
+<pre><code>ctrl_interface=/var/run/wpa_supplicant
+ctrl_interface_group=0
+update_config=1
+
+network={
+        ssid="my_ssid"
+        #psk=my_encrypted_passphrase
+        psk="my_unencrypted_passphrase"
+        key_mgmt=WPA-PSK
+        proto=RSN
+        pairwise=CCMP TKIP
+        group=CCMP TKIP
+}
+</code></pre>
+
+<p>Now, just getting to this point took a lot of tweaking and messing around with various settings. However, it’s still not connecting.
+It’s finding the access point, and even getting its MAC address, but it’s unable to authenticate. Here’s what happens when I run
+<code>wpa_supplicant</code> manually in debug mode:</p>
+
+<pre><code># wpa_supplicant -iwlan0 -c/etc/wpa_supplicant.conf -d
+  (irrelevant parts omitted)
+wlan0: New scan results available
+wlan0: Selecting BSS from priority group 0
+wlan0: 0: 5c:96:xx:xx:xx:83 ssid='my_ssid' wpa_ie_len=0 rsn_ie_len=20 caps=0x11 level=87
+wlan0:    selected based on RSN IE
+wlan0:    selected BSS 5c:96:xx:xx:xx:83 ssid='my_ssid'
+wlan0: Request association: reassociate: 0  selected: 5c:96:xx:xx:xx:83  bssid: 00:00:00:00:00:00  pending: 00:00:00:00:00:00  wpa_state: SCANNING
+wlan0: Trying to associate with 5c:96:xx:xx:xx:83 (SSID='my_ssid' freq=2462 MHz)
+wlan0: Cancelling scan request
+wlan0: WPA: clearing own WPA/RSN IE
+wlan0: Automatic auth_alg selection: 0x1
+RSN: PMKSA cache search - network_ctx=(nil) try_opportunistic=0
+RSN: Search for BSSID 5c:96:xx:xx:xx:83
+RSN: No PMKSA cache entry found
+wlan0: RSN: using IEEE 802.11i/D9.0
+wlan0: WPA: Selected cipher suites: group 16 pairwise 16 key_mgmt 2 proto 2
+wlan0: WPA: clearing AP WPA IE
+WPA: set AP RSN IE - hexdump(len=22): 30 14 01 00 00 0f ac 04 01 00 00 0f ac 04 01 00 00 0f ac 02 00 00
+wlan0: WPA: using GTK CCMP
+wlan0: WPA: using PTK CCMP
+wlan0: WPA: using KEY_MGMT WPA-PSK
+WPA: Set own WPA IE default - hexdump(len=22): 30 14 01 00 00 0f ac 04 01 00 00 0f ac 04 01 00 00 0f ac 02 00 00
+wlan0: No keys have been configured - skip key clearing
+wlan0: State: SCANNING -&gt; ASSOCIATING
+wpa_driver_wext_set_operstate: operstate 0-&gt;0 (DORMANT)
+netlink: Operstate: linkmode=-1, operstate=5
+Limit connection to BSSID 5c:96:xx:xx:xx:83 freq=2462 MHz based on scan results (bssid_set=0)
+wpa_driver_wext_associate
+wpa_driver_wext_set_drop_unencrypted
+wpa_driver_wext_set_psk
+wlan0: Setting authentication timeout: 10 sec 0 usec
+EAPOL: External notification - EAP success=0
+EAPOL: Supplicant port status: Unauthorized
+EAPOL: External notification - EAP fail=0
+EAPOL: Supplicant port status: Unauthorized
+EAPOL: External notification - portControl=Auto
+EAPOL: Supplicant port status: Unauthorized
+RSN: Ignored PMKID candidate without preauth flag
+</code></pre>
+
+<p>and basically it cycles through this over and over. Now, I’m sure this all means something to whoever wrote this code, but to me
+there’s absoutely nothing helpful here. it’s written for someone to try to debug the program, not to help someone troubleshoot
+a problem with their setup. And, yet, this is, as far as I can tell, the only troubleshooting tool these fine folks have seen
+fit to provide. Nice.</p>
+
+<p>So, after wading through all this garbage, and trying a bunch of different things, I finally gleaned (with absolutely no help
+from whoever wrote this crappy software, thank you very much!) that it’s failing authentication. Why? Who knows. Really, there’s
+a special circle of hell for people who write error messages like this for their users to have to decode. When you get there,
+you spend eternity debugging Windows NT BSOD error messages.</p>
+
+<p>So, I tried looking up the incredibly clear message <code>EAPOL: Supplicant port status: Unauthorized</code>. Now, there are a number of posts that
+imply that you need to have <code>eth0</code> disconnected in order for this to work (which makes absolutely no sense to me whatsover -
+since when are you only able to connect to one network interface at a time?), but doing that seems to make no difference. I’ve also
+seen a lot of descriptions of procedures people use to get this to work that are the technological equivalent of holding a dead
+chicken over the machine and praying. This didn’t work for me either (well, okay, I didn’t try the chicken…yet).</p>
+
+<p>Which brings up my gripe: why is this so $@%^!&amp;@ hard? Why do you have to go through this hell to just connect to a wireless access
+point - something that they do in the Mac and Windows worlds all the time? Would it be so bleeping hard to just spit out some relatively
+helpful messages - something along the lines of “authentication failed”, or even “bad passphrase”? Something.</p>
+
+<p>If you are guilty of writing software like this, do me a favor: go to the mirror, grab yourself by the collar and slap yourself
+repeatedly, saying “Bad Programmer! Bad!” over and over, because it’s exactly what I’d be doing if I were there with you.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[btle.js 0.2.0 released]]></title>
+    <link href="http://jacklund.github.io/blog/2013/10/18/btle-dot-js-0-dot-2-0-released/"/>
+    <updated>2013-10-18T23:08:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/10/18/btle-dot-js-0-dot-2-0-released</id>
+    <content type="html"><![CDATA[<p>I just (okay, a few days ago) released version 0.2.0 of <a href="https://github.com/jacklund/btle.js">btle.js</a> to
+<a href="https://npmjs.org/package/btle.js">npm</a>. This has a bunch of API changes - the <code>connect</code> method now gives you a
+<code>Device</code> object, instead of a <code>Connection</code>. All the ATT methods are now on the <code>Device</code> object, but, in addition, you can
+access all the GATT functionality by querying the device for services, which returns <code>Service</code> objects, and services for
+characteristics, which return <code>Characteristics</code> objects.</p>
+
+<p>I’m also working on <a href="https://github.com/jacklund/btle.js/wiki/API-Docs">API docs</a> for the whole thing.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Fun with BeagleBone Black]]></title>
+    <link href="http://jacklund.github.io/blog/2013/09/25/fun-with-beaglebone-black/"/>
+    <updated>2013-09-25T11:02:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/09/25/fun-with-beaglebone-black</id>
+    <content type="html"><![CDATA[<p>So, I’ve decided to try to play with <a href="http://en.wikipedia.org/wiki/ZigBee">ZigBee</a>, and since I have a couple of BeagleBone Blacks hanging around doing nothing, I thought I’d try setting it up on them.</p>
+
+<p>First thing I came across was that the BBB’s seem to have issues with <a href="https://groups.google.com/forum/#!topic/beagleboard/4e2T6XH-fNM">accessing their UARTS</a>. Even via bonescript, there seem to <a href="http://stackoverflow.com/questions/17497060/node-js-script-not-setting-beaglebone-black-mux">be issues</a>.</p>
+
+<p>So, first thing I did was to upgrade to the latest firmware, and then do <code>opkg update</code> followed by <code>opkg upgrade</code> to get all the latest stuff. However, when I tried to run a bonescript program (the one from <a href="http://stackoverflow.com/questions/17497060/node-js-script-not-setting-beaglebone-black-mux">here</a>), I got <code>module bonescript not found</code>!!!. WTF?</p>
+
+<p>Since I had seen in the <a href="http://beagleboard.org/Support/BoneScript/pinMode/">bonescript docs</a> that the <code>pinmode</code> call doesn’t really work until bonescript 0.2.3, I figured I’d be smart and just try to upgrade to the latest npm version of bonescript.</p>
+
+<p>Long story short: bad idea. I had to go through all sorts of hell to make the npm install work (including editing the node-gyp configuration file to avoid a bug in the python version check), I finally got bonescript 0.2.3 working. So, I tried my test program and…the network connection died. Every time I ran the program, the same thing happened.</p>
+
+<p>Turns out, this is an <a href="https://github.com/jadonk/bonescript/issues/51">issue with the latest bonescript</a>. So, I ended up having to back down to the previous version of bonescript via opkg. Once I investigated the <code>module bonescript not found</code> issue, it turned out that, for some reason, the bonescript module in <code>/usr/lib/node_modules</code> wasn’t getting written, so I had to do a <code>opkg remove bonescript</code> followed by <code>opkg install bonescript</code> to make it all work.</p>
+
+<p>All this, and I haven’t even tried to get the XBee stuff working yet. Oy.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Node.js Bit Operations]]></title>
+    <link href="http://jacklund.github.io/blog/2013/09/12/node-dot-js-bit-operations/"/>
+    <updated>2013-09-12T09:07:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/09/12/node-dot-js-bit-operations</id>
+    <content type="html"><![CDATA[<p>I was working on trying to get the barometer readings from my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?DCMP=sensortag&amp;HQS=sensortag-bn">TI SensorTag</a> using Node.js when I came across this problem. See, the <a href="http://processors.wiki.ti.com/index.php/SensorTag_User_Guide#Barometric_Pressure_Sensor_2">user’s guide</a> has two code examples for the algorithm for the pressure - one in C, and one in Java. The one in C uses primarily bit shift operations, whereas the one in Java uses <code>Math.pow()</code> to do the same thing. Naturally, I tended towards the bit shift operations since it makes the code a bit clearer as to what it’s doing (ultimately, from a performance perspective, it doesn’t matter since <code>Math.pow(2, x)</code> probably ultimately resolves to bit shifts anyway).</p>
+
+<p>However, when I did this, I kept on getting pressure values that were all over the place. When I broke it down, it looked like the “offset” and “scale” factors, which rely heavily on bit shifts, were bouncing all over the place.</p>
+
+<p>So, I did some looking, and discovered that, although Node.js stores all its variables as 64-bit floating point numbers, when it comes to bit operations, it does those as 32-bit numbers. A quick test showed that this is true:</p>
+
+<pre><code>&gt; a = Math.pow(2, 31)-1
+2147483647
+&gt; a &gt;&gt; 10
+2097151
+&gt; a = Math.pow(2, 32) -1
+4294967295
+&gt; a &gt;&gt; 10
+-1
+&gt; a &gt;&gt; 2
+-1
+</code></pre>
+
+<p>Notice the sharp transition once you hit that 32-bit border. What that meant was that any time I was doing bit operations, if the value I was operating on was less than 2^32, I got the right answer, otherwise I got garbage. Fun.</p>
+
+<p>So, when I switched to the Java algorithm (modified, of course, because they seem to have forgotten to divide those values by 100 at the end) everything worked.</p>
+
+<p>Good. To. Know.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Published Bluetooth LE Module]]></title>
+    <link href="http://jacklund.github.io/blog/2013/09/10/published-bluetooth-le-module/"/>
+    <updated>2013-09-10T22:31:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/09/10/published-bluetooth-le-module</id>
+    <content type="html"><![CDATA[<p>Well, I published my Node.js module for Bluetooth LE, <a href="https://github.com/jacklund/btle.js">btle.js</a> (pronounced “Beetle Juice”) to <a href="https://npmjs.org/package/btle.js">npm</a>. Even though it’s labeled version 0.1.0, it’s got most of the functionality that’s necessary for Bluetooth LE - reading attributes, writing commands and requests, and listening for notifications. I’m hoping to add more functionality over the next few weeks/months.</p>
+
+<p>The main reason I was doing this was to get my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?DCMP=sensortag&amp;HQS=sensortag-bn">TI SensorTag</a> working with my Raspberry Pi and Bluetooth LE dongle, which it now does. I’ve even got the beginnings of a Node.js module for the sensortag, <a href="https://github.com/jacklund/sensortag.js">sensortag.js</a>, which is built on top of btle.js. I’ve got everything working except the Barometric Pressure sensor readings and the Gyroscope readings.</p>
+
+<p>The nice thing about btle.js is that it’s purely native C++ code, talking directly to the Linux Bluetooth stack - it’s not having to shell out to run gatttool, for instance, which is pretty nice.</p>
+
+<p>For anyone wanting to write some Bluetooth LE code for Linux in a non-Node.js environment, I extracted the low-level I/O code from the <a href="http://www.bluez.org/">Bluez</a> project, removing the dependency on glib so that it’s a true, low-level Linux I/O package. The higher-level code is dependant on <a href="https://github.com/joyent/libuv">libuv</a>, of course - I couldn’t figure out any good way to separate them - but it shouldn’t be too difficult to extract what you need from there as well.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[What to do?]]></title>
+    <link href="http://jacklund.github.io/blog/2013/08/30/what-to-do/"/>
+    <updated>2013-08-30T22:38:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/08/30/what-to-do</id>
+    <content type="html"><![CDATA[<p>So, I haven’t posted in almost 2 months. Part of that is the fact that the last two months have been very busy - work is crazy busy trying to do all the work and get more, and I’ve been busy with the family doing end-of-summer stuff. However, part of the problem is, basically, organization.</p>
+
+<p>I’m, basically, a fairly organized guy, in that I manage to prioritize things and get the high-priority things done. However, I’m also not particularly big on multi-tasking, so that, quite often, my high-priority tasks get all the attention, and all the little, lower-priority things (like this blog) get very little.</p>
+
+<p>One thing I’m constantly searching for is a tool to help me manage all my projects, personal and professional. I’ve tried every todo list/organizational tool out there. Some I stick with for months at a time, others go away almost instantly, but I’ve never found one that’s quite right.</p>
+
+<p>The problem is that none of them work the way I work, or organize things the way my mind organizes things, so whenever I use them, there’s always this cognitive dissonance going on, which gets worse and worse over time until…I find suddenly that I haven’t used it in a while, and everything’s out of date.</p>
+
+<p>I think part of the problem is that every one I’ve tried is basically designed like a todo list on steroids - lots of bells and whistles, but at the end of the day, it’s just a list of things to get done. Unfortunately, that’s not how things work with me. Projects very rarely gel into discrete things to do, at least none but the most trivial of projects. For me, a project is fairly amorphous until I’m working on it, and the things to do suddenly appear to me - but by that time, I’m either doing them or about to do them. I very rarely need to keep track of them at that point - usually, at that point, they’re fairly obvious.</p>
+
+<p>What’s worse, a task list is actually detrimental to my usual creative process. There’s nothing that can strangle creativity faster than having a laundry list of tasks to complete. What I need is not “Do A then B then C” but “Here’s what I was thinking the direction might be. Does that make sense now, or should I take it in another direction?”</p>
+
+<p>For me, the difficulty lies in keeping track of all the projects, primarily, keeping track of where I am with the project, and when it was I last did something on it, and finally, my thoughts on the project - where I think I’ll be going next with it. In a way, it’s really more like notes to my future self about where my present self left things, rather than a set of todos.</p>
+
+<p>Anyway, writing this down has helped me figure out at least a minimal set of requirements:</p>
+
+<ol>
+  <li>I need something which will keep track of my projects</li>
+  <li>Within the projects, I need some place to keep notes on the project, both notes about what I’m doing, and also a way to talk about where I think the project could go</li>
+  <li>I also need a way of capturing what things, in a general sense, that I think need to be done. These aren’t necessarily tasks so much as general ideas about what I think might need to be done.</li>
+</ol>
+
+<p>The more I think about this, the more it seems like I need something GitHub-ish. For example, I just found <a href="http://www.lullabot.com/blog/article/managing-projects-github">this post</a> about managing projects with GitHub, and, while they’re talking mainly development projects, maybe there’s a way to leverage GitHub for my other projects, too.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Got Them Bluetooth LE Bluez]]></title>
+    <link href="http://jacklund.github.io/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez/"/>
+    <updated>2013-07-01T17:15:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/07/01/Got-Them-Bluetooth-LE-Bluez</id>
+    <content type="html"><![CDATA[<p>I’m trying to get my Raspberry Pi to talk to my <a href="http://www.ti.com/ww/en/wireless_connectivity/sensortag/index.shtml?INTC=SensorTag&amp;HQS=sensortag">TI Sensortag</a> over Bluetooth LE, using an <a href="http://www.iogear.com/product/GBU521/">IOGear Bluetooth 4.0 USB adapter</a>. I chose that adapter because it is supported by Linux, and so far it works quite nicely with the Pi.</p>
+
+<p>To start with, I’d like to write something to pull the sensor data - temperature, humidity, pressure, etc - from the SensorTag and publish it over <a href="http://mqtt.org/">MQTT</a>. However, reading the data seems to be problematic.</p>
+
+<p>Problem #1 is that the most-used bluetooth package for Python, <a href="https://code.google.com/p/pybluez/">PyBluez</a> had their last release (0.18) in November, 2009, which, obviously, doesn’t include Bluetooth LE. Not a problem, I thought, I’ll just fork the project, add the bindings for LE, and off we go!</p>
+
+<p>Which brings me to problem #2: the developers of the <a href="http://www.bluez.org/">BlueZ</a> protocol stack, which is how you access bluetooth from, well, pretty much everywhere, haven’t seen fit to include <a href="http://en.wikipedia.org/wiki/Bluetooth_profile#Generic_Attribute_Profile_.28GATT.29">GATT</a> support either via a public library or via D-Bus, despite the fact that they’ve had the code in their codebase since around 2010.</p>
+
+<p>*<strong><em>facepalm</em></strong>*</p>
+
+<p>Look, I understand that everybody’s busy and all, but, really, you couldn’t, in the last THREE YEARS break out the GATT code into a library so that people can access it? Really?</p>
+
+<p>Of course, I shouldn’t complain, I guess - they do provide a nice little command-line tool, <code>gatttool</code>, to let you do GATT stuff, just nothing to do, you know, programming with. Somebody (who is much braver than I) is even trying to <a href="https://github.com/msaunby/ble-sensor-pi">access that via Python and pexpect</a>, which works, sort of, but, uh, really, there has to be a better way.</p>
+
+<p>So, I guess my only option is to pull the GATT code out of the BlueZ project and add it to the Python project. It’s ugly, but it’s better than expect scripts.</p>
+
+<p>And, really, BlueZ developers: Come on, throw us a bone here.</p>
+
+<h3 id="update">Update</h3>
+<p>Well, it looks like I spoke too soon. Because the BlueZ developers have the GATT-layer stuff hooked heavily into glib 2.0 using callbacks, it would be much more work than I’m willing to put into it to do this within Python, which probably explains why nobody else has done it either. Thanks again, BlueZ team! <em>sigh</em></p>
+
+<p>So, I guess what I’m going to have to end up doing is writing all this in C/C++, and pulling parts of their GATT code into my project. Either that, or just implementing the parts I need myself.</p>
+
+<p>My guess is that the BlueZ developers are really more interested in writing kernel code than user-space code. It really sucks for anybody who wants to play with LE applications, though - right now everybody seems to be just writing wrappers around the BlueZ command-line apps and calling it a day. Not a great way to help with adoption of a standard, guys!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Zeroconf Rocks!]]></title>
+    <link href="http://jacklund.github.io/blog/2013/06/27/Zeroconf-Rocks/"/>
+    <updated>2013-06-27T22:27:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/06/27/Zeroconf-Rocks</id>
+    <content type="html"><![CDATA[<p>I have a lot of computers on my network now - my laptop and desktop, my wife’s 3(!) computers, her iPad, two Linux servers and miscellaneous other devices, along with my Raspberry Pi and two BeagleBone Blacks, so managing all these was starting to be a pain. So, just on a hunch, I wanted to see if <a href="http://en.wikipedia.org/wiki/Zero-configuration_networking">Bonjour/Zeroconf/Avahi</a> could help. I did some investigation, and it turns out that you can access any machines that advertise on Zeroconf by <em>name</em>.local. Since I work predominantly on Macs, I was already pretty comfortable with the idea of dynamically finding service. When I brought up my Bonjour Browser application, however, I was surprised: My two BeagleBone Blacks were already advertising (the wrong IP address for my network, but still)!</p>
+
+<p>So, first step: set up the Raspberry Pi to do the same. Fortunately, the Internet came to the rescue, in the form of <a href="http://elinux.org/RPi_Advanced_Setup">this page</a> about setting up Zeroconf on the Pi. I just followed the instructions, and it worked.</p>
+
+<p>Next, I had to fix my BeagleBone Blacks. To do this, I found the DHCP daemon config file, <code>/etc/udhcpd.conf</code>, which looked like this:</p>
+
+<pre><code>start      192.168.7.1
+end        192.168.7.1
+interface  usb0
+max_leases 1
+option subnet 255.255.255.252
+</code></pre>
+
+<p>and which I changed to match my network:</p>
+
+<pre><code>start      192.168.1.2
+end        192.168.1.99
+interface  usb0
+max_leases 1
+option subnet 255.255.255.0
+</code></pre>
+
+<p>Then, I just restarted them, and they suddenly had the right IP addresses.</p>
+
+<p>Now, all I have to do to SSH into my Pi is do <code>ssh raspberry-pi.local</code>. For my BeagleBones, it would be <code>ssh beaglebone-red.local</code> or <code>ssh beaglebone-blue.local</code>.</p>
+
+<p>W00t!!!!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Scala Is Disappointing]]></title>
+    <link href="http://jacklund.github.io/blog/2013/06/25/Scala-Is-Disappointing/"/>
+    <updated>2013-06-25T00:15:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/06/25/Scala-Is-Disappointing</id>
+    <content type="html"><![CDATA[<p>So, I’ve been playing around with Scala, and, while I’m quite impressed with the language syntax, it’s a real pain-in-the-ass to deal with. To begin with, the various versions (2.7, 2.8, 2.9., 2.10) are <a href="http://lift.la/scalas-version-fragility-make-the-enterprise">binary incompatible</a>, which is really annoying. I understand that the language is still in development, but you would think they’d have the core of the language all worked out by now.</p>
+
+<p>I understand the <a href="http://suereth.blogspot.com/2011/12/scala-fresh-is-alive.html">reasons behind it</a>: they’re still making changes to the base traits which causes all the objects to change. But, really, this is one of those things that every language (well, every language with a base class or interface) goes through. These are the things you go through, however, when you’re doing the pre-1.0 releases of the language, not 2.x; at most, you make these changes when you transition between major revisions - from 2.x to 3.0, for instance - <em>not</em> between minor revisions.</p>
+
+<p>What concerns me with this, besides the PIA factor, is that a) the language developers don’t seem to think this is a problem, and b) that it indicates a tendency to want to “fiddle” with the language. I understand the desire to “fiddle”, it’s one of those things that every software developer goes through, the desire to “tweak it just a little bit more” after it’s released. It’s also one of those things that mature software developers grow out of. “The perfect is the enemy of the good”.</p>
+
+<p>They don’t seem to realize that this is going to make it <em>really</em> hard for it to be taken seriously as a general-purpose language. When you’re trying to make a business case for using a new language, one of the things that you have to demonstrate is that the language is mature enough to not change out from under you. Scala is changing constantly, and the Scala developers seem to think this is a virtue, rather than a problem.</p>
+
+<p>Why is this a problem? Well, the fact that you have Scala libraries having to label themselves with the version of Scala they’re compiled against is an immediate indication. If I’m trying to do a project that’s dependent on libraries, I now have to make absolutely sure that there is some version of Scala that they’re all compatible with, and then use that version for my project, rather than using the version based on the feature set I need. What’s more, if there is no overlap - if one of my dependencies is only compatible with, say, 2.9, and another only builds on 2.7, then I’m hosed. I either have to try to build one or the other on a different version of the compiler, which may or may not work, or use different libraries.</p>
+
+<p>The other bit of craziness is the Eclipse Scala plugin can’t change versions, and, you can’t have more than one version running at a time. Even more fun: the only Scala plugins for Eclipse Juno are for 2.9 and 2.10 - if you have to use 2.8, you’re either going to have to use Indigo, or cross-compile to a newer version of Scala.</p>
+
+<p>All in all, I’d have to say that, as much as I like the idea of Scala, I can’t see using it for anything significant until it becomes more stable.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Scala Development Setup]]></title>
+    <link href="http://jacklund.github.io/blog/2013/06/21/Scala-Development-Setup/"/>
+    <updated>2013-06-21T21:56:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/06/21/Scala-Development-Setup</id>
+    <content type="html"><![CDATA[<p>I had this idea for doing a Scala project integrating WebSockets with <a href="http://kafka.apache.org/">Kafka</a>, so I spent a good bit of today trying out different configurations for doing Scala development. My first pass was to try <a href="http://www.jetbrains.com/idea/features/scala.html">IntellijIDEA</a> from JetBrains. I really liked their <a href="http://www.jetbrains.com/ruby/">RubyMine</a> IDE for Ruby, and people were raving about IDEA for Scala development, so I gave it a go.</p>
+
+<p>It’s actually not a bad IDE. I had some trouble navigating, but most of that was because I was so used to Eclipse. However, the big thing that was lacking was good <a href="http://www.scala-sbt.org/">sbt</a> support. Whatever project I was going to use sbt, since that seems to be the builder of choice, and the integration with IDEA seemed to be, well, not really good. You can use sbt to generate the IDEA project, but there didn’t seem to be a good way to have IDEA use the dependencies defined in the sbt build file for the code completion, which seemed to me to be a big problem.</p>
+
+<p>So, I tried out using Eclipse (which wasn’t a stretch since I use it for my Java work), and <a href="https://github.com/typesafehub/sbteclipse">sbteclipse</a>, which is an sbt plugin for Eclipse. It worked really well! Basically, you install the plugin per the instructions, create a minimal sbt build file for the project, and then type <code>sbt eclipse</code> to generate the Eclipse configuration. The cool thing is, you can do this at any time, so if you add a dependency to the build file, just do <code>sbt eclipse</code> again, then refresh the project in Eclipse, and suddenly it has your dependency. Very nice.</p>
+
+<p>The one thing I needed to do, which I eventually found out how to do, was to have sbt use my local maven repository as one of its repositories. sbt uses <a href="http://ant.apache.org/ivy/">ivy</a> under the covers, so Maven integration is there, it just doesn’t know about all the local Maven repositories. to add it, I just had to add the following to my <code>~/.sbt/global.sbt</code> file:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">resolvers += "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository"</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>and, voila, it worked!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Eclipse with Subversion 1.8 on OS X]]></title>
+    <link href="http://jacklund.github.io/blog/2013/06/18/eclipse-with-subversion-1-dot-8-on-os-x/"/>
+    <updated>2013-06-18T14:14:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/06/18/eclipse-with-subversion-1-dot-8-on-os-x</id>
+    <content type="html"><![CDATA[<p>I wasted a considerable amount of time following the instructions from <a href="http://subclipse.tigris.org/wiki/JavaHL">this page</a> on how to install Subclipse on OS X, trying to get MacPorts to install the right version of Subversion (Why subversion, you may ask? Because a customer is still using it, that’s why…).</p>
+
+<p>It turns out that MacPorts doesn’t even have the 1.8 version of Subversion - it’s only got 1.7, which won’t work with the version of Subclipse I’m using. So, I had to go to <a href="http://www.wandisco.com/subversion/download#osx">WanDisco</a> and download it (after removing the MacPorts versions first), and then everything worked.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Moved to GitHub/Octopress]]></title>
+    <link href="http://jacklund.github.io/blog/2013/06/18/moved-to-github-slash-octopress/"/>
+    <updated>2013-06-18T10:51:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/06/18/moved-to-github-slash-octopress</id>
+    <content type="html"><![CDATA[<p>I finally gave up on <a href="http://www.scriptogr.am">scriptogr.am</a>. I was struggling with their syntax highlighting, even sent a message to their support. The only answer I got back was from another user (who was very helpful, but it didn’t really fix my problem). So, I’m done.</p>
+
+<p>I’m now using <a href="http://pages.github.com/">GitHub Pages</a>, which generates their pages using <a href="https://github.com/mojombo/jekyll">Jekyll</a>. I’m also using <a href="http://octopress.org/">Octopress</a> for the layout, which makes it all pretty easy (well, that is, once you go through the somewhat painful ruby setup).</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[SELinux and SSH]]></title>
+    <link href="http://jacklund.github.io/blog/2013/06/13/SELinux-and-SSH/"/>
+    <updated>2013-06-13T13:30:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/06/13/SELinux-and-SSH</id>
+    <content type="html"><![CDATA[<p>I needed to set up Jenkins so that it could run an agent on another Linux box. To do this the default way, you need to allow Jenkins to access the remote box via SSH. So, I set up the Jenkins user and the SSH keys on the remote machine, but trying to do an ssh from the Jenkins user on one machine to the other still didn’t work. After doing <code>sudo journalctl -f</code> on the remote machine, I saw the following:</p>
+
+<pre><code>Jun 13 12:41:50 m2m-linux setroubleshoot[701]: SELinux is preventing /usr/sbin/sshd from read access on the file authorized_keys. For complete SELinux messages. run sealert -l ca7b7aea-64cf-46e5-8bfa-6650ad23f55b
+</code></pre>
+
+<p>Running the suggested <code>sealert -l ca7b7aea-64cf-46e5-8bfa-6650ad23f55b</code> gave me the following (edited for brevity):</p>
+
+<pre><code>SELinux is preventing /usr/sbin/sshd from read access on the file authorized_keys.
+
+*****  Plugin catchall_labels (83.8 confidence) suggests  ****
+
+If you want to allow sshd to have read access on the authorized_keys file
+Then you need to change the label on authorized_keys
+Do
+# semanage fcontext -a -t FILE_TYPE 'authorized_keys'
+where FILE_TYPE is one of the following: NetworkManager_etc_rw_t, NetworkManager_etc_t,...
+Then execute:
+restorecon -v 'authorized_keys'
+
+
+*****  Plugin catchall (17.1 confidence) suggests  *************
+
+If you believe that sshd should be allowed read access on the authorized_keys file by default.
+Then you should report this as a bug.
+You can generate a local policy module to allow this access.
+Do
+allow this access for now by executing:
+# grep sshd /var/log/audit/audit.log | audit2allow -M mypol
+# semodule -i mypol.pp
+</code></pre>
+
+<p>Not really helpful, so I dug around the web and found <a href="http://serverfault.com/questions/50573/selinux-preventing-passwordless-ssh-login">this post on ServerFault</a>. It turns out that the problem is that I created the Jenkins user’s home directory by hand (I had to, it was <code>/var/jenkins</code>, which <code>adduser</code> wouldn’t create), so SELinux didn’t know it was a home directory.</p>
+
+<p>To fix this, I added the following lines to the end of <code>/etc/selinux/targeted/contexts/files/file_contexts.homedirs</code>:</p>
+
+<pre><code>/var/jenkins/.+ unconfined_u:object_r:user_home_t:s0
+/var/jenkins/\.ssh(/.*)?      system_u:object_r:ssh_home_t:s0
+</code></pre>
+
+<p>and then did <code>sudo restorecon -R -v /var/jenkins</code>, and that fixed the problem.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Node.js]]></title>
+    <link href="http://jacklund.github.io/blog/2013/06/12/Node.js/"/>
+    <updated>2013-06-12T16:10:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/06/12/Node.js</id>
+    <content type="html"><![CDATA[<p>Having my new <a href="http://jacklund.github.io/jacklund/post/beaglebone-black">BeagleBone Black</a> has made me look at the default programming environment for it, <a href="http://nodejs.org">Node.js</a>. Companies like <a href="http://www.linkedin.com">LinkedIn</a> are <a href="http://engineering.linkedin.com/nodejs/blazing-fast-nodejs-10-performance-tips-linkedin-mobile">using it</a> on the server side, which sort of surprises me. I can definitely see its uses in devices like the BeagleBone, since it has such a small footprint and minimal use of resources, but I was surprised at how many people are using it on the server side.</p>
+
+<p>It makes sense, though - as <a href="http://wiki.nginx.org/Main">Nginx</a> demonstrated, an event-driven model can eat a thread-based server’s lunch, performance-wise, under certain circumstances. What are those circumstances, though?</p>
+
+<p>To begin with, your application would have to be overwhelmingly I/O-bound; anything that does a lot of CPU operations would gain no real benefit from the event-driven model. So, for example, an application which receives requests and stores data in the database without a lot of processing would work really well here. Why? Because in a thread-based model, you would spawn a thread to handle the request, and that thread would be waiting, doing, basically, nothing while waiting for the database request to return. In the Node.js model, you would handle the incoming request, send off an asynchronous call for the database insert, registering a callback, and then handle the next event.</p>
+
+<p>However, if you were doing a lot of processing of the data, your event handler would be running longer than you would really like, and the other requests might get starved. You could get around this by offloading the processing to another service, so you would send off the request, and go about your business until the response came back, and you could respond to your client.</p>
+
+<p>This is all very interesting, and it would be even more interesting to do some performance comparisons of a “traditional” app written in something like Java vs. a Node.js app.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Setting up NTP on BeagleBone Black]]></title>
+    <link href="http://jacklund.github.io/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black/"/>
+    <updated>2013-06-10T11:50:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/06/10/Setting-up-NTP-on-BeagleBone-Black</id>
+    <content type="html"><![CDATA[<p>For some reason, they didn’t seem to see the need to set up the time service on the BeagleBone Blacks by default. I tried using the instructions from <a href="http://derekmolloy.ie/automatically-setting-the-beaglebone-black-time-using-ntp/">this gentleman</a>, but I had to make some modifications.</p>
+
+<ol>
+  <li>Install NTP</li>
+</ol>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">    <span class="nv">$ </span>opkg update <span class="o">&amp;&amp;</span> opkg install ntp
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ol>
+  <li>Edit <code>/etc/ntp.conf</code>, adding <code>pool.ntp.org</code> as the server:</li>
+</ol>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+</pre></td><td class="code"><pre><code class="apache"><span class="line">    <span class="c"># This is the most basic ntp configuration file</span>
+</span><span class="line">    <span class="c"># The driftfile must remain in a place specific to this</span>
+</span><span class="line">    <span class="c"># machine - it records the machine specific clock error</span>
+</span><span class="line">    <span class="nb">driftfile</span> <span class="sx">/etc/ntp.drift</span>
+</span><span class="line">    <span class="c"># This obtains a random server which will be close</span>
+</span><span class="line">    <span class="c"># (in IP terms) to the machine.  Add other servers</span>
+</span><span class="line">    <span class="c"># as required, or change this.</span>
+</span><span class="line">    <span class="nb">server</span> pool.ntp.org
+</span><span class="line">    <span class="c"># Using local hardware clock as fallback</span>
+</span><span class="line">    <span class="c"># Disable this when using ntpd -q -g -x as ntpdate or it will sync to itself</span>
+</span><span class="line">    <span class="nb">server</span> <span class="m">127.127.1.0</span>
+</span><span class="line">    <span class="nb">fudge</span> <span class="m">127.127.1.0</span> stratum <span class="m">14</span>
+</span><span class="line">    <span class="c"># Defining a default security setting</span>
+</span><span class="line">    <span class="nb">restrict</span> default
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ol>
+  <li>Set your local time:</li>
+</ol>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">    <span class="nv">$ </span><span class="nb">cd</span> /etc
+</span><span class="line">    <span class="nv">$ </span>rm -f localtime
+</span><span class="line">    <span class="nv">$ </span>ln -s ../usr/share/zoneinfo/America/Chicago localtime
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ol>
+  <li>Edit <code>/etc/default/ntpdate</code>:</li>
+</ol>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="apache"><span class="line">    <span class="c"># Configuration script used by ntpdate-sync script</span>
+</span><span class="line">
+</span><span class="line">    <span class="err">NTPSERVERS=&quot;pool</span>.<span class="err">ntp</span>.<span class="err">org&quot;</span>
+</span><span class="line">
+</span><span class="line">    <span class="c"># Set to &quot;yes&quot; to write time to hardware clock on success</span>
+</span><span class="line">    <span class="err">UPDATE_HWCLOCK=&quot;yes&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ol>
+  <li>Now, reboot and see if the clock gets set correctly</li>
+</ol>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[BeagleBone Black]]></title>
+    <link href="http://jacklund.github.io/blog/2013/06/09/BeagleBone-Black/"/>
+    <updated>2013-06-09T20:00:00-05:00</updated>
+    <id>http://jacklund.github.io/blog/2013/06/09/BeagleBone-Black</id>
+    <content type="html"><![CDATA[<p>Got my two <a href="http://beagleboard.org/Products/BeagleBone%20Black">BeagleBone Blacks</a> from <a href="http://adafruit.com/">AdaFruit</a> on Friday. Really nice. I bought them without enclosures because, well, the enclosures were $20, and the BeagleBones themselves were only $45. The nice thing is, though, that they fit exactly into an Altoids tin, so I turned two into my enclosures. I used tin snips to cut holes for power and Ethernet, and lined them with electrical tape to insulate the board from the box. Here’s what they ended up looking like:</p>
+
+<p><img src="https://dl.dropbox.com/s/bpgc7lc5azhazw5/altoids_closed.jpg" alt="" title="Closed" /></p>
+
+<p><img src="https://dl.dropbox.com/s/d87y38ydxqtcv2q/altoids_open.jpg" alt="" title="Open" /></p>
+
+<p><img src="https://dl.dropbox.com/s/7nocbp8nnb65pwn/altoids_working.jpg" alt="" title="Running" /></p>
+
+<p>By default, they run <a href="http://www.angstrom-distribution.org/">Ångström Linux</a>. The default programming environment for them is a variant of Javascript they call <a href="http://beagleboard.org/Support/BoneScript">“Bonescript”</a>, which runs via <a href="http://nodejs.org/">Node.js</a>. However, a kind soul had put together a Python library called <a href="https://github.com/alexanderhiam/PyBBIO">PyBBIO</a>, which I downloaded and tried to install. I kept getting the following warning, however:</p>
+
+<pre><code>Warning: you seem to have a BeagleBone image which only has drivers for the PWM1 module, PWM2A and PWM2B will not be available in PyBBIO.
+You should consider updating Angstrom!
+</code></pre>
+
+<p>I tried updating the OS using <a href="http://learn.adafruit.com/beaglebone-black-installing-operating-systems/overview">these instructions</a>, however it didn’t make the problem go away. That’s when I discovered that PyBBIO <a href="https://github.com/alexanderhiam/PyBBIO/issues/18">doesn’t support the 3.8 kernel that comes with BB Blacks</a>, so it looks like I’m stuck with Javascript for the moment.</p>
+]]></content>
+  </entry>
+  
+</feed>
