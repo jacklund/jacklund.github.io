@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: single
 title:  "More Fun With BeagleBone Black"
 ---
 

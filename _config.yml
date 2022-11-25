@@ -18,7 +18,8 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Jack Lund's Blog
+title: The Geek in the Machine
+subtitle: Jack Lund's Blog
 email: jackl 'at' geekheads.net
 description: >- # this means to ignore newlines until "baseurl:"
   Write an awesome description for your new site here. You can edit this
@@ -30,9 +31,44 @@ twitter_username: jekyllrb
 github_username:  jekyll
 
 # Build settings
-theme: minima
+remote_theme: "mmistakes/minimal-mistakes@4.24.0"
+minimal_mistakes_skin: "dirt" # "default", "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
+paginate: 10
 plugins:
   - jekyll-feed
+  - jekyll-include-cache
+  - jekyll-paginate
+  - jekyll-github-metadata
+
+defaults:
+  # _posts
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: single
+      author_profile: true
+      read_time: true
+      show_date: true
+      comments: true
+      share: true
+      related: true
+
+author:
+  name: "Jack Lund"
+  avatar: "assets/images/JackPic2Color.jpg"
+  bio: "Programmer working in devops and who enjoys Rust programming"
+  location: "Far North Chicago Suburbs"
+  links:
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/jacklund"
+    - label: "Mastodon"
+      icon: "fab fa-fw fa-mastodon"
+      url: "https://freeradical.zone/@jacklund"
+    - label: "Keybase"
+      icon: "fab fa-fw fa-keybase"
+      url: "https://keybase.io/jacklund"
 
 # Exclude from processing.
 # The following items will not be processed, by default.

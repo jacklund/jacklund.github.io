@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: single
 title:  "Published Bluetooth LE Module"
 ---
 

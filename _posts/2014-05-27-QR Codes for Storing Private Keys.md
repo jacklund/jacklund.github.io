@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: single
 title:  "QR Codes for Storing Private Keys"
 ---
 

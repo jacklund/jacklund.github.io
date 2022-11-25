@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: single
 title:  "Using a Raspberry Pi as an iBeacon"
 ---
 
