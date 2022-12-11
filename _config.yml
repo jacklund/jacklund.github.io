@@ -74,6 +74,7 @@ author:
   avatar: "assets/images/zippy.jpg"
   bio: "Programmer, husband, father, martial arts instructor, geek, not necessarily in that order"
   location: "Chicago 'burbs"
+  email: jackl 'at' geekheads.net
   links:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
