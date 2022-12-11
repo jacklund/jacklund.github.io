@@ -1,6 +1,10 @@
 ---
 layout: single
 title:  "Inheritance in Functional Languages"
+tags:
+  - programming
+  - nodejs
+  - languages
 ---
 
 There\'s a tendency amongst proponents of

@@ -1,6 +1,9 @@
 ---
 layout: single
 title:  "Using a Raspberry Pi as an iBeacon"
+tags:
+  - iot
+  - raspberry pi
 ---
 
 There\'s an excellent [blog post by by James Nebeker and David G.

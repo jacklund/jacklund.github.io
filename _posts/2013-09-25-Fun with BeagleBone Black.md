@@ -1,6 +1,9 @@
 ---
 layout: single
 title:  "Fun with BeagleBone Black"
+tags:
+  - iot
+  - beaglebone
 ---
 
 So, I\'ve decided to try to play with

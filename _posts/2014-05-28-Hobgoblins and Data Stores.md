@@ -1,13 +1,16 @@
 ---
 layout: single
 title:  "Hobgoblins and Data Stores"
+tags:
+  - kafka
+  - software architecture
 ---
 
 *"A foolish consistency is the hobgoblin of little minds, adored by
 little statesmen and philosophers and divines.\" - Emerson*
 
 Continuing with my ideas from the [other
-day](https://www.geekheads.net/a-foolish-consistency/), I wanted to move
+day](/2014/05/26/A-Foolish-Consistency.html), I wanted to move
 from the abstract to the more concrete, which is to say that I wanted to
 talk about what such a system would look like.
 

@@ -1,6 +1,10 @@
 ---
 layout: single
 title:  "REST By Any Other Name..."
+tags:
+  - programming
+  - apis
+  - rest
 ---
 
 I\'ve done quite a few interfaces which I\'ve referred to as

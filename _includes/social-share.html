@@ -1,0 +1,26 @@
+<section class="page__share">
+  {% if site.data.ui-text[site.locale].share_on_label %}
+    <h4 class="page__share-title">{{ site.data.ui-text[site.locale].share_on_label | default: "Share on" }}</h4>
+  {% endif %}
+
+<link
+  href="https://cdn.jsdelivr.net/npm/shareon@2/dist/shareon.min.css"
+  rel="stylesheet"
+/>
+<script
+  src="https://cdn.jsdelivr.net/npm/shareon@2/dist/shareon.iife.js"
+  defer
+  init
+></script>
+<div class="shareon">
+  <a class="facebook"></a>
+  <a class="linkedin"></a>
+  <a class="mastodon"></a>
+  <a class="pinterest"></a>
+  <a class="pocket"></a>
+  <a class="reddit"></a>
+  <a class="telegram"></a>
+  <a class="twitter"></a>
+  <a class="whatsapp"></a>
+</div>
+</section>

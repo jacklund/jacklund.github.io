@@ -1,6 +1,10 @@
 ---
 layout: single
 title:  "More Fun With BeagleBone Black"
+tags:
+  - iot
+  - beaglebone
+  - wifi
 ---
 
 I\'ve discovered that owning a BeagleBone Black (or, in my case, two) is

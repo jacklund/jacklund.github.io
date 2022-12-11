@@ -1,6 +1,8 @@
 ---
 layout: single
 title:  "I'm Not Dead Yet"
+tags:
+  - technology
 ---
 
 Just about a year and a half ago I decided it was time for a change, so

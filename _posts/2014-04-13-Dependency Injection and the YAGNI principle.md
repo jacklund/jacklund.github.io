@@ -1,6 +1,9 @@
 ---
 layout: single
 title:  "Dependency Injection and the YAGNI principle"
+tags:
+  - programming
+  - nodejs
 ---
 
 One of my new personal projects involves writing an application using

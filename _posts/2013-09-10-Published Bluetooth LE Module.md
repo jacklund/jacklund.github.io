@@ -1,6 +1,10 @@
 ---
 layout: single
 title:  "Published Bluetooth LE Module"
+tags:
+  - bluetooth
+  - nodejs
+  - iot
 ---
 
 Well, I published my Node.js module for Bluetooth LE,

@@ -1,6 +1,8 @@
 ---
 layout: single
 title:  "QR Codes for Storing Private Keys"
+tags:
+  - cryptography
 ---
 
 So, storage of private keys is a problem.

@@ -1,6 +1,8 @@
 ---
 layout: single
 title:  "The Ghost in the Machine"
+tags:
+  - blog
 ---
 
 So, I\'ve moved my blog over to [Ghost](https://ghost.org) from

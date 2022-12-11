@@ -1,6 +1,8 @@
 ---
 layout: single
 title:  "A Foolish Consistency..."
+tags:
+  - software architecture
 ---
 
 How do you scale a computer system?
@@ -26,16 +28,12 @@ of a discussion between Carl Hewitt, Erik Meijer and Clemens Szyperski.
 
 #### Consistently Inconsistent {#consistentlyinconsistent}
 
-The discussion is mostly about Dr. Hewitt\'s actor model of computation
-- which is interesting in and of itself - but the thing that really
-caught my attention was an almost offhand comment he made about
-relational databases being a problem in that they are trying to enforce
+The discussion is mostly about Dr. Hewitt\'s actor model of computation - which is interesting in and of itself - but the thing that really
+caught my attention was an almost offhand comment he made about relational databases being a problem in that they are trying to enforce
 consistency in an inherently non-consistent situation.
 
-To think about this, we first need to figure out what we mean by
-\"consistent\" in this context: we would regard a system as consistent
-when all parts of the system agree on the state of the system at any
-given time. Another way of putting this is that the system is
+To think about this, we first need to figure out what we mean by \"consistent\" in this context: we would regard a system as consistent
+when all parts of the system agree on the state of the system at any given time. Another way of putting this is that the system is
 transactionally atomic at the global scale.
 
 Or, to put it in other words, it\'s a Turing machine.

@@ -1,6 +1,8 @@
 ---
 layout: single
 title:  "Logging Using EventEmitters in Node.js"
+tags:
+  - nodejs
 ---
 
 I\'ve been working a lot in node.js lately for a work project.
