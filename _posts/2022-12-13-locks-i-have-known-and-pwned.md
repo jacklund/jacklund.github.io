@@ -148,7 +148,7 @@ Yet another hardware store purchase - four standard pins. Easy-peasy.
 
 ![Ace Hardware 40mm](/assets/images/2022-12-12 18.50.55.jpg){: width="250" } ![Ace Hardware 40mm key](/assets/images/2022-12-12 18.51.18.jpg){: width="400" }
 
-This is a little guy I picked up from my local hardware store. Really nice lock
+This is a little guy I (again) picked up from my local hardware store. Really nice lock
 for the price, much better construction than the Master 140 or #3. Four pins
 with at least two spool pins. The action is very clean, and SPP is a
 little tricky because of the spools and because, at least with mine, the pin
@@ -216,7 +216,7 @@ the pins are actually setting.
 ![Kwikset door key](/assets/images/2022-12-13 17.47.42.jpg){: width="250" }
 
 This is a generic Kwikset front door lock. Five pins, a couple of spool pins.
-It has this sort of "crunchy" when I lift, and an actual sort of crunchy sound,
+It has this sort of "crunchy" feel when I lift, and an actual sort of crunchy sound,
 which is annoying.
 
 ## Schlage
