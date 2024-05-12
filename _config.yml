@@ -70,7 +70,8 @@ defaults:
 author:
   name: "Jack Lund"
   # avatar: "assets/images/JackPic2Color.jpg"
-  avatar: "assets/images/zippy.jpg"
+  # avatar: "assets/images/zippy.jpg"
+  avatar: "assets/images/clayme_avatar.jpg"
   bio: "Programmer, husband, father, martial arts instructor, geek, not necessarily in that order"
   location: "Chicago 'burbs"
   email: jackl 'at' geekheads.net
