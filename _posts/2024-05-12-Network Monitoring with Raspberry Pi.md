@@ -9,7 +9,7 @@ tags:
 
 I've had a LOT of issues, over the last few years, with my Internet service. One of the most annoying things (of the _many_ annoying things) in dealing with Internet service providers (*cough* Xfinity *cough*), is convincing them that, yes, there is actually a problem. Recently we had an issue where our internet would go out for up to 10 minutes at a time randomly, often several times a day. Because it's random, when we got the service person out to look at it, it, of course, worked perfectly while he was here.
 
-So, I set up a network monitoring system using two Raspberry Pis, [collectd](https://www.collectd.org/), [prometheus](https://prometheus.io/) and [grafana](https://grafana.com/). I used two [Raspberry Pi 4](https://grafana.com/)s that I had lying around, one for the data collection (collectd) and publishing (prometheus), and the other for the display (grafana). I probably could have just used one, but I wanted to make sure that I didn't overburden it with both tasks.
+So, I set up a network monitoring system using two Raspberry Pis, [collectd](https://www.collectd.org/), [prometheus](https://prometheus.io/) and [grafana](https://grafana.com/). I used two [Raspberry Pi 4](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/)s that I had lying around, one for the data collection (collectd) and publishing (prometheus), and the other for the display (grafana). I probably could have just used one, but I wanted to make sure that I didn't overburden it with both tasks.
 
 ## Setup
 
