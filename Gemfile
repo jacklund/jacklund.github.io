@@ -8,11 +8,13 @@ source "https://rubygems.org"
 # minimal-mistakes theme
 gem "minimal-mistakes-jekyll", github: "mmistakes/minimal-mistakes", branch: "master"
 
+gem "liquid", "~> 4.0.4"
+
 # Github metadata
 gem "jekyll-github-metadata"
 
 # Use github pages
-gem "github-pages", "~> 227", group: :jekyll_plugins
+gem "github-pages", "~> 228", group: :jekyll_plugins
 
 # plugins
 group :jekyll_plugins do
