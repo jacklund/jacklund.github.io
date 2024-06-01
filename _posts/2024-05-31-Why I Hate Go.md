@@ -9,15 +9,15 @@ Over the years, I've used many programming languages, starting with Fortran and 
 
 Then, I stumbled across Go.
 
-My first jump into Go was when we were using Hashicorp Consul at work - a good product, written, as is all Hashicorp stuff, in Go - and I came across something which seemed like a decent feature to add. I can't remember the exact details, this was a few years ago, but I remember that it involved, from what I could tell, adding two new fields to a struct. "That should be easy and forward-compatible" I thought.
+My first jump into Go was when we were using Hashicorp Consul at work - a good product, written, as is all Hashicorp stuff, in Go - and I came across something which seemed like a decent feature to add. I can't remember the exact details, this was a few years ago, but I remember that it involved, from what I could tell, adding two new fields to a struct. They were even "internal" fields, i.e. ones that didn't need to be exposed to the public API for the struct, so I figured I'd just add the code to initialize them in the initializer, have some of the methods change them as needs be, and we're done.
 
-What I didn't realize at the time, was that fields on structs were public by default. What this meant was, rather than having an initializer which hid the field details and which would make my job easier, the struct gets initialized "by hand", i.e., you set all the fields when you need to use it. "Welp", I thought, "No big deal. I'll add the fields where they're needed, shouldn't be too many places".
+What I didn't realize at the time, was that fields on structs were public by default. What this meant was, rather than having an initializer which hid the field details, the struct gets initialized "by hand", i.e., you set all the fields when you need to use it. "Welp", I thought, "No big deal. I'll add the fields where they're needed, shouldn't be too many places".
 
 By the time I got to my twenty-fifth test file, I decided it really wasn't worth the time I was putting into it.
 
-Now, some might say that it was the Consul developer's fault for making those fields public, but, in my experience, if a language gives you a gun that's pointed at your foot, a lot of developers are going to just pull that trigger.
+Now, some might say that it was the Consul developer's fault for making those fields public, but, in my experience, developers will follow the defaults for a language, whether it makes sense or not. 
 
-Since then, I've attempted to use Go to do things, always good to learn a new thing, and every single time, I've hated it, not because I couldn't get the project done with Go, but because using Go is such an unpleasant experience, especially for a programming language from this century. So, I've decided to stop complaining and actually put down in words what I hate so much about Go.
+Since then, I've attempted to use Go to do other things - always good to learn a new thing - and every single time I've hated it, not because I couldn't get the project done with Go, but because using Go is such an unpleasant experience, especially for a programming language from this century. So, I've decided to stop complaining and actually put down in words what I hate so much about Go.
 
 ## The Name
 
@@ -67,7 +67,7 @@ func (f *Foo) Bar(a string)(string, error) {
 }
 ```
 
-To begin with, this is significantly different than typical, [ML](https://en.wikipedia.org/wiki/ML_(programming_language))-type programming languages. It's also not clear from first glance what's going on. I mean, you can figure it out, but why the weird syntax? To make the compiler happy? Just to be different? Honestly, just from a readability and aesthetic viewpoint, this really is not great.
+To begin with, this is significantly different than typical, [ML](https://en.wikipedia.org/wiki/ML_(programming_language))-type programming languages. It's also not clear from first glance what's going on. I mean, you can figure it out, but why the weird syntax? To make the compiler happy? Just to be different? Honestly, just from a readability and aesthetic viewpoint, this really is not great. If you're scanning the code, will your brain register the difference between the parentheses surrounding the arguments and the ones surrounding the return values?
 
 Let's look at how you declare a map of, say, string to int:
 
@@ -89,7 +89,7 @@ Go is not a type-safe language. They don't even claim that it is. It's a "static
 
 ## Data Encapsulation
 
-I already talked about this briefly above, but, honestly, data encapsulation is a thing. An important one. Making fields public by default is a surefire way to introduce unintentional coupling into your code, a lesson I thought we had all learned about 30 years ago. 
+I already talked about this briefly above, but, honestly, data encapsulation is a thing, an important one. Making fields public by default is a surefire way to introduce unintentional coupling into your code, a lesson I thought we had all learned about 30 years ago. 
 
 ## Error Handling
 
