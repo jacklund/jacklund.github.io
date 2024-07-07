@@ -1,0 +1,18 @@
+[submodule "themes/ananke"]
+	path = themes/ananke
+	url = https://github.com/theNewDynamic/gohugo-theme-ananke
+[submodule "themes/anatole"]
+	path = themes/anatole
+	url = https://github.com/lxndrblz/anatole.git
+[submodule "themes/coder"]
+	path = themes/coder
+	url = https://github.com/luizdepra/hugo-coder.git
+[submodule "themes/github-style"]
+	path = themes/github-style
+	url = git@github.com:MeiK2333/github-style.git
+[submodule "themes/PaperMod"]
+	path = themes/PaperMod
+	url = https://github.com/adityatelange/hugo-PaperMod.git
+[submodule "gohugo-theme-ananke"]
+	path = gohugo-theme-ananke
+	url = https://github.com/theNewDynamic/gohugo-theme-ananke

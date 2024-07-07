@@ -1,5 +1,5 @@
-_site
-.sass-cache
-.jekyll-cache
-.jekyll-metadata
-vendor
+/public/
+/resources/_gen/
+
+# Temporary build lock file
+/.hugo_build.lock

@@ -1,0 +1,22 @@
+baseURL: https://wwww.geekheads.net
+disablePathToLower: true
+languageCode: en-us
+theme: 'anatole'
+params:
+  profilePicture: "assets/images/clayme_avatar.jpg"
+  title: The Geek in the Machine
+  author: Jack Lund
+  description: Geeks are people too...sort of
+  socialIcons:
+    - title: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/jacklund"
+    - title: "Mastodon"
+      icon: "fab fa-fw fa-mastodon"
+      url: "https://freeradical.zone/@jacklund"
+    - title: "Keybase"
+      icon: "fab fa-fw fa-keybase"
+      url: "https://keybase.io/jacklund"
+    - title: "LinkedIn"
+      icon: "fab fa-fw fa-linkedin"
+      url: "https://www.linkedin.com/in/jacklund/"
